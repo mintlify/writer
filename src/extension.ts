@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
-import { getHighlightedText, getInsertPosition, addComments } from './helpers';
+import { getHighlightedText, getInsertPosition, addComments } from './helpers/utils';
+import { changeProgressColor, removeProgressColor } from './helpers/ui';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "docs" is now active!');
@@ -9,21 +10,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 		vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
-      title: 'Generating docstring',
-      cancellable: true,
+      title: 'Generating documentation',
     }, () => new Promise(async (resolve, reject) => {
+			changeProgressColor();
 			const editor = vscode.window.activeTextEditor;
-			if (editor != null) {
-				const highlightedText = getHighlightedText(editor);
-				const { data: docstring } = await axios.post('http://localhost:5000/docs/generate/function', { code: highlightedText });
-				const docstringWithComments = addComments(docstring, editor.document.fileName);
-				const snippet = new vscode.SnippetString(`${docstringWithComments}\n`);
-				const insertPosition = getInsertPosition(editor);
-        editor.insertSnippet(snippet, insertPosition);
-				resolve('Completed');
-			} else {
-				reject('No code selected');
+
+			if (editor == null) {
+				removeProgressColor();
+				return reject('No code selected');
 			}
+
+			const highlightedText = getHighlightedText(editor);
+			const { data: docstring } = await axios.post('http://localhost:5000/docs/generate/function', { code: highlightedText });
+			const docstringWithComments = addComments(docstring, editor.document.fileName);
+			const snippet = new vscode.SnippetString(`${docstringWithComments}\n`);
+			const insertPosition = getInsertPosition(editor);
+			editor.insertSnippet(snippet, insertPosition);
+			
+			removeProgressColor();
+			resolve('Completed');
 		}));
 	});
 

@@ -18,7 +18,7 @@
     "commands": [
       {
         "command": "docs.write",
-        "title": "Write Docs"
+        "title": "Generate Documentation"
       }
     ],
 		"keybindings": [
@@ -27,14 +27,37 @@
 				"key": "cmd+d",
 				"mac": "cmd+d",
 				"win": "ctrl+d",
-				"when": "editorHasSelection"
+				"when": "editorHasSelection && editorLangId =~ /typescript|javascript/"
 			}
 		],
 		"menus": {
 			"editor/context": [
 				{
-					"when": "editorHasSelection",
+					"when": "editorHasSelection && editorLangId =~ /typescript|javascript/",
 					"command": "docs.write"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "mintdocs",
+					"title": "Generate Documentation (⌘D)",
+					"icon": "img/outline.png"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "docs",
+				"contents": "[✍️ Write Docs (⌘D)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
+			}
+		],
+		"views": {
+			"mintdocs": [
+				{
+					"id": "docs",
+					"name": "Generate documentation"
 				}
 			]
 		}

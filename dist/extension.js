@@ -4314,6 +4314,40 @@ const addComments = (code, filename) => {
 exports.addComments = addComments;
 
 
+/***/ }),
+/* 51 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.removeProgressColor = exports.changeProgressColor = void 0;
+const vscode = __webpack_require__(1);
+const changeProgressColor = () => {
+    const workbenchConfig = vscode.workspace.getConfiguration('workbench');
+    const currentColorScheme = workbenchConfig.get('colorCustomizations');
+    const mintlifyColorScheme = {
+        "[*Dark*]": {
+            "progressBar.background": "#DCA821",
+            "notificationsInfoIcon.foreground": "#DCA821"
+        },
+        "[*Light*]": {
+            "progressBar.background": "#DCA821",
+            "notificationsInfoIcon.foreground": "#DCA821"
+        }
+    };
+    workbenchConfig.update('colorCustomizations', { ...currentColorScheme, ...mintlifyColorScheme }, true);
+};
+exports.changeProgressColor = changeProgressColor;
+const removeProgressColor = () => {
+    const workbenchConfig = vscode.workspace.getConfiguration('workbench');
+    const currentColorScheme = workbenchConfig.get('colorCustomizations');
+    const { ['[*Dark*]']: defaultDark, ['[*Light*]']: defaultLight, ...removedScheme } = currentColorScheme;
+    workbenchConfig.update('colorCustomizations', removedScheme, true);
+};
+exports.removeProgressColor = removeProgressColor;
+
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -4352,28 +4386,29 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deactivate = exports.activate = void 0;
 const vscode = __webpack_require__(1);
 const axios_1 = __webpack_require__(2);
-const helpers_1 = __webpack_require__(50);
+const utils_1 = __webpack_require__(50);
+const ui_1 = __webpack_require__(51);
 function activate(context) {
     console.log('Congratulations, your extension "docs" is now active!');
     const disposable = vscode.commands.registerCommand('docs.write', async () => {
         vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
-            title: 'Generating docstring',
-            cancellable: true,
+            title: 'Generating documentation',
         }, () => new Promise(async (resolve, reject) => {
+            (0, ui_1.changeProgressColor)();
             const editor = vscode.window.activeTextEditor;
-            if (editor != null) {
-                const highlightedText = (0, helpers_1.getHighlightedText)(editor);
-                const { data: docstring } = await axios_1.default.post('http://localhost:5000/docs/generate/function', { code: highlightedText });
-                const docstringWithComments = (0, helpers_1.addComments)(docstring, editor.document.fileName);
-                const snippet = new vscode.SnippetString(`${docstringWithComments}\n`);
-                const insertPosition = (0, helpers_1.getInsertPosition)(editor);
-                editor.insertSnippet(snippet, insertPosition);
-                resolve('Completed');
+            if (editor == null) {
+                (0, ui_1.removeProgressColor)();
+                return reject('No code selected');
             }
-            else {
-                reject('No code selected');
-            }
+            const highlightedText = (0, utils_1.getHighlightedText)(editor);
+            const { data: docstring } = await axios_1.default.post('http://localhost:5000/docs/generate/function', { code: highlightedText });
+            const docstringWithComments = (0, utils_1.addComments)(docstring, editor.document.fileName);
+            const snippet = new vscode.SnippetString(`${docstringWithComments}\n`);
+            const insertPosition = (0, utils_1.getInsertPosition)(editor);
+            editor.insertSnippet(snippet, insertPosition);
+            (0, ui_1.removeProgressColor)();
+            resolve('Completed');
         }));
     });
     context.subscriptions.push(disposable);
