@@ -1,22 +1,30 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import axios from 'axios';
+import { getHighlightedText, getInsertPosition, addComments } from './helpers';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "docs" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('docs.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from docs!');
+	const disposable = vscode.commands.registerCommand('docs.write', async () => {
+
+		vscode.window.withProgress({
+      location: vscode.ProgressLocation.Notification,
+      title: 'Generating docstring',
+      cancellable: true,
+    }, () => new Promise(async (resolve, reject) => {
+			const editor = vscode.window.activeTextEditor;
+			if (editor != null) {
+				const highlightedText = getHighlightedText(editor);
+				const { data: docstring } = await axios.post('http://localhost:5000/docs/generate/function', { code: highlightedText });
+				const docstringWithComments = addComments(docstring, editor.document.fileName);
+				const snippet = new vscode.SnippetString(`${docstringWithComments}\n`);
+				const insertPosition = getInsertPosition(editor);
+        editor.insertSnippet(snippet, insertPosition);
+				resolve('Completed');
+			} else {
+				reject('No code selected');
+			}
+		}));
 	});
 
 	context.subscriptions.push(disposable);
