@@ -1,10 +1,13 @@
 {
-  "name": "docs",
+  "name": "document",
   "displayName": "Auto-Documentation",
   "description": "The documentation generator by Mintlify",
   "icon": "img/icon.png",
   "version": "0.0.1",
   "publisher": "mintlify",
+  "repository": {
+		"url": "https://github.com/mintlify/vscode-docs"
+	},
   "engines": {
     "vscode": "^1.63.0"
   },
