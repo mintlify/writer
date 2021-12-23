@@ -2,6 +2,7 @@
   "name": "docs",
   "displayName": "Auto-Documentation",
   "description": "The documentation generator by Mintlify",
+  "icon": "img/icon.png",
   "version": "0.0.1",
   "publisher": "mintlify",
   "engines": {

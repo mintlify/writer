@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getHighlightedText, getInsertPosition } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
+import { DOCS_WRITE } from './helpers/api';
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
@@ -23,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 	
 				const highlightedText = getHighlightedText(editor);
 				const { languageId } = editor.document;
-				const { data: docstring } = await axios.post('http://localhost:5000/docs/generate',
+				const { data: docstring } = await axios.post(DOCS_WRITE,
 					{
 						code: highlightedText,
 						languageId,
