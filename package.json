@@ -24,9 +24,9 @@
 		"keybindings": [
 			{
 				"command": "docs.write",
-				"key": "cmd+d",
-				"mac": "cmd+d",
-				"win": "ctrl+d",
+				"key": "cmd+.",
+				"mac": "cmd+.",
+				"win": "ctrl+.",
 				"when": "editorHasSelection && editorLangId =~ /typescript|javascript/"
 			}
 		],
@@ -42,7 +42,7 @@
 			"activitybar": [
 				{
 					"id": "mintdocs",
-					"title": "Generate Documentation (⌘D)",
+					"title": "Generate Documentation (⌘.)",
 					"icon": "img/outline.png"
 				}
 			]
@@ -50,7 +50,7 @@
 		"viewsWelcome": [
 			{
 				"view": "docs",
-				"contents": "[✍️ Write Docs (⌘D)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
+				"contents": "[✍️ Write Docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
 			}
 		],
 		"views": {
