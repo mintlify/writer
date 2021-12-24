@@ -1,9 +1,9 @@
 {
   "name": "document",
-  "displayName": "Auto-Documentation",
-  "description": "The documentation generator by Mintlify",
+  "displayName": "AI Doc Writer for Typescript and Javascript",
+  "description": "The AI generated documentation writer",
   "icon": "img/icon.png",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "mintlify",
   "repository": {
 		"url": "https://github.com/mintlify/vscode-docs"
