@@ -31,7 +31,7 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorHasSelection && editorLangId =~ /typescript|javascript/"
+        "when": "editorLangId =~ /typescript|javascript/"
       }
     ],
     "menus": {
