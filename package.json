@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Typescript and Javascript",
   "description": "The AI generated documentation writer",
   "icon": "img/icon.png",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "publisher": "mintlify",
   "repository": {
 		"url": "https://github.com/mintlify/vscode-docs"
@@ -31,13 +31,13 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorLangId =~ /typescript|javascript/"
+        "when": "editorLangId =~ /typescript|javascript|c/"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorHasSelection && editorLangId =~ /typescript|javascript/",
+          "when": "editorHasSelection && editorLangId =~ /typescript|javascript|c/",
           "command": "docs.write"
         }
       ]
@@ -54,7 +54,7 @@
     "viewsWelcome": [
       {
         "view": "docs",
-        "contents": "[✍️ Write Docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
+        "contents": "[✍️ Generate Docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
       }
     ],
     "views": {
