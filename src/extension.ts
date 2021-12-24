@@ -34,6 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 							code: highlightedText,
 							languageId,
 							commented: true,
+							userId: vscode.env.machineId
 						});
 					const snippet = new vscode.SnippetString(`${docstring}\n`);
 					const insertPosition = getInsertPosition(editor);

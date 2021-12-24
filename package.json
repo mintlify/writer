@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Typescript and Javascript",
   "description": "The AI generated documentation writer",
   "icon": "img/icon.png",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "mintlify",
   "repository": {
 		"url": "https://github.com/mintlify/vscode-docs"
@@ -46,7 +46,7 @@
       "activitybar": [
         {
           "id": "mintdocs",
-          "title": "Generate Documentation (⌘.)",
+          "title": "AI Doc Writer (⌘.)",
           "icon": "img/outline.png"
         }
       ]
@@ -61,7 +61,7 @@
       "mintdocs": [
         {
           "id": "docs",
-          "name": "Generate documentation"
+          "name": "AI Generate Docs"
         }
       ]
     }
