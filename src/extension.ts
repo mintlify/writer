@@ -4,9 +4,12 @@ import { getHighlightedText, getInsertPosition } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
 import { DOCS_WRITE } from './helpers/api';
+import { configUserSettings } from './helpers/ui';
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
+	configUserSettings();
+
 	const disposable = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
 		const editor = vscode.window.activeTextEditor;

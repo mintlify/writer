@@ -22,3 +22,11 @@ export const removeProgressColor = () => {
 	const { ['[*Dark*]']: defaultDark, ['[*Light*]']: defaultLight, ...removedScheme } = currentColorScheme;
 	workbenchConfig.update('colorCustomizations', removedScheme, true);
 };
+
+export const configUserSettings = () => {
+	const httpConfig = vscode.workspace.getConfiguration('http');
+	httpConfig.update('systemCertificates', false, true);
+
+	// Remove color scheme in case left over
+	removeProgressColor();
+};
