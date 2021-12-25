@@ -7,7 +7,7 @@ Writing documentation sucks. Let AI take care of it. Just hightlight code see th
 **Step 1** Highlight code
 **Step 2** Click on the `Write Code` button (or hit ⌘ + .)
 
-<img src="/img/demo.gif" width="520px" />
+<img src="/assets/demo.gif" width="520px" />
 
 -----------------------------------------------------------------------------------------------------------
 ### More information

@@ -2,7 +2,7 @@
   "name": "document",
   "displayName": "AI Doc Writer for Typescript and Javascript",
   "description": "The AI generated documentation writer",
-  "icon": "img/icon.png",
+  "icon": "assets/icon.png",
   "version": "1.0.3",
   "publisher": "mintlify",
   "repository": {
@@ -15,7 +15,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:docs.write"
+    "onCommand:docs.write",
+    "onView:docsOptions"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -31,13 +32,13 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorLangId =~ /typescript|javascript|c/"
+        "when": "editorLangId =~ /typescript|javascript/"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorHasSelection && editorLangId =~ /typescript|javascript|c/",
+          "when": "editorHasSelection && editorLangId =~ /typescript|javascript/",
           "command": "docs.write"
         }
       ]
@@ -47,7 +48,7 @@
         {
           "id": "mintdocs",
           "title": "AI Doc Writer (⌘.)",
-          "icon": "img/outline.png"
+          "icon": "assets/outline.png"
         }
       ]
     },
@@ -62,7 +63,11 @@
         {
           "id": "docs",
           "name": "AI Generate Docs"
-        }
+        },
+        {
+					"id": "docsOptions",
+					"name": "Documentation Style"
+				}
       ]
     }
   },

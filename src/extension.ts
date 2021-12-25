@@ -5,6 +5,7 @@ import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
 import { DOCS_WRITE } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
+import { OptionsProvider } from './options';
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
@@ -20,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const highlightedText = getHighlightedText(editor);
 		if (!highlightedText) {
-			vscode.window.showErrorMessage('No code selected');
+			vscode.window.showErrorMessage('Please select code and enter ⌘. again');
 			return;
 		}
 
@@ -63,6 +64,11 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			resolve('Either time out or completed');
 		});
+	});
+
+	const searchHistoryTree = new OptionsProvider();
+	vscode.window.createTreeView('docsOptions', {
+		treeDataProvider: searchHistoryTree
 	});
 
 	context.subscriptions.push(disposable);
