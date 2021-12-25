@@ -11,7 +11,14 @@ export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
 	configUserSettings();
 
-	const disposable = vscode.commands.registerCommand('docs.write', async () => {
+	const createConfigTree = () => {
+		const searchHistoryTree = new OptionsProvider();
+		vscode.window.createTreeView('docsOptions', {
+			treeDataProvider: searchHistoryTree
+		});
+	};
+
+	const write = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) {
@@ -66,12 +73,14 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	const searchHistoryTree = new OptionsProvider();
-	vscode.window.createTreeView('docsOptions', {
-		treeDataProvider: searchHistoryTree
+	const updateStyleConfig = vscode.commands.registerCommand('docs.styleConfig', async (newStyle) => {
+		if (!newStyle) {return;}
+		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
+		createConfigTree();
 	});
 
-	context.subscriptions.push(disposable);
+	createConfigTree();
+	context.subscriptions.push(write, updateStyleConfig);
 }
 
 // this method is called when your extension is deactivated

@@ -69,6 +69,22 @@
 					"name": "Documentation Style"
 				}
       ]
+    },
+    "configuration": {
+      "title": "AI Doc Writer",
+      "properties": {
+        "docwriter.style": {
+          "type": "string",
+          "default": "Auto-detect",
+          "enum": ["Auto-detect", "JSDoc", "Google"],
+          "enumDescriptions": [
+            "Automatically configured based on the language",
+            "The conventional document format for JavaScript",
+            "Format from the Google Python Style Guide"
+          ],
+          "description": "The format style of documents generated"
+        }
+      }
     }
   },
   "scripts": {
