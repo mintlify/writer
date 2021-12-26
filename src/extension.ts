@@ -40,12 +40,14 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
+					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
 					const { data: docstring } = await axios.post(DOCS_WRITE,
 						{
 							code: highlightedText,
 							languageId,
 							commented: true,
-							userId: vscode.env.machineId
+							userId: vscode.env.machineId,
+							docStyle
 						});
 					const snippet = new vscode.SnippetString(`${docstring}\n`);
 					const insertPosition = getInsertPosition(editor);
