@@ -1,15 +1,10 @@
 import * as vscode from 'vscode';
 
-export const getHighlightedText = (editor: vscode.TextEditor): string => {
+export const getHighlightedText = (editor: vscode.TextEditor) => {
+  const { selection } = editor;
   const highlightRange = new vscode.Range(editor.selection.start, editor.selection.end);
-  const highlightedText = editor.document.getText(highlightRange);
-  return highlightedText;
-};
-
-export const getInsertPosition = (editor: vscode.TextEditor): vscode.Position => {
-  const firstLine = editor.document.lineAt(editor.selection.start.line);
-  const insertPosition = new vscode.Position(editor.selection.start.line, firstLine.firstNonWhitespaceCharacterIndex);
-  return insertPosition;
+  const highlighted = editor.document.getText(highlightRange);
+  return { selection, highlighted };
 };
 
 export const getFileExtension = (filename: string): string => {
@@ -20,3 +15,7 @@ export const getFileExtension = (filename: string): string => {
   }
   return fileExtension[1];
 };
+
+export const wrapStr = (str: string, width: number) => str.replace(
+  new RegExp(`(?![^\\n]{1,${width}}$)([^\\n]{1,${width}})\\s`, 'g'), '$1\n'
+);

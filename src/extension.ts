@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
-import { getHighlightedText, getInsertPosition } from './helpers/utils';
+import { getHighlightedText, wrapStr } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
 import { DOCS_WRITE } from './helpers/api';
@@ -26,8 +26,8 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const highlightedText = getHighlightedText(editor);
-		if (!highlightedText) {
+		const { selection, highlighted } = getHighlightedText(editor);
+		if (!highlighted) {
 			vscode.window.showErrorMessage('Please select code and enter ⌘. again');
 			return;
 		}
@@ -43,14 +43,19 @@ export function activate(context: vscode.ExtensionContext) {
 					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
 					const { data: docstring } = await axios.post(DOCS_WRITE,
 						{
-							code: highlightedText,
+							code: highlighted,
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
 							docStyle
 						});
-					const snippet = new vscode.SnippetString(`${docstring}\n`);
-					const insertPosition = getInsertPosition(editor);
+
+					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
+					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
+					const wrappedDocstring = wrapStr(docstring, maxWidth - selection.start.character);
+
+					const snippet = new vscode.SnippetString(`${wrappedDocstring}\n`);
+					const insertPosition = selection.start;
 					editor.insertSnippet(snippet, insertPosition);
 
 					return resolve('Completed');
