@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Typescript and Javascript",
   "description": "The AI generated documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "publisher": "mintlify",
   "repository": {
 		"url": "https://github.com/mintlify/vscode-docs"
@@ -95,7 +95,7 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "publish": "npm run package && vsce publish"
+    "publish": "npm run package && vsce publish && npx ovsx publish -p $OVSX_KEY"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",

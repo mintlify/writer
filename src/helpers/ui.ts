@@ -6,11 +6,13 @@ export const changeProgressColor = () => {
 	const mintlifyColorScheme = {
 		"[*Dark*]": {
       "progressBar.background": "#DCA821",
-      "notificationsInfoIcon.foreground": "#DCA821"
+      "notificationsInfoIcon.foreground": "#DCA821",
+			"editor.selectionBackground": "#DCA82133"
     },
     "[*Light*]": {
 			"progressBar.background": "#DCA821",
-      "notificationsInfoIcon.foreground": "#DCA821"
+      "notificationsInfoIcon.foreground": "#DCA821",
+			"editor.selectionBackground": "#DCA82133"
     }
 	};
 	workbenchConfig.update('colorCustomizations', {...currentColorScheme, ...mintlifyColorScheme}, true);

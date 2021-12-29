@@ -52,12 +52,14 @@ export function activate(context: vscode.ExtensionContext) {
 					const snippet = new vscode.SnippetString(`${docstring}\n`);
 					const insertPosition = getInsertPosition(editor);
 					editor.insertSnippet(snippet, insertPosition);
-					
-					removeProgressColor();
+
 					return resolve('Completed');
 				} catch {
 					vscode.window.showErrorMessage('Error occurred while generating docs');
 					return resolve('Error');
+				}
+				finally {
+					removeProgressColor();
 				}
 			});
 
