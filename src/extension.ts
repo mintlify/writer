@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const { languageId } = editor.document;
+		const { languageId, getText } = editor.document;
 
 		vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
@@ -47,7 +47,8 @@ export function activate(context: vscode.ExtensionContext) {
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
-							docStyle
+							docStyle,
+							context: getText(),
 						});
 
 					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
