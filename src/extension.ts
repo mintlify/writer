@@ -3,9 +3,15 @@ import axios from 'axios';
 import { getHighlightedText, wrapStr } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_WRITE } from './helpers/api';
+import { DOCS_WRITE, GET_UNDEFINED_VARIABLES } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
+
+type UndefinedVariable = {
+  name: string;
+  line: number;
+  character: number;
+};
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
@@ -32,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const { languageId, getText } = editor.document;
+		const { languageId, getText, uri } = editor.document;
 
 		vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
@@ -40,6 +46,31 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
+					const { data: undefinedVariables }: { data: UndefinedVariable[] } = await axios.post(GET_UNDEFINED_VARIABLES,
+						{
+							code: highlighted,
+							languageId,
+						}
+					);
+					const definitionPromises = undefinedVariables.map((undefVar) => {
+						console.log(undefVar.name);
+						console.log({
+							line: selection.start.line + undefVar.line,
+							character: undefVar.character,
+						});
+						const position = new vscode.Position(selection.start.line + undefVar.line, undefVar.character);
+						return vscode.commands.executeCommand('vscode.executeDefinitionProvider', uri, position);
+					});
+
+					const definitionsRes = await Promise.all(definitionPromises);
+					const definitions = definitionsRes.map((definitions: any) => {
+						const definition = definitions[0];
+						if (definition != null && definition.isSingleLine()) {
+							vscode.window.showTextDocument(definition.targetUri, {
+								selection: definition.targetSelectionRange,
+							});
+						}
+					});
 					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
 					const { data: docstring } = await axios.post(DOCS_WRITE,
 						{
