@@ -5,14 +5,14 @@ export const changeProgressColor = () => {
 	const currentColorScheme = workbenchConfig.get('colorCustomizations') as any;
 	const mintlifyColorScheme = {
 		"[*Dark*]": {
-      "progressBar.background": "#DCA821",
-      "notificationsInfoIcon.foreground": "#DCA821",
-			"editor.selectionBackground": "#DCA82133"
+      "progressBar.background": "#0D9373",
+      "notificationsInfoIcon.foreground": "#0D9373",
+			"editor.selectionBackground": "#0D937333"
     },
     "[*Light*]": {
-			"progressBar.background": "#DCA821",
-      "notificationsInfoIcon.foreground": "#DCA821",
-			"editor.selectionBackground": "#DCA82133"
+			"progressBar.background": "#0D9373",
+      "notificationsInfoIcon.foreground": "#0D9373",
+			"editor.selectionBackground": "#0D937333"
     }
 	};
 	workbenchConfig.update('colorCustomizations', {...currentColorScheme, ...mintlifyColorScheme}, true);
