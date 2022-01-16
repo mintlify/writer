@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
 					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
-					const { data: docstring } = await axios.post(DOCS_WRITE,
+					const { data: { docstring, position } } = await axios.post(DOCS_WRITE,
 						{
 							code: highlighted,
 							languageId,
@@ -55,11 +55,22 @@ export function activate(context: vscode.ExtensionContext) {
 					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
 					const wrappedDocstring = wrapStr(docstring, maxWidth - selection.start.character);
 
-					const snippet = new vscode.SnippetString(`${wrappedDocstring}\n`);
-					const insertPosition = selection.start;
-					editor.insertSnippet(snippet, insertPosition);
+					if (position === 'belowStartLine') {
+						const start = selection.start.line;
+						const startLine = editor.document.lineAt(start);
 
-					return resolve('Completed');
+						const tabbedDocstring = wrappedDocstring.split('\n').map(line => `\t${line}`).join('\n');
+						const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
+						editor.insertSnippet(snippet, startLine.range.end);
+
+						return resolve('Completed Below');
+					}
+					
+					const snippet = new vscode.SnippetString(`${wrappedDocstring}\n`);
+					editor.insertSnippet(snippet, selection.start);
+
+					return resolve('Completed Above');
+
 				} catch {
 					vscode.window.showErrorMessage('Error occurred while generating docs');
 					return resolve('Error');

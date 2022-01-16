@@ -38,13 +38,13 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorLangId =~ /typescript|javascript/"
+        "when": "editorLangId =~ /typescript|javascript|python/"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorHasSelection && editorLangId =~ /typescript|javascript/",
+          "when": "editorHasSelection && editorLangId =~ /typescript|javascript|python/",
           "command": "docs.write"
         }
       ]
