@@ -3,9 +3,9 @@
   "displayName": "AI Doc Writer for JavaScript, TypeScript, and Python",
   "description": "The AI generated documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "publisher": "mintlify",
-  "tags": ["ai", "documentation", "typescript", "javascript", "python"],
+  "keywords": ["documentation", "typescript", "javascript", "python", "nodejs", "intellicode", "ai"],
   "repository": {
 		"url": "https://github.com/mintlify/vscode-docs"
 	},
