@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for JavaScript and TypeScript",
   "description": "The AI generated documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "publisher": "mintlify",
   "tags": ["ai", "documentation", "typescript", "javascript"],
   "repository": {
@@ -72,7 +72,7 @@
         },
         {
 					"id": "docsOptions",
-					"name": "Documentation Style"
+					"name": "Docstring Format"
 				}
       ]
     },
@@ -82,7 +82,7 @@
         "docwriter.style": {
           "type": "string",
           "default": "Auto-detect",
-          "enum": ["Auto-detect", "JSDoc", "Google"],
+          "enum": ["Auto-detect", "JSDoc", "reST", "Google"],
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",

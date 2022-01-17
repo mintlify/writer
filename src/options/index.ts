@@ -5,6 +5,7 @@ import * as path from 'path';
 const FORMAT_OPTIONS = [
   'Auto-detect',
   'JSDoc',
+  'reST',
   'Google'
 ];
 
