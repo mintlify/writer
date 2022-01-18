@@ -6,6 +6,7 @@ const FORMAT_OPTIONS = [
   'Auto-detect',
   'JSDoc',
   'reST',
+  'DocBlock',
   'Google'
 ];
 
