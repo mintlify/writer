@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getHighlightedText } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_WRITE } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
@@ -44,13 +44,14 @@ export function activate(context: vscode.ExtensionContext) {
 					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
 					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
 					const width = maxWidth - selection.start.character;
-					const { data: { docstring, position } } = await axios.post(DOCS_WRITE,
+					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = await axios.post(DOCS_WRITE,
 						{
 							code: highlighted,
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
 							docStyle,
+							source: 'vscode',
 							context: getText(),
 							width
 						});
@@ -62,20 +63,27 @@ export function activate(context: vscode.ExtensionContext) {
 						const tabbedDocstring = docstring.split('\n').map((line: string) => `\t${line}`).join('\n');
 						const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
 						editor.insertSnippet(snippet, startLine.range.end);
-
-						return resolve('Completed Below');
+					} else if (position === 'above') {
+						const snippet = new vscode.SnippetString(`${docstring}\n`);
+						editor.insertSnippet(snippet, selection.start);
 					}
+
+					resolve('Completed generating');
+					removeProgressColor();
 					
-					const snippet = new vscode.SnippetString(`${docstring}\n`);
-					editor.insertSnippet(snippet, selection.start);
-
-					return resolve('Completed Above');
-
+					if (shouldShowFeedback) {
+						const feedback = await vscode.window.showInformationMessage('Are the results useful?', '👍 Yes', '👎 No');
+						if (feedback == null) {
+							return null;
+						}
+						axios.post(FEEDBACK, {
+							id: feedbackId,
+							feedback: feedback === '👍 Yes' ? 1 : -1,
+						});
+					}
 				} catch {
 					vscode.window.showErrorMessage('Error occurred while generating docs');
-					return resolve('Error');
-				}
-				finally {
+					resolve('Error');
 					removeProgressColor();
 				}
 			});
