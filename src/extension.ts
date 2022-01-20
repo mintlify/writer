@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getHighlightedText, wrapStr } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_WRITE } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
@@ -41,13 +41,14 @@ export function activate(context: vscode.ExtensionContext) {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
 					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
-					const { data: { docstring, position } } = await axios.post(DOCS_WRITE,
+					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = await axios.post(DOCS_WRITE,
 						{
 							code: highlighted,
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
 							docStyle,
+							source: 'vscode',
 							context: getText(),
 						});
 
@@ -62,20 +63,24 @@ export function activate(context: vscode.ExtensionContext) {
 						const tabbedDocstring = wrappedDocstring.split('\n').map(line => `\t${line}`).join('\n');
 						const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
 						editor.insertSnippet(snippet, startLine.range.end);
-
-						return resolve('Completed Below');
+					} else if (position === 'above') {
+						const snippet = new vscode.SnippetString(`${wrappedDocstring}\n`);
+						editor.insertSnippet(snippet, selection.start);
 					}
+
+					resolve('Completed generating');
+					removeProgressColor();
 					
-					const snippet = new vscode.SnippetString(`${wrappedDocstring}\n`);
-					editor.insertSnippet(snippet, selection.start);
-
-					return resolve('Completed Above');
-
+					if (shouldShowFeedback) {
+						const feedback = await vscode.window.showInformationMessage('Are the results useful?', '👍 Yes', '👎 No');
+						axios.post(FEEDBACK, {
+							id: feedbackId,
+							feedback: feedback === '👍 Yes' ? 1 : -1,
+						});
+					}
 				} catch {
 					vscode.window.showErrorMessage('Error occurred while generating docs');
-					return resolve('Error');
-				}
-				finally {
+					resolve('Error');
 					removeProgressColor();
 				}
 			});
