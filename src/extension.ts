@@ -73,6 +73,9 @@ export function activate(context: vscode.ExtensionContext) {
 					
 					if (shouldShowFeedback) {
 						const feedback = await vscode.window.showInformationMessage('Are the results useful?', '👍 Yes', '👎 No');
+						if (feedback == null) {
+							return null;
+						}
 						axios.post(FEEDBACK, {
 							id: feedbackId,
 							feedback: feedback === '👍 Yes' ? 1 : -1,
