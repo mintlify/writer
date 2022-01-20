@@ -15,7 +15,3 @@ export const getFileExtension = (filename: string): string => {
   }
   return fileExtension[1];
 };
-
-export const wrapStr = (str: string, width: number) => str.replace(
-  new RegExp(`(?![^\\n]{1,${width}}$)([^\\n]{1,${width}})\\s`, 'g'), '$1\n'
-);

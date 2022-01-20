@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
-import { getHighlightedText, wrapStr } from './helpers/utils';
+import { getHighlightedText } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
 import { DOCS_WRITE } from './helpers/api';
@@ -41,6 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
 					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
+					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
+					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
+					const width = maxWidth - selection.start.character;
 					const { data: { docstring, position } } = await axios.post(DOCS_WRITE,
 						{
 							code: highlighted,
@@ -49,24 +52,21 @@ export function activate(context: vscode.ExtensionContext) {
 							userId: vscode.env.machineId,
 							docStyle,
 							context: getText(),
+							width
 						});
-
-					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
-					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
-					const wrappedDocstring = wrapStr(docstring, maxWidth - selection.start.character);
 
 					if (position === 'belowStartLine') {
 						const start = selection.start.line;
 						const startLine = editor.document.lineAt(start);
 
-						const tabbedDocstring = wrappedDocstring.split('\n').map(line => `\t${line}`).join('\n');
+						const tabbedDocstring = docstring.split('\n').map((line: string) => `\t${line}`).join('\n');
 						const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
 						editor.insertSnippet(snippet, startLine.range.end);
 
 						return resolve('Completed Below');
 					}
 					
-					const snippet = new vscode.SnippetString(`${wrappedDocstring}\n`);
+					const snippet = new vscode.SnippetString(`${docstring}\n`);
 					editor.insertSnippet(snippet, selection.start);
 
 					return resolve('Completed Above');
