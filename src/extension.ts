@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
+import TypescriptHoverProvider from './hover/typescript';
 import { getHighlightedText } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
@@ -110,6 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	createConfigTree();
 	context.subscriptions.push(write, updateStyleConfig);
+	context.subscriptions.push(vscode.languages.registerHoverProvider('typescript', new TypescriptHoverProvider()));
 }
 
 // this method is called when your extension is deactivated
