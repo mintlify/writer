@@ -22,7 +22,7 @@
   ],
   "activationEvents": [
     "onCommand:docs.write",
-    "onView:docsOptions"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
