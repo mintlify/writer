@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
-import TypescriptHoverProvider from './hover/typescript';
+import LanguagesHoverProvider from './hover/provider';
 import { getHighlightedText } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
@@ -118,9 +118,13 @@ export function activate(context: vscode.ExtensionContext) {
 		createConfigTree();
 	});
 
+	const languagesProvider = ['typescript', 'javascript', 'python', 'php'].map((language) => {
+		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
+	});
+
 	createConfigTree();
 	context.subscriptions.push(write, insert, updateStyleConfig);
-	context.subscriptions.push(vscode.languages.registerHoverProvider('typescript', new TypescriptHoverProvider()));
+	context.subscriptions.push(...languagesProvider);
 }
 
 // this method is called when your extension is deactivated
