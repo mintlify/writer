@@ -57,18 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 							width
 						});
 
-					if (position === 'belowStartLine') {
-						const start = selection.start.line;
-						const startLine = editor.document.lineAt(start);
-
-						const tabbedDocstring = docstring.split('\n').map((line: string) => `\t${line}`).join('\n');
-						const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
-						editor.insertSnippet(snippet, startLine.range.end);
-					} else if (position === 'above') {
-						const snippet = new vscode.SnippetString(`${docstring}\n`);
-						editor.insertSnippet(snippet, selection.start);
-					}
-
+					vscode.commands.executeCommand('docs.insert', { position, content: docstring });
 					resolve('Completed generating');
 					removeProgressColor();
 					
@@ -103,6 +92,26 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
+	const insert = vscode.commands.registerCommand('docs.insert', async (
+		{ position, content }: { position: 'above' | 'belowStartLine', content: string }
+	) => {
+		const editor = vscode.window.activeTextEditor;
+		if (editor == null) { return; }
+
+		const { selection } = editor;
+		if (position === 'belowStartLine') {
+			const start = selection.start.line;
+			const startLine = editor.document.lineAt(start);
+
+			const tabbedDocstring = content.split('\n').map((line: string) => `\t${line}`).join('\n');
+			const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
+			editor.insertSnippet(snippet, startLine.range.end);
+		} else if (position === 'above') {
+			const snippet = new vscode.SnippetString(`${content}\n`);
+			editor.insertSnippet(snippet, selection.start);
+		}
+	});
+
 	const updateStyleConfig = vscode.commands.registerCommand('docs.styleConfig', async (newStyle) => {
 		if (!newStyle) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
@@ -110,7 +119,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	context.subscriptions.push(write, updateStyleConfig);
+	context.subscriptions.push(write, insert, updateStyleConfig);
 	context.subscriptions.push(vscode.languages.registerHoverProvider('typescript', new TypescriptHoverProvider()));
 }
 
