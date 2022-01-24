@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { getHighlightedText } from './helpers/utils';
+import { getDocStyleConfig, getHighlightedText } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
 import { DOCS_WRITE, FEEDBACK } from './helpers/api';
@@ -41,7 +41,6 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
 					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
 					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
 					const width = maxWidth - selection.start.character;
@@ -51,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
-							docStyle,
+							docStyle: getDocStyleConfig(),
 							source: 'vscode',
 							context: getText(),
 							width

@@ -15,3 +15,7 @@ export const getFileExtension = (filename: string): string => {
   }
   return fileExtension[1];
 };
+
+export const getDocStyleConfig = () => {
+  return vscode.workspace.getConfiguration('docwriter').get('style') || 'Auto-detect';
+};

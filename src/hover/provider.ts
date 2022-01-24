@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { HoverProvider, Hover, window, env, ProviderResult, MarkdownString, Uri, TextEditor } from 'vscode';
-import { getHighlightedText } from '../helpers/utils';
+import { HoverProvider, Hover, window, env, ProviderResult, MarkdownString, Uri, workspace } from 'vscode';
+import { getDocStyleConfig, getHighlightedText } from '../helpers/utils';
 import { DOCS_PREVIEW } from '../helpers/api';
 
 const formatHoverContent = (content: string) => {
@@ -22,7 +22,7 @@ export default class LanguagesHoverProvider implements HoverProvider {
           languageId: editor.document.languageId,
           commented: true,
           userId: env.machineId,
-          docStyle: 'Auto-detect',
+          docStyle: getDocStyleConfig(),
           source: 'vscode',
           context: editor.document.getText(),
         });
