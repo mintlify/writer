@@ -61,7 +61,7 @@
     "viewsWelcome": [
       {
         "view": "docs",
-        "contents": "[✍️ Generate Docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
+        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
       }
     ],
     "views": {
