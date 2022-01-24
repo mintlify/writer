@@ -16,7 +16,7 @@ export default class LanguagesHoverProvider implements HoverProvider {
       const { highlighted } = getHighlightedText(editor);
       if (!highlighted) {return resolve(null);}
 
-      const { data: { preview, position, docstring } } = await axios.post(DOCS_PREVIEW,
+      const { data: { preview, position, docstring, feedbackId } } = await axios.post(DOCS_PREVIEW,
         {
           code: highlighted,
           languageId: editor.document.languageId,
@@ -27,9 +27,9 @@ export default class LanguagesHoverProvider implements HoverProvider {
           context: editor.document.getText(),
         });
 
-        const insertCommentsArgs = [{ position, content: docstring }];
+        const insertCommentsArgs = [{ position, content: docstring, id: feedbackId }];
         const insertCommandUri = Uri.parse(
-          `command:docs.insert?${encodeURIComponent(JSON.stringify(insertCommentsArgs))}`
+          `command:docs.acceptPreview?${encodeURIComponent(JSON.stringify(insertCommentsArgs))}`
         );
 
       const markdownDocstring = new MarkdownString(
