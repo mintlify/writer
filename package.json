@@ -82,7 +82,7 @@
         "docwriter.style": {
           "type": "string",
           "default": "Auto-detect",
-          "enum": ["Auto-detect", "JSDoc", "reST", "Google"],
+          "enum": ["Auto-detect", "JSDoc", "reST", "DocBlock", "Google"],
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",
