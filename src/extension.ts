@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
-import { getHighlightedText } from './helpers/utils';
+import LanguagesHoverProvider from './hover/provider';
+import { getDocStyleConfig, getHighlightedText } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_WRITE, FEEDBACK } from './helpers/api';
+import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
@@ -40,7 +41,6 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const docStyle = vscode.workspace.getConfiguration('docwriter').get('style');
 					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
 					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
 					const width = maxWidth - selection.start.character;
@@ -50,24 +50,13 @@ export function activate(context: vscode.ExtensionContext) {
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
-							docStyle,
+							docStyle: getDocStyleConfig(),
 							source: 'vscode',
 							context: getText(),
 							width
 						});
 
-					if (position === 'belowStartLine') {
-						const start = selection.start.line;
-						const startLine = editor.document.lineAt(start);
-
-						const tabbedDocstring = docstring.split('\n').map((line: string) => `\t${line}`).join('\n');
-						const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
-						editor.insertSnippet(snippet, startLine.range.end);
-					} else if (position === 'above') {
-						const snippet = new vscode.SnippetString(`${docstring}\n`);
-						editor.insertSnippet(snippet, selection.start);
-					}
-
+					vscode.commands.executeCommand('docs.insert', { position, content: docstring });
 					resolve('Completed generating');
 					removeProgressColor();
 					
@@ -102,14 +91,46 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
+	const insert = vscode.commands.registerCommand('docs.insert', async (
+		{ position, content }: { position: 'above' | 'belowStartLine', content: string }
+	) => {
+		const editor = vscode.window.activeTextEditor;
+		if (editor == null) { return; }
+
+		const { selection } = editor;
+		if (position === 'belowStartLine') {
+			const start = selection.start.line;
+			const startLine = editor.document.lineAt(start);
+
+			const tabbedDocstring = content.split('\n').map((line: string) => `\t${line}`).join('\n');
+			const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
+			editor.insertSnippet(snippet, startLine.range.end);
+		} else if (position === 'above') {
+			const snippet = new vscode.SnippetString(`${content}\n`);
+			editor.insertSnippet(snippet, selection.start);
+		}
+	});
+
+	const acceptPreview = vscode.commands.registerCommand('docs.acceptPreview', async (
+		{ id, position, content }: { id: string, position: 'above' | 'belowStartLine', content: string }
+	) => {
+		await vscode.commands.executeCommand('docs.insert', { position, content });
+		axios.put(DOCS_PREVIEW_ACCEPT, { id });
+	});
+
 	const updateStyleConfig = vscode.commands.registerCommand('docs.styleConfig', async (newStyle) => {
 		if (!newStyle) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
 		createConfigTree();
 	});
 
+	const languagesProvider = ['typescript', 'javascript', 'python', 'php'].map((language) => {
+		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
+	});
+
 	createConfigTree();
-	context.subscriptions.push(write, updateStyleConfig);
+	context.subscriptions.push(write, insert, acceptPreview, updateStyleConfig);
+	context.subscriptions.push(...languagesProvider);
 }
 
 // this method is called when your extension is deactivated
