@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { getDocStyleConfig, getHighlightedText } from './helpers/utils';
+import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK } from './helpers/api';
+import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
@@ -28,9 +28,11 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const { selection, highlighted } = getHighlightedText(editor);
+		let offset: number | null = null;
 		if (!highlighted) {
-			vscode.window.showErrorMessage('Please select code and enter ⌘. again');
-			return;
+			let document = editor.document;
+			let curPos = editor.selection.active;
+			offset = document.offsetAt(curPos);
 		}
 
 		const { languageId, getText } = editor.document;
@@ -41,10 +43,20 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
-					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
-					const width = maxWidth - selection.start.character;
-					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = await axios.post(DOCS_WRITE,
+					const width = getWidth(selection.start.character);
+					// TODO: figure out how to comment at the correct indentation level
+					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = offset ? 
+					await axios.post(DOCS_WRITE_NO_SELECTION,
+						{
+							languageId,
+							commented: true,
+							userId: vscode.env.machineId,
+							docStyle: getDocStyleConfig(),
+							source: 'vscode',
+							code: getText(),
+							offset
+						}) : 
+					await axios.post(DOCS_WRITE,
 						{
 							code: highlighted,
 							languageId,
