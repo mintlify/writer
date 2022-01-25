@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
-      title: 'Generating documentation',
+      title: 'Generating documentation (this is taking longer than usual)',
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
@@ -80,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const timeout = new Promise((resolve, _) => {
 				setTimeout(() => {
 					resolve('Timeout');
-				}, 15000);
+				}, 25000);
 			});
 
 			const firstToFinish = await Promise.race([docsPromise, timeout]);
