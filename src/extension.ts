@@ -8,7 +8,7 @@ import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION } fr
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
-const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript'];
+const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
@@ -123,12 +123,8 @@ export function activate(context: vscode.ExtensionContext) {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) { return; }
 		if (position === 'belowStartLine') {
-			// TODO : Change when adding Python
-			// const curPos = editor.selection.active;
-			// const startLine = editor.document.lineAt(curPos);
-			const { selection } = editor;
-			const start = selection.start.line;
-			const startLine = editor.document.lineAt(start);
+			const curPos = editor.selection.active;
+			const startLine = editor.document.lineAt(curPos);
 
 			const tabbedDocstring = content.split('\n').map((line: string) => `\t${line}`).join('\n');
 			const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
