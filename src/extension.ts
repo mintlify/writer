@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
@@ -95,8 +95,13 @@ export function activate(context: vscode.ExtensionContext) {
 							feedback: feedback === '👍 Yes' ? 1 : -1,
 						});
 					}
-				} catch {
-					vscode.window.showErrorMessage('Error occurred while generating docs');
+				} catch (err: AxiosError | any) {
+					const errMessage = err?.response?.data?.error;
+					if (!(errMessage == null)) {
+						vscode.window.showErrorMessage(errMessage);
+					} else {
+						vscode.window.showErrorMessage('Error occurred while generating docs');
+					}
 					resolve('Error');
 					removeProgressColor();
 				}
