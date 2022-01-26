@@ -35,17 +35,16 @@ export function activate(context: vscode.ExtensionContext) {
 		let location: number | null = null;
 		let line: vscode.TextLine | null = null;
 		if (!highlighted) {
+			removeProgressColor();
 			let document = editor.document;
 			let curPos = editor.selection.active;
 			location = document.offsetAt(curPos);
 			line = document.lineAt(curPos);
 			if (line.isEmptyOrWhitespace) {
-				removeProgressColor();
 				vscode.window.showErrorMessage('Please select a line with code and enter ⌘. again');
 				return;
 			}
 			if (!NO_SELECT_SUPPORT.includes(languageId)) {
-				removeProgressColor();
 				vscode.window.showErrorMessage('Please select code and enter ⌘. again');
 				return;
 			}
