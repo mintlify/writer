@@ -8,6 +8,8 @@ import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION } fr
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
+const NO_SELECT_SUPPORT = ['php'];
+
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
 	configUserSettings();
@@ -27,6 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
+		const { languageId, getText } = editor.document;
+
 		const { selection, highlighted } = getHighlightedText(editor);
 		let location: number | null = null;
 		let line: vscode.TextLine | null = null;
@@ -35,12 +39,18 @@ export function activate(context: vscode.ExtensionContext) {
 			let curPos = editor.selection.active;
 			location = document.offsetAt(curPos);
 			line = document.lineAt(curPos);
+			console.log(location);
 			if (line.isEmptyOrWhitespace) {
+				removeProgressColor();
+				vscode.window.showErrorMessage('Please select a line with code and enter ⌘. again');
+				return;
+			}
+			if (!NO_SELECT_SUPPORT.includes(languageId)) {
+				removeProgressColor();
+				vscode.window.showErrorMessage('Please select code and enter ⌘. again');
 				return;
 			}
 		}
-
-		const { languageId, getText } = editor.document;
 
 		vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
