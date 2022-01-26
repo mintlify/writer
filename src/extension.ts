@@ -28,11 +28,16 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const { selection, highlighted } = getHighlightedText(editor);
-		let offset: number | null = null;
+		let location: number | null = null;
+		let line: vscode.TextLine | null = null;
 		if (!highlighted) {
 			let document = editor.document;
 			let curPos = editor.selection.active;
-			offset = document.offsetAt(curPos);
+			location = document.offsetAt(curPos);
+			line = document.lineAt(curPos);
+			if (line.isEmptyOrWhitespace) {
+				return;
+			}
 		}
 
 		const { languageId, getText } = editor.document;
@@ -43,9 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const width = getWidth(selection.start.character);
-					// TODO: figure out how to comment at the correct indentation level
-					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = offset ? 
+					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = location && line ? 
 					await axios.post(DOCS_WRITE_NO_SELECTION,
 						{
 							languageId,
@@ -53,8 +56,10 @@ export function activate(context: vscode.ExtensionContext) {
 							userId: vscode.env.machineId,
 							docStyle: getDocStyleConfig(),
 							source: 'vscode',
-							code: getText(),
-							offset
+							context: getText(),
+							location,
+							line: line.text,
+							width: getWidth(line.firstNonWhitespaceCharacterIndex)
 						}) : 
 					await axios.post(DOCS_WRITE,
 						{
@@ -65,7 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
 							docStyle: getDocStyleConfig(),
 							source: 'vscode',
 							context: getText(),
-							width
+							width: getWidth(selection.start.character)
 						});
 
 					vscode.commands.executeCommand('docs.insert', { position, content: docstring });
@@ -104,13 +109,15 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	const insert = vscode.commands.registerCommand('docs.insert', async (
-		{ position, content }: { position: 'above' | 'belowStartLine', content: string }
+		{ position, content, }: { position: 'above' | 'belowStartLine', content: string }
 	) => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) { return; }
-
-		const { selection } = editor;
 		if (position === 'belowStartLine') {
+			// TODO : Change when adding Python
+			// const curPos = editor.selection.active;
+			// const startLine = editor.document.lineAt(curPos);
+			const { selection } = editor;
 			const start = selection.start.line;
 			const startLine = editor.document.lineAt(start);
 
@@ -119,7 +126,12 @@ export function activate(context: vscode.ExtensionContext) {
 			editor.insertSnippet(snippet, startLine.range.end);
 		} else if (position === 'above') {
 			const snippet = new vscode.SnippetString(`${content}\n`);
-			editor.insertSnippet(snippet, selection.start);
+			let document = editor.document;
+			const curPos = editor.selection.active;
+			const desiredLine = document.lineAt(curPos);
+			const lineNum : number = desiredLine.range.start.line;
+			const position = new vscode.Position(lineNum, desiredLine.firstNonWhitespaceCharacterIndex);
+			editor.insertSnippet(snippet, position);
 		}
 	});
 
