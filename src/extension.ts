@@ -8,7 +8,7 @@ import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION } fr
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
-const NO_SELECT_SUPPORT = ['php'];
+const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
@@ -39,7 +39,6 @@ export function activate(context: vscode.ExtensionContext) {
 			let curPos = editor.selection.active;
 			location = document.offsetAt(curPos);
 			line = document.lineAt(curPos);
-			console.log(location);
 			if (line.isEmptyOrWhitespace) {
 				removeProgressColor();
 				vscode.window.showErrorMessage('Please select a line with code and enter ⌘. again');
