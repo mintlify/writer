@@ -8,7 +8,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 
 ### 👩‍💻 How to generate documentation
 
-**Step 1** Highlight code
+**Step 1** Highlight code or place cursor on the line you want to document
 **Step 2** Click on the `Write Docs` button (or hit ⌘ + .)
 
 <img src="/assets/demo.gif" width="520px" />
@@ -22,11 +22,12 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - PHP
 - 🚧 More under construction
 
------------------------------------------------------------------------------------------------------------
+---
+
 ### More information
 
 [Website](https://mintlify.com/)
 [Twitter](https://twitter.com/mintlify)
 [Discord](https://discord.gg/6W7GuYuxra)
 
-*Built with 💚 by the Mintlify team*
+_Built with 💚 by the Mintlify team_
