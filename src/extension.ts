@@ -110,7 +110,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const timeout = new Promise((resolve, _) => {
 				setTimeout(() => {
 					resolve('Timeout');
-				}, 15000);
+				}, 25000);
 			});
 
 			const firstToFinish = await Promise.race([docsPromise, timeout]);
