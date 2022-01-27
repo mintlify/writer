@@ -19,3 +19,10 @@ export const getFileExtension = (filename: string): string => {
 export const getDocStyleConfig = () => {
   return vscode.workspace.getConfiguration('docwriter').get('style') || 'Auto-detect';
 };
+
+export const getWidth = (offset: number) => {
+  const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
+  const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
+  const width = maxWidth - offset;
+  return width;
+};

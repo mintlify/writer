@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { getDocStyleConfig, getHighlightedText } from './helpers/utils';
+import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK } from './helpers/api';
+import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
+
+const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex
@@ -27,24 +29,47 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const { selection, highlighted } = getHighlightedText(editor);
-		if (!highlighted) {
-			vscode.window.showErrorMessage('Please select code and enter ⌘. again');
-			return;
-		}
-
 		const { languageId, getText } = editor.document;
+
+		const { selection, highlighted } = getHighlightedText(editor);
+		let location: number | null = null;
+		let line: vscode.TextLine | null = null;
+		if (!highlighted) {
+			removeProgressColor();
+			let document = editor.document;
+			let curPos = editor.selection.active;
+			location = document.offsetAt(curPos);
+			line = document.lineAt(curPos);
+			if (line.isEmptyOrWhitespace) {
+				vscode.window.showErrorMessage('Please select a line with code and enter ⌘. again');
+				return;
+			}
+			if (!NO_SELECT_SUPPORT.includes(languageId)) {
+				vscode.window.showErrorMessage('Please select code and enter ⌘. again');
+				return;
+			}
+		}
 
 		vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
-      title: 'Generating documentation (this is taking longer than usual)',
+      title: 'Generating documentation',
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
-					const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
-					const width = maxWidth - selection.start.character;
-					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = await axios.post(DOCS_WRITE,
+					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = !(location == null) && line ? 
+					await axios.post(DOCS_WRITE_NO_SELECTION,
+						{
+							languageId,
+							commented: true,
+							userId: vscode.env.machineId,
+							docStyle: getDocStyleConfig(),
+							source: 'vscode',
+							context: getText(),
+							location,
+							line: line.text,
+							width: getWidth(line.firstNonWhitespaceCharacterIndex)
+						}) : 
+					await axios.post(DOCS_WRITE,
 						{
 							code: highlighted,
 							languageId,
@@ -53,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
 							docStyle: getDocStyleConfig(),
 							source: 'vscode',
 							context: getText(),
-							width
+							width: getWidth(selection.start.character)
 						});
 
 					vscode.commands.executeCommand('docs.insert', { position, content: docstring });
@@ -70,8 +95,13 @@ export function activate(context: vscode.ExtensionContext) {
 							feedback: feedback === '👍 Yes' ? 1 : -1,
 						});
 					}
-				} catch {
-					vscode.window.showErrorMessage('Error occurred while generating docs');
+				} catch (err: AxiosError | any) {
+					const errMessage = err?.response?.data?.error;
+					if (!(errMessage == null)) {
+						vscode.window.showErrorMessage(errMessage);
+					} else {
+						vscode.window.showErrorMessage('Error occurred while generating docs');
+					}
 					resolve('Error');
 					removeProgressColor();
 				}
@@ -96,18 +126,21 @@ export function activate(context: vscode.ExtensionContext) {
 	) => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) { return; }
-
-		const { selection } = editor;
 		if (position === 'belowStartLine') {
-			const start = selection.start.line;
-			const startLine = editor.document.lineAt(start);
+			const curPos = editor.selection.active;
+			const startLine = editor.document.lineAt(curPos);
 
 			const tabbedDocstring = content.split('\n').map((line: string) => `\t${line}`).join('\n');
 			const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
 			editor.insertSnippet(snippet, startLine.range.end);
 		} else if (position === 'above') {
 			const snippet = new vscode.SnippetString(`${content}\n`);
-			editor.insertSnippet(snippet, selection.start);
+			let document = editor.document;
+			const curPos = editor.selection.active;
+			const desiredLine = document.lineAt(curPos);
+			const lineNum : number = desiredLine.range.start.line;
+			const position = new vscode.Position(lineNum, desiredLine.firstNonWhitespaceCharacterIndex);
+			editor.insertSnippet(snippet, position);
 		}
 	});
 

@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for JavaScript, TypeScript, Python, and PHP",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "publisher": "mintlify",
   "keywords": ["documentation", "typescript", "javascript", "python", "nodejs", "php", "jsdoc", "docblock", "intellicode", "ai"],
   "repository": {
@@ -38,13 +38,13 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorLangId =~ /typescript|javascript|python|php/"
+        "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorHasSelection && editorLangId =~ /typescript|javascript|python|php/",
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/",
           "command": "docs.write"
         }
       ]
