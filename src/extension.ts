@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = location && line ? 
+					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = !(location == null) && line ? 
 					await axios.post(DOCS_WRITE_NO_SELECTION,
 						{
 							languageId,
