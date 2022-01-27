@@ -122,7 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	const insert = vscode.commands.registerCommand('docs.insert', async (
-		{ position, content, }: { position: 'above' | 'belowStartLine', content: string }
+		{ position, content }: { position: 'above' | 'belowStartLine', content: string }
 	) => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) { return; }
