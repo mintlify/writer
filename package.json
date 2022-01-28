@@ -5,14 +5,25 @@
   "icon": "assets/icon.png",
   "version": "1.6.0",
   "publisher": "mintlify",
-  "keywords": ["documentation", "typescript", "javascript", "python", "nodejs", "php", "jsdoc", "docblock", "intellicode", "ai"],
+  "keywords": [
+    "documentation",
+    "typescript",
+    "javascript",
+    "python",
+    "nodejs",
+    "php",
+    "jsdoc",
+    "docblock",
+    "intellicode",
+    "ai"
+  ],
   "repository": {
-		"url": "https://github.com/mintlify/vscode-docs"
-	},
+    "url": "https://github.com/mintlify/vscode-docs"
+  },
   "galleryBanner": {
-		"color": "#041811",
-		"theme": "dark"
-	},
+    "color": "#041811",
+    "theme": "dark"
+  },
   "engines": {
     "vscode": "^1.63.0"
   },
@@ -71,9 +82,9 @@
           "name": "AI Generate Docs"
         },
         {
-					"id": "docsOptions",
-					"name": "Docstring Format"
-				}
+          "id": "docsOptions",
+          "name": "Docstring Format"
+        }
       ]
     },
     "configuration": {
@@ -82,7 +93,13 @@
         "docwriter.style": {
           "type": "string",
           "default": "Auto-detect",
-          "enum": ["Auto-detect", "JSDoc", "reST", "DocBlock", "Google"],
+          "enum": [
+            "Auto-detect",
+            "JSDoc",
+            "reST",
+            "DocBlock",
+            "Google"
+          ],
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",
