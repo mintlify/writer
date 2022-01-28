@@ -126,20 +126,26 @@ export function activate(context: vscode.ExtensionContext) {
 	) => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) { return; }
+		const { selection } = editor;
 		if (position === 'belowStartLine') {
-			const curPos = editor.selection.active;
-			const startLine = editor.document.lineAt(curPos);
+			const start = selection.start.line;
+			const startLine = editor.document.lineAt(start);
 
 			const tabbedDocstring = content.split('\n').map((line: string) => `\t${line}`).join('\n');
 			const snippet = new vscode.SnippetString(`\n${tabbedDocstring}`);
 			editor.insertSnippet(snippet, startLine.range.end);
 		} else if (position === 'above') {
 			const snippet = new vscode.SnippetString(`${content}\n`);
-			let document = editor.document;
-			const curPos = editor.selection.active;
-			const desiredLine = document.lineAt(curPos);
-			const lineNum : number = desiredLine.range.start.line;
-			const position = new vscode.Position(lineNum, desiredLine.firstNonWhitespaceCharacterIndex);
+			let position;
+			if (selection.start.line == selection.end.line && selection.start.character == selection.end.character) {
+				let document = editor.document;
+				const curPos = editor.selection.active;
+				const desiredLine = document.lineAt(curPos);
+				const lineNum : number = desiredLine.range.start.line;
+				position = new vscode.Position(lineNum, desiredLine.firstNonWhitespaceCharacterIndex);
+			} else {
+				position = selection.start;
+			}
 			editor.insertSnippet(snippet, position);
 		}
 	});
