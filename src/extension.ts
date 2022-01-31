@@ -96,6 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
 					if (cursorMarker != null) {
 						const start = new vscode.Position(cursorMarker.line + startLine, cursorMarker.character);
 						editor.selection = new vscode.Selection(start, start);
+						vscode.window.showInformationMessage(cursorMarker.message);
 					}
 					
 					if (shouldShowFeedback) {
