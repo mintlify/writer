@@ -34,6 +34,10 @@ export function activate(context: vscode.ExtensionContext) {
 		const { selection, highlighted } = getHighlightedText(editor);
 		let location: number | null = null;
 		let line: vscode.TextLine | null = null;
+
+		// Used for cursor placement
+		const startLine = selection.start.line;
+
 		if (!highlighted) {
 			removeProgressColor();
 			let document = editor.document;
@@ -56,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const { data: { docstring, position, shouldShowFeedback, feedbackId } } = !(location == null) && line ? 
+					const { data: { docstring, position, shouldShowFeedback, feedbackId, cursorMarker } } = location != null && line ? 
 					await axios.post(DOCS_WRITE_NO_SELECTION,
 						{
 							languageId,
@@ -81,9 +85,18 @@ export function activate(context: vscode.ExtensionContext) {
 							width: getWidth(selection.start.character)
 						});
 
-					vscode.commands.executeCommand('docs.insert', { position, content: docstring });
+					vscode.commands.executeCommand('docs.insert', {
+						position,
+						content: docstring,
+						selection: selection
+					});
 					resolve('Completed generating');
 					removeProgressColor();
+
+					if (cursorMarker != null) {
+						const start = new vscode.Position(cursorMarker.line + startLine, cursorMarker.character);
+						editor.selection = new vscode.Selection(start, start);
+					}
 					
 					if (shouldShowFeedback) {
 						const feedback = await vscode.window.showInformationMessage('Are the results useful?', '👍 Yes', '👎 No');
@@ -122,11 +135,11 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	const insert = vscode.commands.registerCommand('docs.insert', async (
-		{ position, content }: { position: 'above' | 'belowStartLine', content: string }
+		{ position, content, selection }: { position: 'above' | 'belowStartLine', content: string, selection: vscode.Selection }
 	) => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) { return; }
-		const { selection } = editor;
+
 		if (position === 'belowStartLine') {
 			const start = selection.start.line;
 			const startLine = editor.document.lineAt(start);
@@ -153,7 +166,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const acceptPreview = vscode.commands.registerCommand('docs.acceptPreview', async (
 		{ id, position, content }: { id: string, position: 'above' | 'belowStartLine', content: string }
 	) => {
-		await vscode.commands.executeCommand('docs.insert', { position, content });
+		const selection = vscode.window.activeTextEditor?.selection;
+		await vscode.commands.executeCommand('docs.insert', { position, content, selection });
 		axios.put(DOCS_PREVIEW_ACCEPT, { id });
 	});
 
