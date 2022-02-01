@@ -32,3 +32,23 @@ export const configUserSettings = () => {
 	// Remove color scheme in case left over
 	removeProgressColor();
 };
+
+export enum Purpose {
+  work = '💼 Work',
+	personal = '👩‍💻 Personal',
+	openSource = '🖊 Open Source',
+	other = '🤷 Other'
+}
+
+export const getIdFromPurpose = (occupation: Purpose) => {
+	switch (occupation) {
+		case Purpose.work:
+			return 'work';
+		case Purpose.personal:
+			return 'personal';
+		case Purpose.openSource:
+			return 'open-source';
+		default:
+			return 'other';
+	}
+};

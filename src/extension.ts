@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor } from './helpers/ui';
+import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION } from './helpers/api';
+import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
@@ -60,7 +60,16 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					const { data: { docstring, position, shouldShowFeedback, feedbackId, cursorMarker } } = location != null && line ? 
+					const {
+						data: {
+							docstring,
+							position,
+							shouldShowFeedback,
+							shouldShowFirstTimeFeedback,
+							feedbackId,
+							cursorMarker
+						}
+					} = location != null && line ? 
 					await axios.post(DOCS_WRITE_NO_SELECTION,
 						{
 							languageId,
@@ -101,12 +110,22 @@ export function activate(context: vscode.ExtensionContext) {
 					
 					if (shouldShowFeedback) {
 						const feedback = await vscode.window.showInformationMessage('Are the results useful?', '👍 Yes', '👎 No');
-						if (feedback == null) {
-							return null;
-						}
+						if (feedback == null) {return null;}
+
 						axios.post(FEEDBACK, {
 							id: feedbackId,
 							feedback: feedback === '👍 Yes' ? 1 : -1,
+						});
+					} else if (shouldShowFirstTimeFeedback) {
+						const purpose = await vscode.window.showInformationMessage(
+							'What do you plan on using AI Doc Writer for?', Purpose.work, Purpose.personal, Purpose.openSource, Purpose.other
+						) as Purpose;
+
+						if (purpose == null) {return null;}
+
+						axios.post(INTRO, {
+							id: feedbackId,
+							purpose: getIdFromPurpose(purpose),
 						});
 					}
 				} catch (err: AxiosError | any) {
