@@ -4,7 +4,7 @@ import LanguagesHoverProvider from './hover/provider';
 import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_PREVIEW_ACCEPT, DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
@@ -183,14 +183,6 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	const acceptPreview = vscode.commands.registerCommand('docs.acceptPreview', async (
-		{ id, position, content }: { id: string, position: 'above' | 'belowStartLine', content: string }
-	) => {
-		const selection = vscode.window.activeTextEditor?.selection;
-		await vscode.commands.executeCommand('docs.insert', { position, content, selection });
-		axios.put(DOCS_PREVIEW_ACCEPT, { id });
-	});
-
 	const updateStyleConfig = vscode.commands.registerCommand('docs.styleConfig', async (newStyle) => {
 		if (!newStyle) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
@@ -202,7 +194,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	context.subscriptions.push(write, insert, acceptPreview, updateStyleConfig);
+	context.subscriptions.push(write, insert, updateStyleConfig);
 	context.subscriptions.push(...languagesProvider);
 }
 
