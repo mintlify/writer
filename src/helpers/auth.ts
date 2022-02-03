@@ -37,13 +37,26 @@ export class AuthService {
     return this.storage.get('authToken', null);
   }
 
-  public setToken(value: string | null) {
-    this.storage.update('authToken', value);
+  public setToken(token: string | null) {
+    this.storage.update('authToken', token);
   }
 
   public deleteToken() {
     this.storage.update('authToken', undefined);
   }
+
+  public getEmail(): string | null {
+    return this.storage.get('email', null);
+  }
+
+  public setEmail(email: string | null) {
+    this.storage.update('email', email);
+  }
+
+  public deleteEmail() {
+    this.storage.update('email', undefined);
+  }
+
 }
 
 export const initializeAuth = (authService: AuthService) => {
@@ -56,13 +69,13 @@ export const initializeAuth = (authService: AuthService) => {
         try {
           const authResponse = await axios.post(USER_CODE, { code, uriScheme: vscode.env.uriScheme });
           const { email } = authResponse.data;
-          authService.setToken(email);
+          authService.setEmail(email);
           // Get user data
         } catch (err) {
           vscode.window.showErrorMessage('Error authenticating user');
         }
       } else if (uri.path === '/logout') {
-        authService.deleteToken();
+        authService.deleteEmail();
       }
     }
   });

@@ -7,7 +7,7 @@ import { resolve } from 'path';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
-import { AuthService, initializeAuth, login } from './helpers/auth';
+import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 
 const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python'];
 
@@ -63,6 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
+					const WRITE_ENDPOINT = highlighted ? DOCS_WRITE : DOCS_WRITE_NO_SELECTION;
 					const {
 						data: {
 							docstring,
@@ -72,29 +73,22 @@ export function activate(context: vscode.ExtensionContext) {
 							feedbackId,
 							cursorMarker
 						}
-					} = location != null && line ? 
-					await axios.post(DOCS_WRITE_NO_SELECTION,
+					} = 
+					await axios.post(WRITE_ENDPOINT,
 						{
 							languageId,
 							commented: true,
 							userId: vscode.env.machineId,
+							email: authService.getEmail(),
 							docStyle: getDocStyleConfig(),
 							source: 'vscode',
 							context: getText(),
-							location,
-							line: line.text,
-							width: getWidth(line.firstNonWhitespaceCharacterIndex)
-						}) : 
-					await axios.post(DOCS_WRITE,
-						{
+							width: line ? getWidth(line.firstNonWhitespaceCharacterIndex) : getWidth(selection.start.character),
+							// code to use for selected
 							code: highlighted,
-							languageId,
-							commented: true,
-							userId: vscode.env.machineId,
-							docStyle: getDocStyleConfig(),
-							source: 'vscode',
-							context: getText(),
-							width: getWidth(selection.start.character)
+							// location for no-selection
+							location,
+							line: line?.text,
 						});
 
 					vscode.commands.executeCommand('docs.insert', {
@@ -203,12 +197,16 @@ export function activate(context: vscode.ExtensionContext) {
 		createConfigTree();
 	});
 
+	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
+		logout();
+	});
+
 	const languagesProvider = ['typescript', 'javascript', 'python', 'php'].map((language) => {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
 
 	createConfigTree();
-	context.subscriptions.push(write, insert, updateStyleConfig);
+	context.subscriptions.push(write, insert, updateStyleConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 

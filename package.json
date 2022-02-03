@@ -32,8 +32,9 @@
     "Programming Languages"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onCommand:docs.write",
-    "onStartupFinished"
+    "onCommand:docs.logout"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -41,6 +42,10 @@
       {
         "command": "docs.write",
         "title": "Generate Documentation"
+      },
+      {
+        "command": "docs.logout",
+        "title": "Logout of AI Doc Writer"
       }
     ],
     "keybindings": [
