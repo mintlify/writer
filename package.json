@@ -49,13 +49,13 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/"
+        "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/",
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/",
           "command": "docs.write"
         }
       ]
