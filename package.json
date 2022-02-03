@@ -106,7 +106,10 @@
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",
-            "Format from the Google Python Style Guide"
+            "A documentation format for Python",
+            "A documentation format for PHP",
+            "Format from the Google Python Style Guide",
+            "The conventional documentation format for Java"
           ],
           "description": "The format style of documents generated"
         }
