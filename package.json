@@ -1,9 +1,9 @@
 {
   "name": "document",
-  "displayName": "AI Doc Writer for JavaScript, TypeScript, Python, and PHP",
+  "displayName": "AI Doc Writer for JavaScript, TypeScript, Python, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -15,7 +15,9 @@
     "jsdoc",
     "docblock",
     "intellicode",
-    "ai"
+    "ai",
+    "java",
+    "javadoc"
   ],
   "repository": {
     "url": "https://github.com/mintlify/vscode-docs"
@@ -98,7 +100,8 @@
             "JSDoc",
             "reST",
             "DocBlock",
-            "Google"
+            "Google",
+            "Javadoc"
           ],
           "enumDescriptions": [
             "Automatically configured based on the language",
