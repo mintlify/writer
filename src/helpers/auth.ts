@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import { ISDEV } from "./api";
+import { ISDEV, MINTBASE } from "./api";
 
 const auth0URI = ISDEV ? 'https://dev-h9spuzyu.us.auth0.com' : 'https://mintlify.us.auth0.com';
 const responseType = 'code';
 const clientId = ISDEV ? 'Rsc8PmIdW9MqtcaJqMqWpJfYWAiMuyrV' : 'MOMiBZylQGPE0nHpbvzVHAT4TgU0DtcP';
 const scope = 'openid profile email offline_access';
+
+const USER_CODE = MINTBASE + '/user/code';
 
 export const getLoginURI = (uriScheme: string) => {
   const redirectURI = `https://mintlify.com/start/${uriScheme}`;
@@ -52,10 +54,9 @@ export const initializeAuth = (authService: AuthService) => {
   
         const code = query.get('code');
         try {
-          console.log({code});
-          // const authResponse = await axios.post(MINT_USER_CODE, { code });
-          // const { authToken, email, isFirstTime } = authResponse.data;
-          
+          const authResponse = await axios.post(USER_CODE, { code, uriScheme: vscode.env.uriScheme });
+          const { email } = authResponse.data;
+          authService.setToken(email);
           // Get user data
         } catch (err) {
           vscode.window.showErrorMessage('Error authenticating user');
