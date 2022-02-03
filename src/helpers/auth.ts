@@ -16,7 +16,7 @@ export const getLoginURI = (uriScheme: string) => {
 };
 
 export const getLogoutURI = (uriScheme: string) => {
-  const returnToURI = `${uriScheme}://mintlify.search/logout`;
+  const returnToURI = `${uriScheme}://mintlify.document/logout`;
   return `${auth0URI}/v2/logout?client_id=${clientId}&returnTo=${returnToURI}`;
 };
 
@@ -26,7 +26,7 @@ export const login = () => {
 };
 
 export const logout = () => {
-  const logoutURI = getLoginURI(vscode.env.uriScheme);
+  const logoutURI = getLogoutURI(vscode.env.uriScheme);
   vscode.env.openExternal(vscode.Uri.parse(logoutURI));
 };
 
@@ -70,12 +70,15 @@ export const initializeAuth = (authService: AuthService) => {
           const authResponse = await axios.post(USER_CODE, { code, uriScheme: vscode.env.uriScheme });
           const { email } = authResponse.data;
           authService.setEmail(email);
+
+          vscode.window.showInformationMessage(`Successfully signed in with ${email}`);
           // Get user data
         } catch (err) {
           vscode.window.showErrorMessage('Error authenticating user');
         }
       } else if (uri.path === '/logout') {
         authService.deleteEmail();
+        vscode.window.showInformationMessage('Successfully logged out');
       }
     }
   });
