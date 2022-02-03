@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
+import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, showStatusBarButton } from './helpers/ui';
 import { resolve } from 'path';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
@@ -15,6 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put here
 	const authService = new AuthService(context.globalState);
 	configUserSettings();
+	showStatusBarButton();
 	initializeAuth(authService);
 
 	const createConfigTree = () => {
@@ -198,6 +199,26 @@ export function activate(context: vscode.ExtensionContext) {
 		createConfigTree();
 	});
 
+	const openSettings = vscode.commands.registerCommand('docs.openSettings', async () => {
+		const GENERATE_BUTTON = '✍️ Generate docs (⌘.)';
+		const LOGOUT_BUTTON = 'Logout';
+		const selectedButton = await vscode.window.showInformationMessage('AI Doc Writer Settings', GENERATE_BUTTON, LOGOUT_BUTTON);
+		let selectedCommand: string;
+		switch (selectedButton) {
+			case GENERATE_BUTTON:
+				selectedCommand = 'docs.write';
+				break;
+			case LOGOUT_BUTTON:
+				selectedCommand = 'docs.logout';
+				break;
+			default:
+				selectedCommand = '';
+				break;
+		}
+		
+		vscode.commands.executeCommand(selectedCommand);
+	});
+
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
 		logout();
 	});
@@ -207,7 +228,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	context.subscriptions.push(write, insert, updateStyleConfig, logoutCommand);
+	context.subscriptions.push(write, insert, updateStyleConfig, openSettings, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 
