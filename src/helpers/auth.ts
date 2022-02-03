@@ -23,13 +23,11 @@ export const getLogoutURI = (uriScheme: string) => {
 export const login = () => {
   const loginURI = getLoginURI(vscode.env.uriScheme);
   vscode.env.openExternal(vscode.Uri.parse(loginURI));
-  vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
 };
 
 export const logout = () => {
   const logoutURI = getLogoutURI(vscode.env.uriScheme);
   vscode.env.openExternal(vscode.Uri.parse(logoutURI));
-  vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
 };
 
 export class AuthService {
@@ -62,6 +60,10 @@ export class AuthService {
 }
 
 export const initializeAuth = (authService: AuthService) => {
+  if (authService.getEmail() != null) {
+    vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
+  }
+
   vscode.window.registerUriHandler({
     async handleUri(uri: vscode.Uri) {
       if (uri.path === '/auth') {
@@ -78,14 +80,15 @@ export const initializeAuth = (authService: AuthService) => {
           const { email } = authResponse.data;
           authService.setEmail(email);
 
-          vscode.window.showInformationMessage(`Successfully signed in with ${email}`);
-          // Get user data
+          vscode.window.showInformationMessage(`🙌 Successfully signed in with ${email}`);
+          vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
         } catch (err) {
           vscode.window.showErrorMessage('Error authenticating user');
         }
       } else if (uri.path === '/logout') {
         authService.deleteEmail();
         vscode.window.showInformationMessage('Successfully logged out');
+        vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
       }
     }
   });
