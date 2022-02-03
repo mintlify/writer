@@ -58,6 +58,12 @@
       }
     ],
     "menus": {
+      "view/title": [
+				{
+					"command": "docs.logout",
+					"when": "view == docs && docs.isSignedIn"
+				}
+			],
       "editor/context": [
         {
           "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/",

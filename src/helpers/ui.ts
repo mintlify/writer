@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { ISDEV } from './api';
 
 export const changeProgressColor = () => {
 	const workbenchConfig = vscode.workspace.getConfiguration('workbench');
@@ -52,20 +51,4 @@ export const getIdFromPurpose = (occupation: Purpose) => {
 		default:
 			return 'other';
 	}
-};
-
-export const showStatusBarButton = () => {
-	const statusButton = vscode.window.createStatusBarItem(
-		vscode.StatusBarAlignment.Right,
-		0
-	);
-	statusButton.text = '$(pencil)';
-	statusButton.tooltip = 'AI Doc Writer Settings';
-
-	if (ISDEV) {
-		statusButton.text += ' (dev)';
-	}
-
-	statusButton.command = 'docs.openSettings';
-	statusButton.show();
 };

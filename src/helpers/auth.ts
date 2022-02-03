@@ -23,11 +23,13 @@ export const getLogoutURI = (uriScheme: string) => {
 export const login = () => {
   const loginURI = getLoginURI(vscode.env.uriScheme);
   vscode.env.openExternal(vscode.Uri.parse(loginURI));
+  vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
 };
 
 export const logout = () => {
   const logoutURI = getLogoutURI(vscode.env.uriScheme);
   vscode.env.openExternal(vscode.Uri.parse(logoutURI));
+  vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
 };
 
 export class AuthService {
