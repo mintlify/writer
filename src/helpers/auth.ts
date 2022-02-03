@@ -64,10 +64,15 @@ export const initializeAuth = (authService: AuthService) => {
     async handleUri(uri: vscode.Uri) {
       if (uri.path === '/auth') {
         const query = new URLSearchParams(uri.query);
-  
         const code = query.get('code');
         try {
-          const authResponse = await axios.post(USER_CODE, { code, uriScheme: vscode.env.uriScheme });
+          const authResponse = await axios.post(USER_CODE,
+            {
+              code,
+              userId: vscode.env.machineId,
+              uriScheme: vscode.env.uriScheme
+            }
+          );
           const { email } = authResponse.data;
           authService.setEmail(email);
 
