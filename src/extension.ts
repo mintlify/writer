@@ -63,7 +63,6 @@ export function activate(context: vscode.ExtensionContext) {
     }, async () => {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
-					console.log(authService.getEmail());
 					const WRITE_ENDPOINT = highlighted ? DOCS_WRITE : DOCS_WRITE_NO_SELECTION;
 					const {
 						data: {
