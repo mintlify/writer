@@ -7,12 +7,15 @@ import { resolve } from 'path';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
+import { AuthService, initializeAuth, login } from './helpers/auth';
 
 const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python'];
 
 export function activate(context: vscode.ExtensionContext) {
-	// All active events can be put herex
+	// All active events can be put here
+	const authService = new AuthService(context.globalState);
 	configUserSettings();
+	initializeAuth(authService);
 
 	const createConfigTree = () => {
 		const searchHistoryTree = new OptionsProvider();
@@ -129,14 +132,25 @@ export function activate(context: vscode.ExtensionContext) {
 						});
 					}
 				} catch (err: AxiosError | any) {
+					resolve('Error');
+					removeProgressColor();
+
+					if (err?.response?.data?.requiresAuth) {
+						const SIGN_IN_BUTTON = err.response.data.button;
+						const signInResponse = await vscode.window.showInformationMessage(err.response.data.message, err.response.data.button);
+						if (signInResponse === SIGN_IN_BUTTON) {
+							login();
+						}
+
+						return;
+					}
+
 					const errMessage = err?.response?.data?.error;
-					if (!(errMessage == null)) {
+					if (errMessage != null) {
 						vscode.window.showErrorMessage(errMessage);
 					} else {
 						vscode.window.showErrorMessage('Error occurred while generating docs');
 					}
-					resolve('Error');
-					removeProgressColor();
 				}
 			});
 
