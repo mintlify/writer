@@ -8,7 +8,7 @@ import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 
-const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python'];
+const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put herex

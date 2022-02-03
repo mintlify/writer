@@ -20,6 +20,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - JSX and TSX files
 - Python
 - PHP
+- Java
 - 🚧 More under construction
 
 ---

@@ -1,9 +1,9 @@
 {
   "name": "document",
-  "displayName": "AI Doc Writer for JavaScript, TypeScript, Python, and PHP",
+  "displayName": "AI Doc Writer for JavaScript, TypeScript, Python, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -15,7 +15,9 @@
     "jsdoc",
     "docblock",
     "intellicode",
-    "ai"
+    "ai",
+    "java",
+    "javadoc"
   ],
   "repository": {
     "url": "https://github.com/mintlify/vscode-docs"
@@ -49,13 +51,13 @@
         "key": "cmd+.",
         "mac": "cmd+.",
         "win": "ctrl+.",
-        "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/"
+        "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php/",
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/",
           "command": "docs.write"
         }
       ]
@@ -98,12 +100,16 @@
             "JSDoc",
             "reST",
             "DocBlock",
-            "Google"
+            "Google",
+            "Javadoc"
           ],
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",
-            "Format from the Google Python Style Guide"
+            "A documentation format for Python",
+            "A documentation format for PHP",
+            "Format from the Google Python Style Guide",
+            "The conventional documentation format for Java"
           ],
           "description": "The format style of documents generated"
         }

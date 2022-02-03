@@ -7,6 +7,7 @@ const FORMAT_OPTIONS = [
   'JSDoc',
   'reST',
   'DocBlock',
+  'Javadoc',
   'Google'
 ];
 
