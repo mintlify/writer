@@ -34,8 +34,9 @@
     "Programming Languages"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onCommand:docs.write",
-    "onStartupFinished"
+    "onCommand:docs.logout"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -43,6 +44,10 @@
       {
         "command": "docs.write",
         "title": "Generate Documentation"
+      },
+      {
+        "command": "docs.logout",
+        "title": "Logout of AI Doc Writer"
       }
     ],
     "keybindings": [
@@ -55,6 +60,12 @@
       }
     ],
     "menus": {
+      "view/title": [
+				{
+					"command": "docs.logout",
+					"when": "view == docs && docs.isSignedIn"
+				}
+			],
       "editor/context": [
         {
           "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/",
