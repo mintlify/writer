@@ -15,10 +15,10 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 
 ### 📝 Languages supported
 
+- Python
 - JavaScript
 - TypeScript
 - JSX and TSX files
-- Python
 - PHP
 - Java
 - 🚧 More under construction
