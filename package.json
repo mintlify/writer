@@ -78,14 +78,27 @@
         {
           "id": "mintdocs",
           "title": "AI Doc Writer (⌘.)",
-          "icon": "assets/outline.png"
+          "icon": "assets/outline.png",
+          "when": "isMac || isLinux"
+        },
+        {
+          "id": "mintdocs",
+          "title": "AI Doc Writer (Ctrl+.)",
+          "icon": "assets/outline.png",
+          "when": "isWindows"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)"
+        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isMac || isLinux"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isWindows"
       }
     ],
     "views": {

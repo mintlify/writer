@@ -8,6 +8,7 @@ import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/
 import { configUserSettings } from './helpers/ui';
 import { OptionsProvider } from './options';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
+import { KEYBINDING_DISPLAY } from './constants';
 
 const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java'];
 
@@ -48,11 +49,11 @@ export function activate(context: vscode.ExtensionContext) {
 			location = document.offsetAt(curPos);
 			line = document.lineAt(curPos);
 			if (line.isEmptyOrWhitespace) {
-				vscode.window.showErrorMessage('Please select a line with code and enter ⌘. again');
+				vscode.window.showErrorMessage(`Please select a line with code and enter ${KEYBINDING_DISPLAY} again`);
 				return;
 			}
 			if (!NO_SELECT_SUPPORT.includes(languageId)) {
-				vscode.window.showErrorMessage('Please select code and enter ⌘. again');
+				vscode.window.showErrorMessage(`Please select code and enter ${KEYBINDING_DISPLAY} again`);
 				return;
 			}
 		}
