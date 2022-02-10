@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -55,8 +55,37 @@
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.mac == '⌘ + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "alt+.",
+        "mac": "alt+.",
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.mac == '⌥ + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "cmd+.",
+        "mac": "cmd+.",
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.mac == '⌘ + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "alt+.",
+        "mac": "alt+.",
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.mac == '⌥ + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "ctrl+.",
         "win": "ctrl+.",
-        "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "alt+.",
+        "win": "alt+.",
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "menus": {
@@ -77,15 +106,8 @@
       "activitybar": [
         {
           "id": "mintdocs",
-          "title": "AI Doc Writer (⌘.)",
-          "icon": "assets/outline.png",
-          "when": "isMac || isLinux"
-        },
-        {
-          "id": "mintdocs",
-          "title": "AI Doc Writer (Ctrl+.)",
-          "icon": "assets/outline.png",
-          "when": "isWindows"
+          "title": "AI Doc Writer",
+          "icon": "assets/outline.png"
         }
       ]
     },
@@ -93,12 +115,32 @@
       {
         "view": "docs",
         "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
-        "when": "isMac || isLinux"
+        "when": "isMac && config.docwriter.hotkey.mac == '⌘ + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isMac && config.docwriter.hotkey.mac == '⌥ + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isLinux && config.docwriter.hotkey.mac == '⌘ + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isLinux && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "view": "docs",
         "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
-        "when": "isWindows"
+        "when": "isWindows && config.docwriter.hotkey.windows == 'Ctrl + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isWindows && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "views": {
@@ -108,8 +150,12 @@
           "name": "AI Generate Docs"
         },
         {
-          "id": "docsOptions",
+          "id": "formatOptions",
           "name": "Docstring Format"
+        },
+        {
+          "id": "hotkeyOptions",
+          "name": "Hotkey Binding"
         }
       ]
     },
@@ -124,18 +170,44 @@
             "JSDoc",
             "reST",
             "DocBlock",
-            "Google",
-            "Javadoc"
+            "Javadoc",
+            "Google"
           ],
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",
             "A documentation format for Python",
             "A documentation format for PHP",
-            "Format from the Google Python Style Guide",
-            "The conventional documentation format for Java"
+            "The conventional documentation format for Java",
+            "Format from the Google Python Style Guide"
           ],
           "description": "The format style of documents generated"
+        },
+        "docwriter.hotkey.mac": {
+          "type": "string",
+          "default": "⌘ + .",
+          "enum": [
+            "⌘ + .",
+            "⌥ + ."
+          ],
+          "enumDescriptions": [
+            "Command + .",
+            "Option + ."
+          ],
+          "description": "The hotkey used for generating documentation (only for Macs)"
+        },
+        "docwriter.hotkey.windows": {
+          "type": "string",
+          "default": "Ctrl + .",
+          "enum": [
+            "Ctrl + .",
+            "Alt + ."
+          ],
+          "enumDescriptions": [
+            "Control + .",
+            "Alt + ."
+          ],
+          "description": "The hotkey used for generating documentation (only for Windows)"
         }
       }
     }

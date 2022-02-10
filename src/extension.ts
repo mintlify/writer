@@ -6,9 +6,10 @@ import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } f
 import { resolve } from 'path';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
-import { OptionsProvider } from './options';
+import { FormatOptionsProvider } from './options/format';
+import { HotkeyOptionsProvider } from './options/hotkey';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
-import { KEYBINDING_DISPLAY } from './constants';
+import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
 const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java'];
 
@@ -19,10 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
 	initializeAuth(authService);
 
 	const createConfigTree = () => {
-		const searchHistoryTree = new OptionsProvider();
-		vscode.window.createTreeView('docsOptions', {
-			treeDataProvider: searchHistoryTree
-		});
+		const formatTree = new FormatOptionsProvider();
+		const hotkeyTree = new HotkeyOptionsProvider();
+		vscode.window.createTreeView('formatOptions', {treeDataProvider: formatTree});
+		vscode.window.createTreeView('hotkeyOptions', {treeDataProvider: hotkeyTree});
 	};
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
@@ -49,11 +50,11 @@ export function activate(context: vscode.ExtensionContext) {
 			location = document.offsetAt(curPos);
 			line = document.lineAt(curPos);
 			if (line.isEmptyOrWhitespace) {
-				vscode.window.showErrorMessage(`Please select a line with code and enter ${KEYBINDING_DISPLAY} again`);
+				vscode.window.showErrorMessage(`Please select a line with code and enter ${KEYBINDING_DISPLAY()} again`);
 				return;
 			}
 			if (!NO_SELECT_SUPPORT.includes(languageId)) {
-				vscode.window.showErrorMessage(`Please select code and enter ${KEYBINDING_DISPLAY} again`);
+				vscode.window.showErrorMessage(`Please select code and enter ${KEYBINDING_DISPLAY()} again`);
 				return;
 			}
 		}
@@ -197,6 +198,11 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
 		createConfigTree();
 	});
+	const updateHotkeyConfig = vscode.commands.registerCommand('docs.hotkeyConfig', async (newHotkey) => {
+		if (!newHotkey) {return;}
+		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
+		createConfigTree();
+	});
 
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
 		logout();
@@ -207,7 +213,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	context.subscriptions.push(write, insert, updateStyleConfig, logoutCommand);
+	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 
