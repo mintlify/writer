@@ -11,7 +11,7 @@ const FORMAT_OPTIONS = [
   'Google'
 ];
 
-export class OptionsProvider implements vscode.TreeDataProvider<FormatOption> {
+export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOption> {
   constructor() {}
 
   getTreeItem(element: FormatOption): vscode.TreeItem {
@@ -43,6 +43,7 @@ class FormatOption extends vscode.TreeItem {
     if (this.isDefault) {
       this.description = 'Default';
     }
+
     if (this.selected) {
       this.iconPath = {
         light: path.join(__filename, '..', '..', 'assets', 'light', 'check.svg'),

@@ -1,5 +1,24 @@
-import { env } from 'vscode';
+import { env, workspace } from 'vscode';
 
-const isWindows = () => Boolean(env.appRoot && env.appRoot[0] !== "/");
-
-export const KEYBINDING_DISPLAY = isWindows() ? 'Ctrl+.' : '⌘.';
+export const isWindows = () => Boolean(env.appRoot && env.appRoot[0] !== "/");
+export const hotkeyConfigProperty = () => {
+  if (isWindows()) {
+    return 'hotkey.windows';
+  }
+  return 'hotkey.mac';
+};
+export const KEYBINDING_DISPLAY = (): string => {
+  const hotkeyConfig = workspace.getConfiguration('docwriter').get(hotkeyConfigProperty());
+  switch (hotkeyConfig) {
+    case '⌘ + .':
+      return '⌘ + .';
+    case '⌥ + .':
+      return '⌥.';
+    case 'Ctrl + .':
+      return 'Ctrl+.';
+    case '⎇ + .':
+      return '⎇+.';
+    default:
+      return '⌘ + .';
+  }
+};
