@@ -9,7 +9,7 @@ const HOTKEY_OPTIONS_MAC = [
 ];
 const HOTKEY_OPTIONS_WINDOWS = [
   'Ctrl + .',
-  '⎇ + .',
+  'Alt + .',
 ];
 
 export class HotkeyOptionsProvider implements vscode.TreeDataProvider<FormatOption> {

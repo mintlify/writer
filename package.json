@@ -85,7 +85,7 @@
         "command": "docs.write",
         "key": "alt+.",
         "win": "alt+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.windows == '⎇ + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "menus": {
@@ -139,8 +139,8 @@
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⎇+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
-        "when": "isWindows && config.docwriter.hotkey.windows == '⎇ + .'"
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isWindows && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "views": {
@@ -201,7 +201,7 @@
           "default": "Ctrl + .",
           "enum": [
             "Ctrl + .",
-            "⎇ + ."
+            "Alt + ."
           ],
           "enumDescriptions": [
             "Control + .",
