@@ -79,7 +79,7 @@
         "command": "docs.write",
         "key": "ctrl+.",
         "win": "ctrl+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.mac == 'Ctrl + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
       },
       {
         "command": "docs.write",
