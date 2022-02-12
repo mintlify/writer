@@ -23,6 +23,15 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - Java
 - 🚧 More under construction
 
+### 📑 Docstring formats supported
+- JSDoc
+- reST
+- NumPy
+- DocBlock
+- Javadoc
+- Google
+- 🚧 More under construction
+
 ---
 
 ### More information
