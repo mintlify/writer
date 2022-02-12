@@ -169,6 +169,7 @@
             "Auto-detect",
             "JSDoc",
             "reST",
+            "NumPy",
             "DocBlock",
             "Javadoc",
             "Google"
