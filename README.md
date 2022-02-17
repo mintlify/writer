@@ -24,6 +24,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - 🚧 More under construction
 
 ### 📑 Docstring formats supported
+
 - JSDoc
 - reST
 - NumPy
@@ -31,6 +32,10 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - Javadoc
 - Google
 - 🚧 More under construction
+
+### 🚨 Disclaimer
+
+We never store your code, but your code does leave your machine. If this is a concern to you, then please set up [a call](https://savvycal.com/mintlify/enterprise-help) with us to discuss how you can locally host.
 
 ---
 
