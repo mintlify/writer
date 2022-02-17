@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -155,7 +155,8 @@
         },
         {
           "id": "hotkeyOptions",
-          "name": "Hotkey Binding"
+          "name": "Hotkey Binding",
+          "visibility": "collapsed"
         }
       ]
     },
