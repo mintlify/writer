@@ -47,11 +47,8 @@ class ComponentOption extends vscode.TreeItem {
       this.description = "Default";
     }
 
-    if (isTracking) {
-      this.iconPath = {
-        light: path.join(__filename, '..', '..', 'assets', 'light', 'check.svg'),
-        dark: path.join(__filename, '..', '..', 'assets', 'dark', 'check.svg')
-      };
-    }
+    this.iconPath = isTracking
+      ? new vscode.ThemeIcon('circle-filled')
+      : new vscode.ThemeIcon('circle-outline');
   }
 }
