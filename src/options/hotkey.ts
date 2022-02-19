@@ -12,14 +12,14 @@ const HOTKEY_OPTIONS_WINDOWS = [
   'Alt + .',
 ];
 
-export class HotkeyOptionsProvider implements vscode.TreeDataProvider<FormatOption> {
+export class HotkeyOptionsProvider implements vscode.TreeDataProvider<HotkeyOption> {
   constructor() {}
 
-  getTreeItem(element: FormatOption): vscode.TreeItem {
+  getTreeItem(element: HotkeyOption): vscode.TreeItem {
     return element;
   }
 
-  getChildren(): FormatOption[] {
+  getChildren(): HotkeyOption[] {
     const docWriterConfig = vscode.workspace.getConfiguration('docwriter');
     const hotkeyConfig = hotkeyConfigProperty();
     const defaultValue = docWriterConfig.inspect(hotkeyConfig)?.defaultValue;
@@ -29,13 +29,13 @@ export class HotkeyOptionsProvider implements vscode.TreeDataProvider<FormatOpti
     const options = HOTKEY_OPTIONS.map((option) => {
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
-      return new FormatOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected);
+      return new HotkeyOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected);
     });
     return options;
   }
 }
 
-class FormatOption extends vscode.TreeItem {
+class HotkeyOption extends vscode.TreeItem {
   constructor(
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,

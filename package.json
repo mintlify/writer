@@ -154,6 +154,10 @@
           "name": "Docstring Format"
         },
         {
+          "id": "progress",
+          "name": "Documentation Progress"
+        },
+        {
           "id": "hotkeyOptions",
           "name": "Hotkey Binding",
           "visibility": "collapsed"

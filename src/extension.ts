@@ -8,6 +8,7 @@ import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/
 import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
+import { ProgressOptionsProvider } from './options/progress';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
@@ -20,10 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
 	initializeAuth(authService);
 
 	const createConfigTree = () => {
-		const formatTree = new FormatOptionsProvider();
-		const hotkeyTree = new HotkeyOptionsProvider();
-		vscode.window.createTreeView('formatOptions', {treeDataProvider: formatTree});
-		vscode.window.createTreeView('hotkeyOptions', {treeDataProvider: hotkeyTree});
+		vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider() });
+		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
+		vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider() });
 	};
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
