@@ -155,7 +155,8 @@
         },
         {
           "id": "progress",
-          "name": "Documentation Progress"
+          "name": "Documentation Progress",
+          "when": "editorIsOpen"
         },
         {
           "id": "hotkeyOptions",

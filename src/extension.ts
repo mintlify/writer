@@ -4,7 +4,7 @@ import LanguagesHoverProvider from './hover/provider';
 import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
@@ -23,8 +23,23 @@ export function activate(context: vscode.ExtensionContext) {
 	const createConfigTree = () => {
 		vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider() });
 		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
-		vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider() });
 	};
+
+	const createProgressTree = async (document?: vscode.TextDocument) => {
+		if (document == null) {
+			return;
+		}
+
+		const file = document.getText();
+		const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId: document.languageId });
+		const { data: { percentage } } = progress;
+		vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(percentage) });
+	};
+
+	// Detect changes for progress
+	vscode.workspace.onDidSaveTextDocument(async (document) => {
+		createProgressTree(document);
+	});
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
@@ -213,6 +228,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
+	createProgressTree(vscode.window.activeTextEditor?.document);
 	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }

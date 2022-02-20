@@ -1,8 +1,18 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
+
+const buildUnicodeProgressBar = (progress: number): string => {
+  const numberOfFullBars = progress / 10;
+  const fullBars = "█".repeat(numberOfFullBars);
+  const emptySpace = "▁".repeat(10 - numberOfFullBars);
+  return `|${fullBars}${emptySpace}|`;
+};
 
 export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {
-  constructor() {}
+  private progress: number;
+
+  constructor(progress: number) {
+    this.progress = progress;
+  }
 
   getTreeItem(element: ProgressBar): vscode.TreeItem {
     return element;
@@ -18,19 +28,20 @@ export class ProgressOptionsProvider implements vscode.TreeDataProvider<Progress
       });
     }
 
-    const progress = "█▁▁▁▁▁▁▁▁▁";
-    return [new ProgressBar(progress)];
+    const bar = buildUnicodeProgressBar(this.progress);
+    return [new ProgressBar(bar, this.progress)];
   }
 }
 
 class ProgressBar extends vscode.TreeItem {
   constructor(
-    public readonly progress: string,
+    public readonly bar: string,
+    public readonly progress: number,
   ) {
-    super(progress, vscode.TreeItemCollapsibleState.Collapsed);
+    super(bar, vscode.TreeItemCollapsibleState.Collapsed);
     this.id = "progress";
     this.tooltip = "Progress bar (click to toggle settings)";
-    this.description = "22%";
+    this.description = `${progress}%`;
   }
 }
 
