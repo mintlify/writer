@@ -190,6 +190,21 @@
           ],
           "description": "The format style of documents generated"
         },
+        "docwriter.progress.trackFunctions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Toggle to include functions in documentation progress tracking"
+        },
+        "docwriter.progress.trackClasses": {
+          "type": "boolean",
+          "default": false,
+          "description": "Toggle to include classes in documentation progress tracking"
+        },
+        "docwriter.progress.trackTypes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Toggle to include type definitions in documentation progress tracking"
+        },
         "docwriter.hotkey.mac": {
           "type": "string",
           "default": "⌘ + .",
