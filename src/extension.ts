@@ -25,20 +25,24 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 	};
 
-	const createProgressTree = async (document?: vscode.TextDocument) => {
-		if (document == null) {
+	const createProgressTree = async () => {
+		const editor = vscode.window.activeTextEditor;
+		if (editor == null) {
+			removeProgressColor();
 			return;
 		}
 
-		const file = document.getText();
-		const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId: document.languageId });
+		const { languageId, getText } = editor.document;
+
+		const file = getText();
+		const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId });
 		const { data: { percentage } } = progress;
 		vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(percentage) });
 	};
 
 	// Detect changes for progress
-	vscode.workspace.onDidSaveTextDocument(async (document) => {
-		createProgressTree(document);
+	vscode.workspace.onDidSaveTextDocument(async () => {
+		createProgressTree();
 	});
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
@@ -218,6 +222,11 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
 		createConfigTree();
 	});
+	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
+		console.log(trackingConfigId, newValue);
+		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
+		createProgressTree();
+	});
 
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
 		logout();
@@ -228,8 +237,8 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	createProgressTree(vscode.window.activeTextEditor?.document);
-	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, logoutCommand);
+	createProgressTree();
+	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 

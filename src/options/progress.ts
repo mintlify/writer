@@ -1,5 +1,25 @@
 import * as vscode from 'vscode';
 
+type TrackingConfig = {
+  id: string;
+  name: string;
+};
+
+const trackingConfigIds: TrackingConfig[] = [
+  {
+    id: 'progress.trackFunctions',
+    name: 'Functions',
+  },
+  {
+    id: 'progress.trackClasses',
+    name: 'Classes',
+  },
+  {
+    id: 'progress.trackTypes',
+    name: 'Types',
+  },
+];
+
 const buildUnicodeProgressBar = (progress: number): string => {
   const numberOfFullBars = progress / 10;
   const fullBars = "█".repeat(numberOfFullBars);
@@ -20,11 +40,8 @@ export class ProgressOptionsProvider implements vscode.TreeDataProvider<Progress
 
   getChildren(element?: vscode.TreeItem): any[] {
     if (element?.id === 'progress') {
-      const tracking = ["Functions"];
-      const defaultTracking = ['Functions'];
-      const allComponents = ["Functions", "Classes", "Types"];
-      return allComponents.map((component) => {
-        return new ComponentOption(component, tracking.includes(component), defaultTracking.includes(component));
+      return trackingConfigIds.map((config) => {
+        return new ComponentOption(config);
       });
     }
 
@@ -47,12 +64,17 @@ class ProgressBar extends vscode.TreeItem {
 
 class ComponentOption extends vscode.TreeItem {
   constructor(
-    name: string,
-    isTracking: boolean,
-    isDefault: boolean,
+    config: TrackingConfig,
   ) {
-    super(name, vscode.TreeItemCollapsibleState.None);
-    this.tooltip = `Click to toggle ${name.toLowerCase()} in progress tracking`;
+    super(config.name, vscode.TreeItemCollapsibleState.None);
+    this.tooltip = `Click to toggle ${config.name.toLowerCase()} in progress tracking`;
+
+    const docWriterConfig = vscode.workspace.getConfiguration('docwriter');
+    const configId = config.id;
+    const isTrackingConfigInspect = docWriterConfig.inspect(configId);
+    const isTracking = Boolean(docWriterConfig.get(configId));
+
+    const isDefault = Boolean(isTrackingConfigInspect?.defaultValue);
 
     if (isDefault) {
       this.description = "Default";
@@ -61,5 +83,13 @@ class ComponentOption extends vscode.TreeItem {
     this.iconPath = isTracking
       ? new vscode.ThemeIcon('circle-filled')
       : new vscode.ThemeIcon('circle-outline');
+
+    const onClickCommand: vscode.Command = {
+      title: 'Changing Tracking Config',
+      command: 'docs.trackingTypeConfig',
+      arguments: [config.id, !isTracking]
+    };
+
+    this.command = onClickCommand;
   }
 }
