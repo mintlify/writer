@@ -36,11 +36,13 @@ export const getActiveIndicatorTypeNames = () => {
 };
 
 export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {
-  private progress: number;
+  private current: number;
+  private total: number;
   private error: string | undefined;
 
-  constructor(progress: number, error?: string) {
-    this.progress = progress;
+  constructor(current: number, total: number, error?: string) {
+    this.current = current;
+    this.total = total;
     this.error = error;
   }
 
@@ -58,20 +60,32 @@ export class ProgressOptionsProvider implements vscode.TreeDataProvider<Progress
       });
     }
 
-    const bar = buildUnicodeProgressBar(this.progress);
-    return [new ProgressBar(bar, this.progress)];
+    let percentage = 100;
+    let bar = 'Settings';
+    if (this.total !== 0) {
+      percentage = Math.round(this.current * 100 / this.total);
+      bar = buildUnicodeProgressBar(percentage);
+    }
+
+    return [new ProgressBar(bar, this.current, this.total)];
   }
 }
 
 class ProgressBar extends vscode.TreeItem {
   constructor(
     public readonly bar: string,
-    public readonly progress: number,
+    public readonly current: number,
+    public readonly total: number,
   ) {
     super(bar, vscode.TreeItemCollapsibleState.Collapsed);
     this.id = "progress";
     this.tooltip = "Progress bar (click to toggle settings)";
-    this.description = `${progress}%`;
+
+    if (total !== 0) {
+      this.description = `${current}/${total}`;
+    } else {
+      this.iconPath = new vscode.ThemeIcon('settings-gear');
+    }
   }
 }
 
