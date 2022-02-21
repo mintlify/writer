@@ -37,12 +37,17 @@ export const getActiveIndicatorTypeNames = () => {
 
 export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {
   private progress: number;
+  private error: string | undefined;
 
-  constructor(progress: number) {
+  constructor(progress: number, error?: string) {
     this.progress = progress;
+    this.error = error;
   }
 
   getTreeItem(element: ProgressBar): vscode.TreeItem {
+    if (this.error) {
+      return new ErrorPage();
+    }
     return element;
   }
 
@@ -99,5 +104,11 @@ class ComponentOption extends vscode.TreeItem {
     };
 
     this.command = onClickCommand;
+  }
+}
+
+class ErrorPage extends vscode.TreeItem {
+  constructor() {
+    super('Unable to display progress', vscode.TreeItemCollapsibleState.None);
   }
 }

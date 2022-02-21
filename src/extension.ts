@@ -36,9 +36,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const file = getText();
 		const types = getActiveIndicatorTypeNames();
-		const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId, types });
-		const { data: { percentage } } = progress;
-		vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(percentage) });
+		try {
+			const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId, types });
+			const { data: { percentage } } = progress;
+			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(percentage) });
+		} catch {
+			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(0, 'Unable to generate progress') });
+		}
 	};
 
 	// Detect changes for progress
