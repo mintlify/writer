@@ -28,7 +28,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const createProgressTree = async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) {
-			removeProgressColor();
 			return;
 		}
 
@@ -235,7 +234,6 @@ export function activate(context: vscode.ExtensionContext) {
 		createConfigTree();
 	});
 	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
-		console.log(trackingConfigId, newValue);
 		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
 		createProgressTree();
 	});
