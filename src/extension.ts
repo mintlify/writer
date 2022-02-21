@@ -46,7 +46,14 @@ export function activate(context: vscode.ExtensionContext) {
 	};
 
 	// Detect changes for progress
-	vscode.workspace.onDidSaveTextDocument(async () => {
+	vscode.workspace.onDidSaveTextDocument(() => {
+		createProgressTree();
+	});
+	vscode.window.onDidChangeActiveTextEditor((editor) => {
+		if (editor == null) {
+			return;
+		}
+		
 		createProgressTree();
 	});
 
