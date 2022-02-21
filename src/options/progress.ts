@@ -24,7 +24,15 @@ const buildUnicodeProgressBar = (progress: number): string => {
   const numberOfFullBars = progress / 10;
   const fullBars = "█".repeat(numberOfFullBars);
   const emptySpace = "▁".repeat(10 - numberOfFullBars);
-  return `|${fullBars}${emptySpace}|`;
+  return `[${fullBars}${emptySpace}]`;
+};
+
+export const getActiveIndicatorTypeNames = () => {
+  return trackingConfigIds.filter(
+    (config) => Boolean(vscode.workspace.getConfiguration('docwriter').get(config.id))
+  ).map(
+    (config) => config.name
+  );
 };
 
 export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {

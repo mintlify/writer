@@ -8,7 +8,7 @@ import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from '
 import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
-import { ProgressOptionsProvider } from './options/progress';
+import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
@@ -35,7 +35,8 @@ export function activate(context: vscode.ExtensionContext) {
 		const { languageId, getText } = editor.document;
 
 		const file = getText();
-		const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId });
+		const types = getActiveIndicatorTypeNames();
+		const progress: { data: { percentage: number } } = await axios.post(PROGRESS, { file, languageId, types });
 		const { data: { percentage } } = progress;
 		vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(percentage) });
 	};
