@@ -4,10 +4,11 @@ import LanguagesHoverProvider from './hover/provider';
 import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
 import { resolve } from 'path';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
+import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
@@ -20,11 +21,40 @@ export function activate(context: vscode.ExtensionContext) {
 	initializeAuth(authService);
 
 	const createConfigTree = () => {
-		const formatTree = new FormatOptionsProvider();
-		const hotkeyTree = new HotkeyOptionsProvider();
-		vscode.window.createTreeView('formatOptions', {treeDataProvider: formatTree});
-		vscode.window.createTreeView('hotkeyOptions', {treeDataProvider: hotkeyTree});
+		vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider() });
+		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 	};
+
+	const createProgressTree = async () => {
+		const editor = vscode.window.activeTextEditor;
+		if (editor == null) {
+			return;
+		}
+
+		const { languageId, getText } = editor.document;
+
+		const file = getText();
+		const types = getActiveIndicatorTypeNames();
+		try {
+			const progressRes = await axios.post(PROGRESS, { file, languageId, types });
+			const { data: progress } = progressRes;
+			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
+		} catch {
+			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
+		}
+	};
+
+	// Detect changes for progress
+	vscode.workspace.onDidSaveTextDocument(() => {
+		createProgressTree();
+	});
+	vscode.window.onDidChangeActiveTextEditor((editor) => {
+		if (editor == null) {
+			return;
+		}
+		
+		createProgressTree();
+	});
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
@@ -203,6 +233,10 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
 		createConfigTree();
 	});
+	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
+		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
+		createProgressTree();
+	});
 
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
 		logout();
@@ -213,7 +247,8 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, logoutCommand);
+	createProgressTree();
+	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 

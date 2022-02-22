@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -154,6 +154,11 @@
           "name": "Docstring Format"
         },
         {
+          "id": "progress",
+          "name": "Documentation Progress",
+          "when": "editorIsOpen"
+        },
+        {
           "id": "hotkeyOptions",
           "name": "Hotkey Binding",
           "visibility": "collapsed"
@@ -184,6 +189,26 @@
             "Format from the Google Python Style Guide"
           ],
           "description": "The format style of documents generated"
+        },
+        "docwriter.progress.trackFunctions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Toggle to include functions in documentation progress tracking"
+        },
+        "docwriter.progress.trackMethods": {
+          "type": "boolean",
+          "default": true,
+          "description": "Toggle to include methods in documentation progress tracking"
+        },
+        "docwriter.progress.trackClasses": {
+          "type": "boolean",
+          "default": false,
+          "description": "Toggle to include classes in documentation progress tracking"
+        },
+        "docwriter.progress.trackTypes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Toggle to include type definitions in documentation progress tracking"
         },
         "docwriter.hotkey.mac": {
           "type": "string",

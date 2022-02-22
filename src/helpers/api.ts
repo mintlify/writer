@@ -5,3 +5,4 @@ export const DOCS_WRITE = MINTBASE + '/docs/write/v2';
 export const DOCS_WRITE_NO_SELECTION = MINTBASE + '/docs/write/v2/no-selection';
 export const FEEDBACK = MINTBASE + '/docs/feedback';
 export const INTRO = MINTBASE + '/docs/intro';
+export const PROGRESS = MINTBASE + '/progress';
