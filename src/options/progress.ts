@@ -35,68 +35,71 @@ export const getActiveIndicatorTypeNames = () => {
   );
 };
 
-export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {
-  private current: number;
-  private total: number;
-  private error: string | undefined;
+type Progress = {
+  current: number;
+  total: number;
+  breakdown: Record<string, { current: number, total: number }>
+};
 
-  constructor(current: number, total: number, error?: string) {
-    this.current = current;
-    this.total = total;
-    this.error = error;
+export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {
+  private progress?: Progress;
+
+  constructor(progress?: Progress) {
+    this.progress = progress;
   }
 
   getTreeItem(element: ProgressBar): vscode.TreeItem {
-    if (this.error) {
-      return new ErrorPage();
-    }
     return element;
   }
 
   getChildren(element?: vscode.TreeItem): any[] {
+    if (!this.progress) {
+      return [new ErrorPage("Language not supported")];
+    }
+
     if (element?.id === 'progress') {
       return trackingConfigIds.map((config) => {
-        return new ComponentOption(config);
+        const breakdown = this.progress?.breakdown[config.name];
+        return new ComponentOption(config, breakdown);
       });
     }
 
-    const percentage = this.total !== 0 ? Math.round(this.current * 100 / this.total) : 100;
+    const percentage = this.progress.total != 0
+      ? Math.round(this.progress.current * 100 / this.progress.total)
+      : 100;
     const bar = buildUnicodeProgressBar(percentage);
 
-    return [new ProgressBar(bar, this.current, this.total)];
+    return [new ProgressBar(bar, this.progress)];
   }
 }
 
 class ProgressBar extends vscode.TreeItem {
   constructor(
     public readonly bar: string,
-    public readonly current: number,
-    public readonly total: number,
+    public readonly progress?: Progress
   ) {
     super(bar, vscode.TreeItemCollapsibleState.Collapsed);
     this.id = "progress";
     this.tooltip = "Progress bar (click to toggle settings)";
 
-    this.description = `${current}/${total}`;
+    this.description = progress != null && progress.total !== 0 ? `${progress.current}/${progress.total}` : 'None';
   }
 }
 
 class ComponentOption extends vscode.TreeItem {
   constructor(
     config: TrackingConfig,
+    breakdown?: { current: number, total: number }
   ) {
     super(config.name, vscode.TreeItemCollapsibleState.None);
     this.tooltip = `Click to toggle ${config.name.toLowerCase()} in progress tracking`;
 
     const docWriterConfig = vscode.workspace.getConfiguration('docwriter');
     const configId = config.id;
-    const isTrackingConfigInspect = docWriterConfig.inspect(configId);
     const isTracking = Boolean(docWriterConfig.get(configId));
 
-    const isDefault = Boolean(isTrackingConfigInspect?.defaultValue);
-
-    if (isDefault) {
-      this.description = "Default";
+    if (breakdown) {
+      this.description = breakdown.total !== 0 ? `${breakdown.current}/${breakdown.total}` : 'None';
     }
 
     this.iconPath = isTracking
@@ -114,7 +117,9 @@ class ComponentOption extends vscode.TreeItem {
 }
 
 class ErrorPage extends vscode.TreeItem {
-  constructor() {
-    super('Unable to display progress', vscode.TreeItemCollapsibleState.None);
+  constructor(error: string) {
+    super(error, vscode.TreeItemCollapsibleState.None);
+
+    this.iconPath = new vscode.ThemeIcon('info');
   }
 }

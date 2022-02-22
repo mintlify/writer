@@ -36,11 +36,11 @@ export function activate(context: vscode.ExtensionContext) {
 		const file = getText();
 		const types = getActiveIndicatorTypeNames();
 		try {
-			const progress = await axios.post(PROGRESS, { file, languageId, types });
-			const { data: { current, total } } = progress;
-			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(current, total) });
+			const progressRes = await axios.post(PROGRESS, { file, languageId, types });
+			const { data: progress } = progressRes;
+			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
 		} catch {
-			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(0, 0, 'Unable to generate progress') });
+			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
 		}
 	};
 
