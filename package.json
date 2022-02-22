@@ -195,6 +195,11 @@
           "default": true,
           "description": "Toggle to include functions in documentation progress tracking"
         },
+        "docwriter.progress.trackMethods": {
+          "type": "boolean",
+          "default": true,
+          "description": "Toggle to include methods in documentation progress tracking"
+        },
         "docwriter.progress.trackClasses": {
           "type": "boolean",
           "default": false,

@@ -11,6 +11,10 @@ const trackingConfigIds: TrackingConfig[] = [
     name: 'Functions',
   },
   {
+    id: 'progress.trackMethods',
+    name: 'Methods',
+  },
+  {
     id: 'progress.trackClasses',
     name: 'Classes',
   },
