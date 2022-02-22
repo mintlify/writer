@@ -60,12 +60,8 @@ export class ProgressOptionsProvider implements vscode.TreeDataProvider<Progress
       });
     }
 
-    let percentage = 100;
-    let bar = 'Settings';
-    if (this.total !== 0) {
-      percentage = Math.round(this.current * 100 / this.total);
-      bar = buildUnicodeProgressBar(percentage);
-    }
+    const percentage = this.total !== 0 ? Math.round(this.current * 100 / this.total) : 100;
+    const bar = buildUnicodeProgressBar(percentage);
 
     return [new ProgressBar(bar, this.current, this.total)];
   }
@@ -81,11 +77,7 @@ class ProgressBar extends vscode.TreeItem {
     this.id = "progress";
     this.tooltip = "Progress bar (click to toggle settings)";
 
-    if (total !== 0) {
-      this.description = `${current}/${total}`;
-    } else {
-      this.iconPath = new vscode.ThemeIcon('settings-gear');
-    }
+    this.description = `${current}/${total}`;
   }
 }
 
