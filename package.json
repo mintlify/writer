@@ -3,7 +3,7 @@
   "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
