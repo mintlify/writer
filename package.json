@@ -150,13 +150,13 @@
           "name": "AI Generate Docs"
         },
         {
-          "id": "formatOptions",
-          "name": "Docstring Format"
-        },
-        {
           "id": "progress",
           "name": "Documentation Progress",
           "when": "editorIsOpen"
+        },
+        {
+          "id": "formatOptions",
+          "name": "Docstring Format"
         },
         {
           "id": "hotkeyOptions",
