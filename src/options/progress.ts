@@ -42,7 +42,8 @@ export const getActiveIndicatorTypeNames = () => {
 type Progress = {
   current: number;
   total: number;
-  breakdown: Record<string, { current: number, total: number }>
+  breakdown: Record<string, { current: number, total: number }>,
+  hasNotCompletedOnboarding?: { hasGeneratedFunction: boolean, hasGeneratedUnspecified: boolean }
 };
 
 export class ProgressOptionsProvider implements vscode.TreeDataProvider<ProgressBar> {
@@ -59,6 +60,14 @@ export class ProgressOptionsProvider implements vscode.TreeDataProvider<Progress
   getChildren(element?: vscode.TreeItem): any[] {
     if (!this.progress) {
       return [new ErrorPage("Language not supported")];
+    }
+
+    if (this.progress.hasNotCompletedOnboarding) {
+      const { hasGeneratedFunction, hasGeneratedUnspecified } = this.progress.hasNotCompletedOnboarding;
+      return [
+        new OnboardingTodo('Document a function', hasGeneratedFunction),
+        new OnboardingTodo('Document a line of code', hasGeneratedUnspecified)
+      ];
     }
 
     if (element?.id === 'progress') {
@@ -117,6 +126,18 @@ class ComponentOption extends vscode.TreeItem {
     };
 
     this.command = onClickCommand;
+  }
+}
+
+class OnboardingTodo extends vscode.TreeItem {
+  constructor(
+    name: string,
+    hasCompleted: boolean,
+  ) {
+    super(name, vscode.TreeItemCollapsibleState.None);
+    this.tooltip = "Complete by selecting the code and clicking the `Generate docs` button";
+
+    this.iconPath = hasCompleted ? new vscode.ThemeIcon('pass-filled') : new vscode.ThemeIcon('circle-large-outline');
   }
 }
 
