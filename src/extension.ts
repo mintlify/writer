@@ -45,16 +45,16 @@ export function activate(context: vscode.ExtensionContext) {
 	};
 
 	// Detect changes for progress
-	vscode.workspace.onDidSaveTextDocument(() => {
-		createProgressTree();
-	});
-	vscode.window.onDidChangeActiveTextEditor((editor) => {
-		if (editor == null) {
-			return;
-		}
+	// vscode.workspace.onDidSaveTextDocument(() => {
+	// 	createProgressTree();
+	// });
+	// vscode.window.onDidChangeActiveTextEditor((editor) => {
+	// 	if (editor == null) {
+	// 		return;
+	// 	}
 		
-		createProgressTree();
-	});
+	// 	createProgressTree();
+	// });
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
@@ -247,7 +247,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	createProgressTree();
+	// createProgressTree();
 	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
