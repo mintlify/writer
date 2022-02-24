@@ -176,17 +176,6 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				}
 			});
-
-			const timeout = new Promise((resolve, _) => {
-				setTimeout(() => {
-					resolve('Timeout');
-				}, 25000);
-			});
-
-			const firstToFinish = await Promise.race([docsPromise, timeout]);
-			if (firstToFinish === 'Timeout') {
-				vscode.window.showErrorMessage('Error: Generating documentation timed out');
-			}
 		});
 	});
 
