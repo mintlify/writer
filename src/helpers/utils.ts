@@ -18,10 +18,6 @@ export const getFileExtension = (filename: string): string => {
   return fileExtension[1];
 };
 
-/**
- * Get the style configuration from the docwriter extension.
- * @returns The value of the configuration.
- */
 export const getDocStyleConfig = () => {
   return vscode.workspace.getConfiguration('docwriter').get('style') || 'Auto-detect';
 };
@@ -33,17 +29,33 @@ export const getWidth = (offset: number) => {
   return width;
 };
 
-export const checkWorkerStatus = async (id: string) => {
-  let workerResponse = null;
+const sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 
-  while (workerResponse == null) {
-    const { data } = await axios.get(WORKER_STATUS(id));
-    if (data) {
-      console.log(data);
-      workerResponse = data;
+const checkWorkerStatus = async (id: string): Promise<any> => {
+  const status = await axios.get(WORKER_STATUS(id));
+  return status.data;
+};
+
+export const monitorWorkerStatus = async (id: string) => {
+  let workerStatus = null;
+  let millisecondsPassed = 0;
+  const intervalMs = 100;
+
+  while (workerStatus == null && millisecondsPassed < 25000) {
+    const status = await checkWorkerStatus(id);
+    if (status.state === 'completed' && status.data) {
+      workerStatus = status.data;
       break;
     }
+    else if (status.state === 'failed') {
+      throw new Error('Unable to generate documentation');
+    }
+
+    millisecondsPassed += intervalMs;
+    await sleep(intervalMs);
   }
 
-  return workerResponse;
+  return workerStatus;
 };

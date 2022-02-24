@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { checkWorkerStatus, getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
+import { monitorWorkerStatus, getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS, WORKER_STATUS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
@@ -119,7 +119,7 @@ export function activate(context: vscode.ExtensionContext) {
 						shouldShowFirstTimeFeedback,
 						feedbackId,
 						cursorMarker
-					} = await checkWorkerStatus(id);
+					} = await monitorWorkerStatus(id);
 					vscode.commands.executeCommand('docs.insert', {
 						position,
 						content: docstring,
