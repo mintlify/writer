@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
+import { checkWorkerStatus, getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
-import { resolve } from 'path';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS, WORKER_STATUS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
@@ -96,17 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
 					const WRITE_ENDPOINT = highlighted ? DOCS_WRITE : DOCS_WRITE_NO_SELECTION;
-					const {
-						data: {
-							docstring,
-							position,
-							shouldShowFeedback,
-							shouldShowFirstTimeFeedback,
-							feedbackId,
-							cursorMarker
-						}
-					} = 
-					await axios.post(WRITE_ENDPOINT,
+					const { data: { id } } = await axios.post(WRITE_ENDPOINT,
 						{
 							languageId,
 							commented: true,
@@ -122,7 +111,15 @@ export function activate(context: vscode.ExtensionContext) {
 							location,
 							line: line?.text,
 						});
-
+					
+					const {
+						docstring,
+						position,
+						shouldShowFeedback,
+						shouldShowFirstTimeFeedback,
+						feedbackId,
+						cursorMarker
+					} = await checkWorkerStatus(id);
 					vscode.commands.executeCommand('docs.insert', {
 						position,
 						content: docstring,
@@ -190,7 +187,6 @@ export function activate(context: vscode.ExtensionContext) {
 			if (firstToFinish === 'Timeout') {
 				vscode.window.showErrorMessage('Error: Generating documentation timed out');
 			}
-			resolve('Either time out or completed');
 		});
 	});
 

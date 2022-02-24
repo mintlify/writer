@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import axios from 'axios';
+import { WORKER_STATUS } from './api';
 
 export const getHighlightedText = (editor: vscode.TextEditor) => {
   const { selection } = editor;
@@ -29,4 +31,19 @@ export const getWidth = (offset: number) => {
   const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
   const width = maxWidth - offset;
   return width;
+};
+
+export const checkWorkerStatus = async (id: string) => {
+  let workerResponse = null;
+
+  while (workerResponse == null) {
+    const { data } = await axios.get(WORKER_STATUS(id));
+    if (data) {
+      console.log(data);
+      workerResponse = data;
+      break;
+    }
+  }
+
+  return workerResponse;
 };
