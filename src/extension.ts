@@ -176,6 +176,8 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				}
 			});
+			
+			await docsPromise;
 		});
 	});
 
