@@ -24,36 +24,56 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 	};
 
+	let isProgressVisible = false;
 	const createProgressTree = async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) {
 			return;
 		}
 
+		if (!isProgressVisible) {
+			const checkProgressVisibility = vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
+			return checkProgressVisibility.onDidChangeVisibility((e) => {
+				if (e.visible) {
+					isProgressVisible = true;
+					createProgressTree();
+				}
+			});
+		}
+
 		const { languageId, getText } = editor.document;
 
 		const file = getText();
 		const types = getActiveIndicatorTypeNames();
+		let treeDataProvider;		
 		try {
 			const progressRes = await axios.post(PROGRESS, { file, languageId, types });
 			const { data: progress } = progressRes;
 			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
+			treeDataProvider = new ProgressOptionsProvider(progress);
 		} catch {
-			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
+			treeDataProvider = new ProgressOptionsProvider(undefined);
 		}
+
+		const progressTree = vscode.window.createTreeView('progress', { treeDataProvider });
+		progressTree.onDidChangeVisibility((e) => {
+			if (!e.visible) {
+				isProgressVisible = false;
+				createProgressTree();
+			}
+		});
 	};
 
 	// Detect changes for progress
-	// vscode.workspace.onDidSaveTextDocument(() => {
-	// 	createProgressTree();
-	// });
-	// vscode.window.onDidChangeActiveTextEditor((editor) => {
-	// 	if (editor == null) {
-	// 		return;
-	// 	}
-		
-	// 	createProgressTree();
-	// });
+	vscode.workspace.onDidSaveTextDocument(() => {
+		createProgressTree();
+	});
+	vscode.window.onDidChangeActiveTextEditor((editor) => {
+		if (editor == null) {
+			return;
+		}
+		createProgressTree();
+	});
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
@@ -234,7 +254,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	// createProgressTree();
+	createProgressTree();
 	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
