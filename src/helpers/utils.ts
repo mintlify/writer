@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import axios from 'axios';
+import { WORKER_STATUS } from './api';
 
 export const getHighlightedText = (editor: vscode.TextEditor) => {
   const { selection } = editor;
@@ -16,10 +18,6 @@ export const getFileExtension = (filename: string): string => {
   return fileExtension[1];
 };
 
-/**
- * Get the style configuration from the docwriter extension.
- * @returns The value of the configuration.
- */
 export const getDocStyleConfig = () => {
   return vscode.workspace.getConfiguration('docwriter').get('style') || 'Auto-detect';
 };
@@ -29,4 +27,35 @@ export const getWidth = (offset: number) => {
   const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
   const width = maxWidth - offset;
   return width;
+};
+
+const sleep = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+const checkWorkerStatus = async (id: string): Promise<any> => {
+  const status = await axios.get(WORKER_STATUS(id));
+  return status.data;
+};
+
+export const monitorWorkerStatus = async (id: string) => {
+  let workerStatus = null;
+  let millisecondsPassed = 0;
+  const intervalMs = 100;
+
+  while (workerStatus == null && millisecondsPassed < 25000) {
+    const status = await checkWorkerStatus(id);
+    if (status.state === 'completed' && status.data) {
+      workerStatus = status.data;
+      break;
+    }
+    else if (status.state === 'failed') {
+      throw new Error('Unable to generate documentation');
+    }
+
+    millisecondsPassed += intervalMs;
+    await sleep(intervalMs);
+  }
+
+  return workerStatus;
 };

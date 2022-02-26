@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
+import { monitorWorkerStatus, getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
-import { resolve } from 'path';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS, WORKER_STATUS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
@@ -25,36 +24,56 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 	};
 
+	let isProgressVisible = false;
 	const createProgressTree = async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (editor == null) {
 			return;
 		}
 
+		if (!isProgressVisible) {
+			const checkProgressVisibility = vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
+			return checkProgressVisibility.onDidChangeVisibility((e) => {
+				if (e.visible) {
+					isProgressVisible = true;
+					createProgressTree();
+				}
+			});
+		}
+
 		const { languageId, getText } = editor.document;
 
 		const file = getText();
 		const types = getActiveIndicatorTypeNames();
+		let treeDataProvider;		
 		try {
 			const progressRes = await axios.post(PROGRESS, { file, languageId, types });
 			const { data: progress } = progressRes;
 			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
+			treeDataProvider = new ProgressOptionsProvider(progress);
 		} catch {
-			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
+			treeDataProvider = new ProgressOptionsProvider(undefined);
 		}
+
+		const progressTree = vscode.window.createTreeView('progress', { treeDataProvider });
+		progressTree.onDidChangeVisibility((e) => {
+			if (!e.visible) {
+				isProgressVisible = false;
+				createProgressTree();
+			}
+		});
 	};
 
 	// Detect changes for progress
-	// vscode.workspace.onDidSaveTextDocument(() => {
-	// 	createProgressTree();
-	// });
-	// vscode.window.onDidChangeActiveTextEditor((editor) => {
-	// 	if (editor == null) {
-	// 		return;
-	// 	}
-		
-	// 	createProgressTree();
-	// });
+	vscode.workspace.onDidSaveTextDocument(() => {
+		createProgressTree();
+	});
+	vscode.window.onDidChangeActiveTextEditor((editor) => {
+		if (editor == null) {
+			return;
+		}
+		createProgressTree();
+	});
 
 	const write = vscode.commands.registerCommand('docs.write', async () => {
 		changeProgressColor();
@@ -96,17 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const docsPromise = new Promise(async (resolve, _) => {
 				try {
 					const WRITE_ENDPOINT = highlighted ? DOCS_WRITE : DOCS_WRITE_NO_SELECTION;
-					const {
-						data: {
-							docstring,
-							position,
-							shouldShowFeedback,
-							shouldShowFirstTimeFeedback,
-							feedbackId,
-							cursorMarker
-						}
-					} = 
-					await axios.post(WRITE_ENDPOINT,
+					const { data: { id } } = await axios.post(WRITE_ENDPOINT,
 						{
 							languageId,
 							commented: true,
@@ -122,7 +131,15 @@ export function activate(context: vscode.ExtensionContext) {
 							location,
 							line: line?.text,
 						});
-
+					
+					const {
+						docstring,
+						position,
+						shouldShowFeedback,
+						shouldShowFirstTimeFeedback,
+						feedbackId,
+						cursorMarker
+					} = await monitorWorkerStatus(id);
 					vscode.commands.executeCommand('docs.insert', {
 						position,
 						content: docstring,
@@ -179,18 +196,8 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				}
 			});
-
-			const timeout = new Promise((resolve, _) => {
-				setTimeout(() => {
-					resolve('Timeout');
-				}, 25000);
-			});
-
-			const firstToFinish = await Promise.race([docsPromise, timeout]);
-			if (firstToFinish === 'Timeout') {
-				vscode.window.showErrorMessage('Error: Generating documentation timed out');
-			}
-			resolve('Either time out or completed');
+			
+			await docsPromise;
 		});
 	});
 
@@ -247,7 +254,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	createConfigTree();
-	// createProgressTree();
+	createProgressTree();
 	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
