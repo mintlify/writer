@@ -249,7 +249,7 @@ export function activate(context: vscode.ExtensionContext) {
 		logout();
 	});
 
-	const languagesProvider = ['typescript', 'javascript', 'python', 'php'].map((language) => {
+	const languagesProvider = ['typescript', 'javascript', 'python', 'php', 'java'].map((language) => {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
 
