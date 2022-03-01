@@ -19,6 +19,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - JavaScript
 - TypeScript
 - JSX and TSX files
+- C and C++
 - PHP
 - Java
 - 🚧 More under construction

@@ -1,6 +1,6 @@
 {
   "name": "document",
-  "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, PHP, and Java",
+  "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, C, C++, PHP, and Java",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
   "version": "1.10.1",
@@ -11,6 +11,8 @@
     "javascript",
     "python",
     "nodejs",
+    "c",
+    "c++",
     "php",
     "jsdoc",
     "docblock",
