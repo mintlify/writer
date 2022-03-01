@@ -11,7 +11,7 @@ import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
-const NO_SELECT_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java'];
+const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put here
@@ -102,7 +102,7 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showErrorMessage(`Please select a line with code and enter ${KEYBINDING_DISPLAY()} again`);
 				return;
 			}
-			if (!NO_SELECT_SUPPORT.includes(languageId)) {
+			if (!LANGUAGES_SUPPORT.includes(languageId)) {
 				vscode.window.showErrorMessage(`Please select code and enter ${KEYBINDING_DISPLAY()} again`);
 				return;
 			}
@@ -249,7 +249,7 @@ export function activate(context: vscode.ExtensionContext) {
 		logout();
 	});
 
-	const languagesProvider = ['typescript', 'javascript', 'python', 'php', 'java'].map((language) => {
+	const languagesProvider =  LANGUAGES_SUPPORT.map((language) => {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
 
