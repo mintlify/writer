@@ -14,6 +14,7 @@
     "php",
     "jsdoc",
     "docblock",
+    "doxygen",
     "intellicode",
     "ai",
     "java",
@@ -177,6 +178,7 @@
             "reST",
             "NumPy",
             "DocBlock",
+            "Doxygen",
             "Javadoc",
             "Google"
           ],
@@ -185,6 +187,7 @@
             "The conventional document format for JavaScript",
             "A documentation format for Python",
             "A documentation format for PHP",
+            "The de facto standard tool for generating documentation for C++ and C",
             "The conventional documentation format for Java",
             "Format from the Google Python Style Guide"
           ],

@@ -8,6 +8,7 @@ const FORMAT_OPTIONS = [
   'reST',
   'NumPy',
   'DocBlock',
+  'Doxygen',
   'Javadoc',
   'Google'
 ];

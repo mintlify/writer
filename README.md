@@ -29,6 +29,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - reST
 - NumPy
 - DocBlock
+- Doxygen
 - Javadoc
 - Google
 - 🚧 More under construction
