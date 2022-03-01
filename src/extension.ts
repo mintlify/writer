@@ -11,7 +11,7 @@ import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
-const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c'];
+const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put here

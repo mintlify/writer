@@ -55,37 +55,37 @@
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
-        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/ && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/ && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/ && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/ && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "command": "docs.write",
         "key": "ctrl+.",
         "win": "ctrl+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "win": "alt+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/ && config.docwriter.hotkey.windows == 'Alt + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/ && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "menus": {
@@ -97,7 +97,7 @@
 			],
       "editor/context": [
         {
-          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c/",
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp/",
           "command": "docs.write"
         }
       ]
