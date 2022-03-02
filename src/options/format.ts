@@ -10,7 +10,8 @@ const FORMAT_OPTIONS = [
   'DocBlock',
   'Doxygen',
   'Javadoc',
-  'Google'
+  'Google',
+  'Custom'
 ];
 
 export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOption> {
@@ -20,14 +21,21 @@ export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOpti
     return element;
   }
 
-  getChildren(): FormatOption[] {
+  getChildren(element?: vscode.TreeItem): any[] {
+    if (element) {
+      return [new CustomOption()];
+    }
+
     const docWriterConfig = vscode.workspace.getConfiguration('docwriter');
     const defaultValue = docWriterConfig.inspect('style')?.defaultValue;
     const currentValue = docWriterConfig.get('style');
     const options = FORMAT_OPTIONS.map((option) => {
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
-      return new FormatOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected);
+      const isCustom = option === 'Custom';
+
+      const collapsibleState = isCustom ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
+      return new FormatOption(option, collapsibleState, selected, isDefault, isCustom);
     });
     return options;
   }
@@ -37,8 +45,9 @@ class FormatOption extends vscode.TreeItem {
   constructor(
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public readonly selected: boolean = false,
     public readonly isDefault: boolean = false,
-    public readonly selected: boolean = false
+    public readonly isCustom: boolean = false,
   ) {
     super(label, collapsibleState);
     this.tooltip = this.label;
@@ -52,6 +61,11 @@ class FormatOption extends vscode.TreeItem {
         dark: path.join(__filename, '..', '..', 'assets', 'dark', 'check.svg')
       };
     }
+    // Enable once we need to gate
+    // else if (this.label === 'Custom') {
+    //   this.iconPath = new vscode.ThemeIcon('lock');
+    // }
+
     const onClickCommand: vscode.Command = {
       title: 'Style Config',
       command: 'docs.styleConfig',
@@ -59,5 +73,18 @@ class FormatOption extends vscode.TreeItem {
     };
 
     this.command = onClickCommand;
+  }
+}
+
+class CustomOption extends vscode.TreeItem {
+  constructor() {
+    super('⚙', vscode.TreeItemCollapsibleState.None);
+    this.description = 'Open template settings';
+
+    this.command = {
+      title: 'Open template settings',
+      command: 'workbench.action.openSettings',
+      arguments: ['docwriter.customTemplate']
+    };
   }
 }

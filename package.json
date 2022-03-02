@@ -182,7 +182,8 @@
             "DocBlock",
             "Doxygen",
             "Javadoc",
-            "Google"
+            "Google",
+            "Custom"
           ],
           "enumDescriptions": [
             "Automatically configured based on the language",
@@ -191,9 +192,16 @@
             "A documentation format for PHP",
             "The de facto standard tool for generating documentation for C++ and C",
             "The conventional documentation format for Java",
-            "Format from the Google Python Style Guide"
+            "Format from the Google Python Style Guide",
+            "Custom template based on your own style and preferences"
           ],
           "description": "The format style of documents generated"
+        },
+        "docwriter.customTemplate": {
+          "type": "string",
+          "default": "something\n123",
+          "markdownDescription": "Testing 123",
+          "editPresentation": "multilineText"
         },
         "docwriter.progress.trackFunctions": {
           "type": "boolean",
