@@ -199,8 +199,8 @@
         },
         "docwriter.customTemplate": {
           "type": "string",
-          "default": "something\n123",
-          "markdownDescription": "Testing 123",
+          "default": "{{summary}}\n\nArgs:\n\t{{#params}}\n\t{{name}} ({{type}}): {{paramExplained}}. Defaults to {{defaultValue}}\n\t{{/params}}\n\nReturns:\n\t{{return}}\n\nAuthor:\n\t{{author}}",
+          "markdownDescription": "Format using [mustache template syntax](https://mustache.github.io/mustache.5.html)\n\n‎\n\n`{{summary}}`: summary of the function\n\n`{{#params}}`\n\n`{{name}}`: name of the parameter - `{{type}}`: type of the parameter - `{{defaultValue}}`: default parameter value - `{{paramExplained}}`: summary of the parameter\n\n`{{/params}}`\n\n`{{returnExplained}}`: description of the return value\n\n`{{author}}`: name of the author\n\n`{{date}}`: generated date",
           "editPresentation": "multilineText"
         },
         "docwriter.progress.trackFunctions": {
