@@ -78,13 +78,13 @@ class FormatOption extends vscode.TreeItem {
 
 class CustomOption extends vscode.TreeItem {
   constructor() {
-    super('⚙', vscode.TreeItemCollapsibleState.None);
-    this.description = 'Open template settings';
+    super('✎', vscode.TreeItemCollapsibleState.None);
+    this.description = 'Configure custom style';
 
     this.command = {
       title: 'Open template settings',
       command: 'workbench.action.openSettings',
-      arguments: ['docwriter.customTemplate']
+      arguments: ['docwriter.custom']
     };
   }
 }

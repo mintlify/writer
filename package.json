@@ -197,13 +197,13 @@
           ],
           "description": "The format style of documents generated"
         },
-        "docwriter.customTemplate": {
+        "docwriter.custom.template": {
           "type": "string",
-          "default": "{{summary}}\n\n{{#params}}\n@param {{name}} ({{type}}) - {{paramExplained}}\n{{/params}}\n{{#returnExplained}}\n@returns {{.}}\n{{/returnExplained}}\n\nGenerated on {{date}}",
+          "default": "{{summary}}\n{{#params}}\n@param {{name}} ({{type}}) - {{paramExplained}}\n{{/params}}\n{{#returnExplained}}\n@returns {{.}}\n{{/returnExplained}}\n\nGenerated on {{date}}",
           "markdownDescription": "Format using [mustache template syntax](https://mustache.github.io/mustache.5.html)\n\n‎\n\n`{{summary}}`: summary of the function\n\n`{{#params}}`\n\n`{{name}}`: name of the parameter - `{{type}}`: type of the parameter - `{{defaultValue}}`: default parameter value - `{{paramExplained}}`: summary of the parameter\n\n`{{/params}}`\n\n`{{returnExplained}}`: description of the return value\n\n`{{author}}`: name of the author\n\n`{{date}}`: the current date (in dd/mm/yyyy)",
           "editPresentation": "multilineText"
         },
-        "docwriter.customTemplateAuthor": {
+        "docwriter.custom.author": {
           "type": "string",
           "markdownDescription": "Set the name of the author. Replaces `{{author}}`"
         },
