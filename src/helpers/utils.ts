@@ -22,6 +22,13 @@ export const getDocStyleConfig = () => {
   return vscode.workspace.getConfiguration('docwriter').get('style') || 'Auto-detect';
 };
 
+export const getCustomConfig = () => {
+  return {
+    template: vscode.workspace.getConfiguration('docwriter').get('customTemplate') || null,
+    author: vscode.workspace.getConfiguration('docwriter').get('customTemplateAuthor') || null,
+  };
+};
+
 export const getWidth = (offset: number) => {
   const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
   const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;
