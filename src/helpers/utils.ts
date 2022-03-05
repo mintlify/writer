@@ -22,6 +22,26 @@ export const getDocStyleConfig = () => {
   return vscode.workspace.getConfiguration('docwriter').get('style') || 'Auto-detect';
 };
 
+export const getDate = (): string => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  let formattedMM = mm < 10 ? '0' + mm : mm.toString();
+  let formattedDD = dd < 10 ? '0' + dd : dd.toString();
+
+  return formattedMM + '/' + formattedDD + '/' + yyyy;
+};
+
+export const getCustomConfig = () => {
+  return {
+    template: vscode.workspace.getConfiguration('docwriter').get('custom.template') || null,
+    author: vscode.workspace.getConfiguration('docwriter').get('custom.author') || null,
+    date: getDate(),
+  };
+};
+
 export const getWidth = (offset: number) => {
   const rulers = vscode.workspace.getConfiguration('editor').get('rulers') as number[] | null;
   const maxWidth = rulers != null && rulers.length > 0 ? rulers[0] : 100;

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
-import { monitorWorkerStatus, getDocStyleConfig, getHighlightedText, getWidth } from './helpers/utils';
+import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
@@ -122,6 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
 							userId: vscode.env.machineId,
 							email: authService.getEmail(),
 							docStyle: getDocStyleConfig(),
+							custom: getCustomConfig(),
 							source: 'vscode',
 							context: getText(),
 							width: line ? getWidth(line.firstNonWhitespaceCharacterIndex) : getWidth(selection.start.character),
