@@ -31,7 +31,7 @@ export const getDate = (): string => {
   let formattedMM = mm < 10 ? '0' + mm : mm.toString();
   let formattedDD = dd < 10 ? '0' + dd : dd.toString();
 
-  return formattedDD + '/' + formattedMM + '/' + yyyy;
+  return formattedMM + '/' + formattedDD + '/' + yyyy;
 };
 
 export const getCustomConfig = () => {
