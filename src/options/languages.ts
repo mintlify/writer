@@ -51,8 +51,8 @@ class LanguageOption extends vscode.TreeItem {
       };
     }
     const onClickCommand: vscode.Command = {
-      title: 'Hotkey Config',
-      command: 'docs.hotkeyConfig',
+      title: 'Language Config',
+      command: 'docs.languageConfig',
       arguments: [this.label]
     };
 

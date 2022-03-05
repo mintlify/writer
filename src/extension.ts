@@ -243,6 +243,11 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
 		createConfigTree();
 	});
+	const updateLanguageConfig = vscode.commands.registerCommand('docs.languageConfig', async (newLanguage) => {
+		if (!newLanguage) {return;}
+		await vscode.workspace.getConfiguration('docwriter').update('language', newLanguage);
+		createConfigTree();
+	});
 	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
 		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
 		createProgressTree();
@@ -258,7 +263,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	createConfigTree();
 	createProgressTree();
-	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
+	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateLanguageConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 
