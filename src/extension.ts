@@ -10,6 +10,7 @@ import { HotkeyOptionsProvider } from './options/hotkey';
 import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
+import { LanguageOptionsProvider } from './options/languages';
 
 const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp'];
 
@@ -22,6 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const createConfigTree = () => {
 		vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider() });
 		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
+		vscode.window.createTreeView('languageOptions', { treeDataProvider: new LanguageOptionsProvider() });
 	};
 
 	let isProgressVisible = false;
