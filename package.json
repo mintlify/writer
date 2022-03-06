@@ -162,6 +162,11 @@
           "when": "editorIsOpen"
         },
         {
+          "id": "languageOptions",
+          "name": "Languages",
+          "visibility": "collapsed"
+        },
+        {
           "id": "hotkeyOptions",
           "name": "Hotkey Binding",
           "visibility": "collapsed"
@@ -226,6 +231,27 @@
           "type": "boolean",
           "default": false,
           "description": "Toggle to include type definitions in documentation progress tracking"
+        },
+        "docwriter.language": {
+          "type": "string",
+          "default": "English",
+          "enum": [
+            "English",
+            "Chinese",
+            "French",
+            "Korean",
+            "Russian",
+            "Spanish"
+          ],
+          "enumDescriptions": [
+            "English",
+            "中文",
+            "française",
+            "한국어",
+            "Русский",
+            "Española"
+          ],
+          "description": "Toggle to specify the language of the generated documentation"
         },
         "docwriter.hotkey.mac": {
           "type": "string",

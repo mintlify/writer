@@ -36,9 +36,10 @@ export const getDate = (): string => {
 
 export const getCustomConfig = () => {
   return {
-    template: vscode.workspace.getConfiguration('docwriter').get('custom.template') || null,
-    author: vscode.workspace.getConfiguration('docwriter').get('custom.author') || null,
+    template: vscode.workspace.getConfiguration('docwriter').get('custom.template'),
+    author: vscode.workspace.getConfiguration('docwriter').get('custom.author'),
     date: getDate(),
+    language: vscode.workspace.getConfiguration('docwriter').get('language'),
   };
 };
 

@@ -10,6 +10,7 @@ import { HotkeyOptionsProvider } from './options/hotkey';
 import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
 import { AuthService, initializeAuth, login, logout } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
+import { LanguageOptionsProvider } from './options/languages';
 
 const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp'];
 
@@ -22,6 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const createConfigTree = () => {
 		vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider() });
 		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
+		vscode.window.createTreeView('languageOptions', { treeDataProvider: new LanguageOptionsProvider() });
 	};
 
 	let isProgressVisible = false;
@@ -241,6 +243,11 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
 		createConfigTree();
 	});
+	const updateLanguageConfig = vscode.commands.registerCommand('docs.languageConfig', async (newLanguage) => {
+		if (!newLanguage) {return;}
+		await vscode.workspace.getConfiguration('docwriter').update('language', newLanguage);
+		createConfigTree();
+	});
 	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
 		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
 		createProgressTree();
@@ -256,7 +263,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	createConfigTree();
 	createProgressTree();
-	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateTrackingConfig, logoutCommand);
+	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateLanguageConfig, updateTrackingConfig, logoutCommand);
 	context.subscriptions.push(...languagesProvider);
 }
 
