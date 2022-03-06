@@ -239,17 +239,17 @@
             "English",
             "Chinese",
             "French",
-            "Spanish",
+            "Korean",
             "Russian",
-            "Korean"
+            "Spanish"
           ],
           "enumDescriptions": [
             "English",
             "中文",
             "française",
-            "Española",
+            "한국어",
             "Русский",
-            "한국어"
+            "Española"
           ],
           "description": "Toggle to specify the language of the generated documentation"
         },
