@@ -251,7 +251,7 @@
             "Русский",
             "한국어"
           ],
-          "description": "Toggle to specify the language of the generated"
+          "description": "Toggle to specify the language of the generated documentation"
         },
         "docwriter.hotkey.mac": {
           "type": "string",
