@@ -49,6 +49,10 @@
         "title": "Generate Documentation"
       },
       {
+        "command": "docs.portal",
+        "title": "Manage account"
+      },
+      {
         "command": "docs.logout",
         "title": "Logout of AI Doc Writer"
       }
@@ -93,6 +97,11 @@
     ],
     "menus": {
       "view/title": [
+        {
+					"command": "docs.portal",
+					"when": "view == docs && docs.isSignedIn",
+          "group": "top"
+				},
 				{
 					"command": "docs.logout",
 					"when": "view == docs && docs.isSignedIn"

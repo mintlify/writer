@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import { ISDEV, MINTBASE, UPGRADE } from "./api";
+import { ISDEV, MINTBASE, PORTAL, UPGRADE } from "./api";
 
 const auth0URI = ISDEV ? 'https://dev-h9spuzyu.us.auth0.com' : 'https://mintlify.us.auth0.com';
 const responseType = 'code';
@@ -33,6 +33,11 @@ export const logout = () => {
 export const upgrade = (email?: string) => {
   const upgradeURI = UPGRADE;
   vscode.env.openExternal(vscode.Uri.parse(`${upgradeURI}?email=${email}`));
+};
+
+export const openPortal = (email?: string) => {
+  const portalURI = PORTAL;
+  vscode.env.openExternal(vscode.Uri.parse(`${portalURI}?email=${email}`));
 };
 
 export class AuthService {

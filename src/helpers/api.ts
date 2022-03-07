@@ -10,3 +10,4 @@ export const INTRO = MINTBASE + '/docs/intro';
 export const PROGRESS = MINTBASE + '/progress';
 
 export const UPGRADE = MINTBASE + '/user/checkout';
+export const PORTAL = MINTBASE + '/user/portal';

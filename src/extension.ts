@@ -8,7 +8,7 @@ import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
 import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
-import { AuthService, initializeAuth, login, logout, upgrade } from './helpers/auth';
+import { AuthService, initializeAuth, login, logout, openPortal, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 import { LanguageOptionsProvider } from './options/languages';
 
@@ -266,6 +266,10 @@ export function activate(context: vscode.ExtensionContext) {
 		createProgressTree();
 	});
 
+	const portalCommand = vscode.commands.registerCommand('docs.portal', async () => {
+		openPortal(authService.getEmail());
+	});
+
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
 		logout();
 	});
@@ -276,7 +280,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	createConfigTree();
 	createProgressTree();
-	context.subscriptions.push(write, insert, updateStyleConfig, updateHotkeyConfig, updateLanguageConfig, updateTrackingConfig, logoutCommand);
+	context.subscriptions.push(
+		write, insert, updateStyleConfig, updateHotkeyConfig, updateLanguageConfig, updateTrackingConfig, portalCommand, logoutCommand
+	);
 	context.subscriptions.push(...languagesProvider);
 }
 
