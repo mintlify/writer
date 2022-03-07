@@ -8,7 +8,7 @@ import { configUserSettings } from './helpers/ui';
 import { FormatOptionsProvider } from './options/format';
 import { HotkeyOptionsProvider } from './options/hotkey';
 import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
-import { AuthService, initializeAuth, login, logout } from './helpers/auth';
+import { AuthService, initializeAuth, login, logout, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 import { LanguageOptionsProvider } from './options/languages';
 
@@ -181,11 +181,24 @@ export function activate(context: vscode.ExtensionContext) {
 					resolve('Error');
 					removeProgressColor();
 
-					if (err?.response?.data?.requiresAuth) {
-						const SIGN_IN_BUTTON = err.response.data.button;
+					const { requiresAuth, requiresUpgrade, button } = err?.response?.data;
+
+					if (requiresAuth) {
+						const SIGN_IN_BUTTON = button;
 						const signInResponse = await vscode.window.showInformationMessage(err.response.data.message, err.response.data.button);
 						if (signInResponse === SIGN_IN_BUTTON) {
 							login();
+						}
+
+						return;
+					}
+
+					else if (requiresUpgrade) {
+						const UPGRADE_BUTTON = "🔐 Upgrade to continue";
+						const LEARN_MORE_BUTTON = "ℹ️ Learn more";
+						const upgradeResponse = await vscode.window.showInformationMessage(err.response.data.message, UPGRADE_BUTTON, LEARN_MORE_BUTTON);
+						if (upgradeResponse === UPGRADE_BUTTON) {
+							upgrade(authService.getEmail());
 						}
 
 						return;

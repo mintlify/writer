@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import { ISDEV, MINTBASE } from "./api";
+import { ISDEV, MINTBASE, UPGRADE } from "./api";
 
 const auth0URI = ISDEV ? 'https://dev-h9spuzyu.us.auth0.com' : 'https://mintlify.us.auth0.com';
 const responseType = 'code';
@@ -30,6 +30,11 @@ export const logout = () => {
   vscode.env.openExternal(vscode.Uri.parse(logoutURI));
 };
 
+export const upgrade = (email?: string) => {
+  const upgradeURI = UPGRADE;
+  vscode.env.openExternal(vscode.Uri.parse(`${upgradeURI}?email=${email}`));
+};
+
 export class AuthService {
   constructor(private storage: vscode.Memento) {}
 	
@@ -45,18 +50,17 @@ export class AuthService {
     this.storage.update('authToken', undefined);
   }
 
-  public getEmail(): string | null {
-    return this.storage.get('email', null);
+  public getEmail(): string | undefined {
+    return this.storage.get('email', undefined);
   }
 
-  public setEmail(email: string | null) {
+  public setEmail(email: string) {
     this.storage.update('email', email);
   }
 
   public deleteEmail() {
     this.storage.update('email', undefined);
   }
-
 }
 
 export const initializeAuth = (authService: AuthService) => {

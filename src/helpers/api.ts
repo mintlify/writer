@@ -8,3 +8,5 @@ export const WORKER_STATUS = (id: string) => MINTBASE + `/docs/worker/${id}`;
 export const FEEDBACK = MINTBASE + '/docs/feedback';
 export const INTRO = MINTBASE + '/docs/intro';
 export const PROGRESS = MINTBASE + '/progress';
+
+export const UPGRADE = MINTBASE + '/user/checkout';
