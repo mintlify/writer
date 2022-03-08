@@ -200,6 +200,9 @@ export function activate(context: vscode.ExtensionContext) {
 						if (upgradeResponse === UPGRADE_BUTTON) {
 							upgrade(authService.getEmail());
 						}
+						else if (upgradeResponse === LEARN_MORE_BUTTON) {
+							vscode.env.openExternal(vscode.Uri.parse('https://www.mintlify.com/pricing'));
+						}
 
 						return;
 					}
