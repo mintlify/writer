@@ -98,6 +98,13 @@ export const initializeAuth = (authService: AuthService) => {
         authService.deleteEmail();
         vscode.window.showInformationMessage('Successfully logged out');
         vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
+      } else if (uri.path === '/return') {
+        const query = new URLSearchParams(uri.query);
+        const event = query.get('event');
+
+        if (event === 'upgrade') {
+          vscode.window.showInformationMessage('🎉 Successfully upgraded to teams plan');
+        }
       }
     }
   });
