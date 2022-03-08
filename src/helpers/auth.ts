@@ -32,12 +32,12 @@ export const logout = () => {
 
 export const upgrade = (email?: string) => {
   const upgradeURI = UPGRADE;
-  vscode.env.openExternal(vscode.Uri.parse(`${upgradeURI}?email=${email}`));
+  vscode.env.openExternal(vscode.Uri.parse(`${upgradeURI}?email=${email}&scheme=${vscode.env.uriScheme}`));
 };
 
 export const openPortal = (email?: string) => {
   const portalURI = PORTAL;
-  vscode.env.openExternal(vscode.Uri.parse(`${portalURI}?email=${email}`));
+  vscode.env.openExternal(vscode.Uri.parse(`${portalURI}?email=${email}&scheme=${vscode.env.uriScheme}`));
 };
 
 export class AuthService {
