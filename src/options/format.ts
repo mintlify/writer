@@ -38,7 +38,7 @@ export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOpti
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
       const isCustom = option === 'Custom';
-      const isUpgraded = this.authService.getUpgradedStatus();
+      const isUpgraded = this.authService.getEmail() != null && this.authService.getUpgradedStatus();
       const collapsibleState = isCustom ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
       return new FormatOption(option, collapsibleState, selected, isDefault, isCustom, isUpgraded);
     });

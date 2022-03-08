@@ -30,7 +30,7 @@ export class LanguageOptionsProvider implements vscode.TreeDataProvider<Language
     const options = LANGUAGES.map((option) => {
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
-      const isUpgraded = this.authService.getUpgradedStatus();
+      const isUpgraded = this.authService.getEmail() != null && this.authService.getUpgradedStatus();
       return new LanguageOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected, isUpgraded);
     });
     return options;

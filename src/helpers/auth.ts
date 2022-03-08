@@ -57,6 +57,7 @@ export class AuthService {
   public deleteEmail() {
     this.storage.update('email', undefined);
     vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
+    this.setUpgradedStatus(false);
   }
 
   public getUpgradedStatus(): boolean {
@@ -76,6 +77,10 @@ export const createConfigTree = (authService: AuthService) => {
 };
 
 export const initializeAuth = (authService: AuthService) => {
+  if (authService.getEmail() != null) {
+    vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
+  }
+  
   vscode.window.registerUriHandler({
     async handleUri(uri: vscode.Uri) {
       if (uri.path === '/auth') {
