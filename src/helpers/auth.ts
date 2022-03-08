@@ -1,14 +1,15 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import { ISDEV, MINTBASE, PORTAL, UPGRADE } from "./api";
+import { ISDEV, USER_CODE, PORTAL, UPGRADE } from "./api";
+import { FormatOptionsProvider } from '../options/format';
+import { HotkeyOptionsProvider } from '../options/hotkey';
+import { LanguageOptionsProvider } from '../options/languages';
 
 const auth0URI = ISDEV ? 'https://dev-h9spuzyu.us.auth0.com' : 'https://mintlify.us.auth0.com';
 const responseType = 'code';
 const clientId = ISDEV ? 'Rsc8PmIdW9MqtcaJqMqWpJfYWAiMuyrV' : 'MOMiBZylQGPE0nHpbvzVHAT4TgU0DtcP';
 const scope = 'openid profile email offline_access';
-
-const USER_CODE = MINTBASE + '/user/code';
 
 export const getLoginURI = (uriScheme: string) => {
   const redirectURI = `https://mintlify.com/start/${uriScheme}`;
@@ -42,19 +43,6 @@ export const openPortal = (email?: string) => {
 
 export class AuthService {
   constructor(private storage: vscode.Memento) {}
-	
-  public getToken(): string | null {
-    return this.storage.get('authToken', null);
-  }
-
-  public setToken(token: string | null) {
-    this.storage.update('authToken', token);
-  }
-
-  public deleteToken() {
-    this.storage.update('authToken', undefined);
-  }
-
   public getEmail(): string | undefined {
     return this.storage.get('email', undefined);
   }
@@ -66,7 +54,21 @@ export class AuthService {
   public deleteEmail() {
     this.storage.update('email', undefined);
   }
+
+  public getUpgradedStatus(): boolean {
+    return Boolean(this.storage.get('isUpgraded', false));
+  }
+
+  public setUpgradedStatus(status: boolean) {
+    return this.storage.update('isUpgraded', status);
+  }
 }
+
+export const createConfigTree = (authService: AuthService) => {
+  vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider(authService) });
+  vscode.window.createTreeView('languageOptions', { treeDataProvider: new LanguageOptionsProvider(authService) });
+  vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
+};
 
 export const initializeAuth = (authService: AuthService) => {
   if (authService.getEmail() != null) {
@@ -86,8 +88,10 @@ export const initializeAuth = (authService: AuthService) => {
               uriScheme: vscode.env.uriScheme
             }
           );
-          const { email } = authResponse.data;
+          const { email, isUpgraded } = authResponse.data;
           authService.setEmail(email);
+          authService.setUpgradedStatus(isUpgraded);
+          createConfigTree(authService);
 
           vscode.window.showInformationMessage(`🙌 Successfully signed in with ${email}`);
           vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
@@ -96,6 +100,9 @@ export const initializeAuth = (authService: AuthService) => {
         }
       } else if (uri.path === '/logout') {
         authService.deleteEmail();
+        authService.setUpgradedStatus(false);
+        createConfigTree(authService);
+
         vscode.window.showInformationMessage('Successfully logged out');
         vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
       } else if (uri.path === '/return') {
@@ -103,6 +110,8 @@ export const initializeAuth = (authService: AuthService) => {
         const event = query.get('event');
 
         if (event === 'upgrade') {
+          authService.setUpgradedStatus(true);
+          createConfigTree(authService);
           vscode.window.showInformationMessage('🎉 Successfully upgraded to the Team Plan');
         }
       }

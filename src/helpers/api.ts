@@ -11,3 +11,5 @@ export const PROGRESS = MINTBASE + '/progress';
 
 export const UPGRADE = MINTBASE + '/user/checkout';
 export const PORTAL = MINTBASE + '/user/portal';
+
+export const USER_CODE = MINTBASE + '/user/code';
