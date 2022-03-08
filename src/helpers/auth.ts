@@ -49,10 +49,14 @@ export class AuthService {
 
   public setEmail(email: string) {
     this.storage.update('email', email);
+    if (email) {
+      vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
+    }
   }
 
   public deleteEmail() {
     this.storage.update('email', undefined);
+    vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
   }
 
   public getUpgradedStatus(): boolean {
@@ -60,7 +64,8 @@ export class AuthService {
   }
 
   public setUpgradedStatus(status: boolean) {
-    return this.storage.update('isUpgraded', status);
+    this.storage.update('isUpgraded', status);
+    vscode.commands.executeCommand('setContext', 'docs.isUpgraded', status);
   }
 }
 
@@ -71,10 +76,6 @@ export const createConfigTree = (authService: AuthService) => {
 };
 
 export const initializeAuth = (authService: AuthService) => {
-  if (authService.getEmail() != null) {
-    vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
-  }
-
   vscode.window.registerUriHandler({
     async handleUri(uri: vscode.Uri) {
       if (uri.path === '/auth') {
@@ -94,7 +95,6 @@ export const initializeAuth = (authService: AuthService) => {
           createConfigTree(authService);
 
           vscode.window.showInformationMessage(`🙌 Successfully signed in with ${email}`);
-          vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
         } catch (err) {
           vscode.window.showErrorMessage('Error authenticating user');
         }
@@ -104,7 +104,6 @@ export const initializeAuth = (authService: AuthService) => {
         createConfigTree(authService);
 
         vscode.window.showInformationMessage('Successfully logged out');
-        vscode.commands.executeCommand('setContext', 'docs.isSignedIn', false);
       } else if (uri.path === '/return') {
         const query = new URLSearchParams(uri.query);
         const event = query.get('event');

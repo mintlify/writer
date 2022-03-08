@@ -53,6 +53,10 @@
         "title": "Manage account"
       },
       {
+        "command": "docs.login",
+        "title": "Login to account"
+      },
+      {
         "command": "docs.logout",
         "title": "Logout of AI Doc Writer"
       }
@@ -105,6 +109,10 @@
 				{
 					"command": "docs.logout",
 					"when": "view == docs && docs.isSignedIn"
+				},
+        {
+					"command": "docs.login",
+					"when": "view == docs && !docs.isSignedIn"
 				}
 			],
       "editor/context": [

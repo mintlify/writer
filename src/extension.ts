@@ -272,6 +272,10 @@ export function activate(context: vscode.ExtensionContext) {
 		openPortal(authService.getEmail());
 	});
 
+	const loginCommand = vscode.commands.registerCommand('docs.login', async () => {
+		login();
+	});
+
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
 		logout();
 	});
@@ -280,15 +284,13 @@ export function activate(context: vscode.ExtensionContext) {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
 
-	console.log(authService.getUpgradedStatus());
-
 	createConfigTree(authService);
 	createProgressTree();
 	context.subscriptions.push(
 		write, insert,
 		updateStyleConfig, updateHotkeyConfig, updateLanguageConfig,
 		updateTrackingConfig, showUpgradeInformationMessage,
-		portalCommand, logoutCommand
+		loginCommand, portalCommand, logoutCommand,
 	);
 	context.subscriptions.push(...languagesProvider);
 }
