@@ -103,7 +103,7 @@ export const initializeAuth = (authService: AuthService) => {
         const event = query.get('event');
 
         if (event === 'upgrade') {
-          vscode.window.showInformationMessage('🎉 Successfully upgraded to teams plan');
+          vscode.window.showInformationMessage('🎉 Successfully upgraded to the Team Plan');
         }
       }
     }
