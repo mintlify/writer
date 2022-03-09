@@ -5,6 +5,7 @@ import { ISDEV, USER_CODE, PORTAL, UPGRADE } from "./api";
 import { FormatOptionsProvider } from '../options/format';
 import { HotkeyOptionsProvider } from '../options/hotkey';
 import { LanguageOptionsProvider } from '../options/languages';
+import { TeamProvider } from '../options/team';
 
 const auth0URI = ISDEV ? 'https://dev-h9spuzyu.us.auth0.com' : 'https://mintlify.us.auth0.com';
 const responseType = 'code';
@@ -76,9 +77,18 @@ export const createConfigTree = (authService: AuthService) => {
   vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 };
 
+export const createTeamTree = () => {
+  vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider() });
+};
+
 export const initializeAuth = (authService: AuthService) => {
   if (authService.getEmail() != null) {
     vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
+  }
+
+  if (authService.getUpgradedStatus()) {
+    vscode.commands.executeCommand('setContext', 'docs.isUpgraded', true);
+    vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider() });
   }
   
   vscode.window.registerUriHandler({

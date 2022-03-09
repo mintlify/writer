@@ -184,6 +184,12 @@
           "visibility": "collapsed"
         },
         {
+          "id": "team",
+          "name": "Team",
+          "visibility": "visible",
+          "when": "docs.isUpgraded"
+        },
+        {
           "id": "hotkeyOptions",
           "name": "Hotkey Binding",
           "visibility": "collapsed"
