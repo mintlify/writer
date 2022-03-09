@@ -85,6 +85,10 @@ export const createConfigTree = (authService: AuthService) => {
   vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 };
 
+export const createTeamTree = (authService: AuthService) => {
+  vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider(authService) });
+};
+
 export const initializeAuth = (authService: AuthService) => {
   if (authService.getEmail() != null) {
     vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
@@ -92,7 +96,7 @@ export const initializeAuth = (authService: AuthService) => {
 
   if (authService.getUpgradedStatus()) {
     vscode.commands.executeCommand('setContext', 'docs.isUpgraded', true);
-    vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider(authService) });
+    createTeamTree(authService);
   }
   
   vscode.window.registerUriHandler({

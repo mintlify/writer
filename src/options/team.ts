@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as vscode from 'vscode';
-import { TEAM } from '../helpers/api';
-import { AuthService } from '../helpers/auth';
+import { INVITE, TEAM } from '../helpers/api';
+import { AuthService, createTeamTree } from '../helpers/auth';
 
 type Member = {
   email: string,
@@ -13,7 +13,7 @@ type Team = {
   members: Member[]
 };
 
-vscode.commands.registerCommand('docs.invite', async () => {
+vscode.commands.registerCommand('docs.invite', async (authService: AuthService) => {
   const email = await vscode.window.showInputBox({
     title: 'Invite memember adding their email',
     placeHolder: 'hi@example.com',
@@ -26,7 +26,20 @@ vscode.commands.registerCommand('docs.invite', async () => {
     }
   });
 
-  vscode.window.showInformationMessage('Invite sent to ' + email);
+  if (!email) {
+    return null;
+  }
+
+  try {
+    await axios.post(INVITE, {
+      fromEmail: authService.getEmail(),
+      toEmail: email
+    });
+    vscode.window.showInformationMessage('Invite sent to ' + email);
+    createTeamTree(authService);
+  } catch (error: any) {
+    vscode.window.showErrorMessage(error?.response?.data?.error);
+  }
 });
 
 export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
@@ -51,7 +64,7 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
     const membersTreeItems = team.members.map(
       member => new TeamMemberItem(member.email, member.email === email, false, member.isInvitePending)
     );
-    return [adminTreeItem, ...membersTreeItems, new AddMemberItem()];
+    return [adminTreeItem, ...membersTreeItems, new AddMemberItem(this.authService)];
   }
 }
 
@@ -78,13 +91,14 @@ class TeamMemberItem extends vscode.TreeItem {
 }
 
 class AddMemberItem extends vscode.TreeItem {
-  constructor() {
+  constructor(authService: AuthService) {
     super('Invite Member', vscode.TreeItemCollapsibleState.None);
     this.iconPath = new vscode.ThemeIcon('add');
 
     this.command = {
       title: 'Invite Member',
       command: 'docs.invite',
+      arguments: [authService]
     };
   }
 }
