@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { AuthService } from '../helpers/auth';
 
 const LANGUAGES = [
   'English',
@@ -11,7 +12,11 @@ const LANGUAGES = [
 ];
 
 export class LanguageOptionsProvider implements vscode.TreeDataProvider<LanguageOption> {
-  constructor() {}
+  private authService: AuthService;
+  
+  constructor(authService: AuthService) {
+    this.authService = authService;
+  }
 
   getTreeItem(element: LanguageOption): vscode.TreeItem {
     return element;
@@ -25,7 +30,8 @@ export class LanguageOptionsProvider implements vscode.TreeDataProvider<Language
     const options = LANGUAGES.map((option) => {
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
-      return new LanguageOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected);
+      const isUpgraded = this.authService.getEmail() != null && this.authService.getUpgradedStatus();
+      return new LanguageOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected, isUpgraded);
     });
     return options;
   }
@@ -36,7 +42,8 @@ class LanguageOption extends vscode.TreeItem {
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly isDefault: boolean = false,
-    public readonly selected: boolean = false
+    public readonly selected: boolean = false,
+    public readonly isUpgraded: boolean = false,
   ) {
     super(label, collapsibleState);
     this.tooltip = this.label;
@@ -49,13 +56,21 @@ class LanguageOption extends vscode.TreeItem {
         light: path.join(__filename, '..', '..', 'assets', 'light', 'check.svg'),
         dark: path.join(__filename, '..', '..', 'assets', 'dark', 'check.svg')
       };
+    } else if (!this.isDefault && !this.isUpgraded) {
+      this.iconPath = new vscode.ThemeIcon('lock');
+      this.command = {
+        title: 'Show Upgrade Info Message',
+        command: 'docs.upgradeInfo',
+        arguments: ['Upgrade to a teams plan for non-english outputs', '🔐 Upgrade']
+      };
+
+      return;
     }
-    const onClickCommand: vscode.Command = {
+
+    this.command = {
       title: 'Language Config',
       command: 'docs.languageConfig',
       arguments: [this.label]
     };
-
-    this.command = onClickCommand;
   }
 }

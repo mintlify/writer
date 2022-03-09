@@ -2,15 +2,12 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
+import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, displaySignInView } from './helpers/ui';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
-import { FormatOptionsProvider } from './options/format';
-import { HotkeyOptionsProvider } from './options/hotkey';
 import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
-import { AuthService, initializeAuth, login, logout, openPortal, upgrade } from './helpers/auth';
+import { AuthService, createConfigTree, initializeAuth, login, logout, openPortal, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
-import { LanguageOptionsProvider } from './options/languages';
 
 const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp'];
 
@@ -19,12 +16,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const authService = new AuthService(context.globalState);
 	configUserSettings();
 	initializeAuth(authService);
-
-	const createConfigTree = () => {
-		vscode.window.createTreeView('formatOptions', { treeDataProvider: new FormatOptionsProvider() });
-		vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
-		vscode.window.createTreeView('languageOptions', { treeDataProvider: new LanguageOptionsProvider() });
-	};
 
 	let isProgressVisible = false;
 	const createProgressTree = async () => {
@@ -181,15 +172,10 @@ export function activate(context: vscode.ExtensionContext) {
 					resolve('Error');
 					removeProgressColor();
 
-					const { requiresAuth, requiresUpgrade, button } = err?.response?.data;
+					const { requiresAuth, requiresUpgrade, message, button } = err?.response?.data;
 
 					if (requiresAuth) {
-						const SIGN_IN_BUTTON = button;
-						const signInResponse = await vscode.window.showInformationMessage(err.response.data.message, err.response.data.button);
-						if (signInResponse === SIGN_IN_BUTTON) {
-							login();
-						}
-
+						displaySignInView(message, button);
 						return;
 					}
 
@@ -252,25 +238,41 @@ export function activate(context: vscode.ExtensionContext) {
 	const updateStyleConfig = vscode.commands.registerCommand('docs.styleConfig', async (newStyle) => {
 		if (!newStyle) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
-		createConfigTree();
+		createConfigTree(authService);
 	});
 	const updateHotkeyConfig = vscode.commands.registerCommand('docs.hotkeyConfig', async (newHotkey) => {
 		if (!newHotkey) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
-		createConfigTree();
+		createConfigTree(authService);
 	});
 	const updateLanguageConfig = vscode.commands.registerCommand('docs.languageConfig', async (newLanguage) => {
 		if (!newLanguage) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('language', newLanguage);
-		createConfigTree();
+		createConfigTree(authService);
 	});
 	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
 		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
 		createProgressTree();
 	});
 
+	const showUpgradeInformationMessage = vscode.commands.registerCommand('docs.upgradeInfo', async (message, button) => {
+		if (authService.getEmail() == null) {
+			displaySignInView('Sign in and upgrade to unlock feature', '🔐 Sign in');
+			return;
+		}
+
+		const clickedOnButton = await vscode.window.showInformationMessage(message, button);
+		if (clickedOnButton) {
+			upgrade(authService.getEmail());
+		}
+	});
+
 	const portalCommand = vscode.commands.registerCommand('docs.portal', async () => {
 		openPortal(authService.getEmail());
+	});
+
+	const loginCommand = vscode.commands.registerCommand('docs.login', async () => {
+		login();
 	});
 
 	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
@@ -281,13 +283,13 @@ export function activate(context: vscode.ExtensionContext) {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
 
-	createConfigTree();
+	createConfigTree(authService);
 	createProgressTree();
 	context.subscriptions.push(
-		write, insert, updateStyleConfig, updateHotkeyConfig, updateLanguageConfig, updateTrackingConfig, portalCommand, logoutCommand
+		write, insert,
+		updateStyleConfig, updateHotkeyConfig, updateLanguageConfig,
+		updateTrackingConfig, showUpgradeInformationMessage,
+		loginCommand, portalCommand, logoutCommand,
 	);
 	context.subscriptions.push(...languagesProvider);
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {}
