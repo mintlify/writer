@@ -3,10 +3,10 @@ import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, displaySignInView } from './helpers/ui';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
-import { createProgressTree, getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
-import { AuthService, createConfigTree, initializeAuth, login, logout, openPortal, upgrade } from './helpers/auth';
+import { createProgressTree } from './options/progress';
+import { AuthService, createConfigTree, initializeAuth, openPortal, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
 const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp'];
