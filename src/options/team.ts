@@ -1,8 +1,16 @@
+import axios from 'axios';
 import * as vscode from 'vscode';
+import { TEAM } from '../helpers/api';
+import { AuthService } from '../helpers/auth';
+
+type Member = {
+  email: string,
+  isInvitePending: boolean,
+};
 
 type Team = {
   admin: string,
-  members: string[]
+  members: Member[]
 };
 
 vscode.commands.registerCommand('docs.invite', async () => {
@@ -22,21 +30,28 @@ vscode.commands.registerCommand('docs.invite', async () => {
 });
 
 export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
-  private team?: Team;
+  private authService: AuthService;
 
-  constructor(team?: Team) {
-    this.team = team;
+  constructor(authService: AuthService) {
+    this.authService = authService;
   }
 
   getTreeItem(element: TeamMemberItem): vscode.TreeItem {
     return element;
   }
 
-  getChildren(element?: vscode.TreeItem): any[] {
+  async getChildren(element?: vscode.TreeItem): Promise<any[]> {
     if (element) {
       return [new RemoveMemberItem()];
     }
-    return [new TeamMemberItem('han@mintlify.com', true, true), new TeamMemberItem('hahnbee@mintlify.com', false, false, true), new AddMemberItem()];
+
+    const email = this.authService.getEmail();
+    const { data: team }: { data: Team } = await axios.get(`${TEAM}?email=${email}`);
+    const adminTreeItem = new TeamMemberItem(team.admin, team.admin === email, true);
+    const membersTreeItems = team.members.map(
+      member => new TeamMemberItem(member.email, member.email === email, false, member.isInvitePending)
+    );
+    return [adminTreeItem, ...membersTreeItems, new AddMemberItem()];
   }
 }
 
