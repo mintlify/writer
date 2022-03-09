@@ -42,6 +42,20 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService) 
   }
 });
 
+vscode.commands.registerCommand('docs.removeMember', async (authService, email) => {
+  try {
+    await axios.delete(INVITE, {
+      data: {
+        fromEmail: authService.getEmail(),
+        toEmail: email
+      }
+    });
+    createTeamTree(authService);
+  } catch (error: any) {
+    vscode.window.showErrorMessage(error?.response?.data?.error);
+  }
+});
+
 export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
   private authService: AuthService;
 
@@ -55,7 +69,7 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
 
   async getChildren(element?: vscode.TreeItem): Promise<any[]> {
     if (element) {
-      return [new RemoveMemberItem()];
+      return [new RemoveMemberItem(this.authService, element.id)];
     }
 
     const email = this.authService.getEmail();
@@ -76,14 +90,14 @@ class TeamMemberItem extends vscode.TreeItem {
     public readonly isInvitePending: boolean = false,
   ) {
     super(name, isSelf ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed);
+    this.id = name;
+
     if (isAdmin) {
       this.description = 'Admin';
     }
-
     if (isInvitePending) {
       this.description = 'Invited';
     }
-
     if (isSelf) {
       this.iconPath = new vscode.ThemeIcon('account');
     }
@@ -104,8 +118,14 @@ class AddMemberItem extends vscode.TreeItem {
 }
 
 class RemoveMemberItem extends vscode.TreeItem {
-  constructor() {
+  constructor(authService: AuthService, email?: string) {
     super('Remove Member', vscode.TreeItemCollapsibleState.None);
     this.iconPath = new vscode.ThemeIcon('trash');
+
+    this.command = {
+      title: 'Remove Member',
+      command: 'docs.removeMember',
+      arguments: [authService, email]
+    };
   }
 }
