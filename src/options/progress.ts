@@ -66,6 +66,11 @@ export const createProgressTree = async () => {
   });
 };
 
+vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
+  await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
+  createProgressTree();
+});
+
 const buildUnicodeProgressBar = (progress: number): string => {
   const numberOfFullBars = progress / 10;
   const fullBars = "█".repeat(numberOfFullBars);

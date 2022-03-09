@@ -17,8 +17,6 @@ export function activate(context: vscode.ExtensionContext) {
 	configUserSettings();
 	initializeAuth(authService);
 
-	
-
 	// Detect changes for progress
 	vscode.workspace.onDidSaveTextDocument(() => {
 		createProgressTree();
@@ -212,10 +210,6 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('docwriter').update('language', newLanguage);
 		createConfigTree(authService);
 	});
-	const updateTrackingConfig = vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
-		await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
-		createProgressTree();
-	});
 
 	const showUpgradeInformationMessage = vscode.commands.registerCommand('docs.upgradeInfo', async (message, button) => {
 		if (authService.getEmail() == null) {
@@ -233,14 +227,6 @@ export function activate(context: vscode.ExtensionContext) {
 		openPortal(authService.getEmail());
 	});
 
-	const loginCommand = vscode.commands.registerCommand('docs.login', async () => {
-		login();
-	});
-
-	const logoutCommand = vscode.commands.registerCommand('docs.logout', async () => {
-		logout();
-	});
-
 	const languagesProvider =  LANGUAGES_SUPPORT.map((language) => {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
@@ -250,8 +236,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		write, insert,
 		updateStyleConfig, updateHotkeyConfig, updateLanguageConfig,
-		updateTrackingConfig, showUpgradeInformationMessage,
-		loginCommand, portalCommand, logoutCommand,
+		showUpgradeInformationMessage,
+		portalCommand,
 	);
 	context.subscriptions.push(...languagesProvider);
 }

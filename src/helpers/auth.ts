@@ -42,6 +42,14 @@ export const openPortal = (email?: string) => {
   vscode.env.openExternal(vscode.Uri.parse(`${portalURI}?email=${email}&scheme=${vscode.env.uriScheme}`));
 };
 
+vscode.commands.registerCommand('docs.login', async () => {
+  login();
+});
+
+vscode.commands.registerCommand('docs.logout', async () => {
+  logout();
+});
+
 export class AuthService {
   constructor(private storage: vscode.Memento) {}
   public getEmail(): string | undefined {
