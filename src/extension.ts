@@ -5,7 +5,7 @@ import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlighted
 import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, displaySignInView } from './helpers/ui';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
-import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
+import { createProgressTree, getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
 import { AuthService, createConfigTree, initializeAuth, login, logout, openPortal, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
@@ -17,45 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	configUserSettings();
 	initializeAuth(authService);
 
-	let isProgressVisible = false;
-	const createProgressTree = async () => {
-		const editor = vscode.window.activeTextEditor;
-		if (editor == null) {
-			return;
-		}
-
-		if (!isProgressVisible) {
-			const checkProgressVisibility = vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
-			return checkProgressVisibility.onDidChangeVisibility((e) => {
-				if (e.visible) {
-					isProgressVisible = true;
-					createProgressTree();
-				}
-			});
-		}
-
-		const { languageId, getText } = editor.document;
-
-		const file = getText();
-		const types = getActiveIndicatorTypeNames();
-		let treeDataProvider;		
-		try {
-			const progressRes = await axios.post(PROGRESS, { file, languageId, types });
-			const { data: progress } = progressRes;
-			vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
-			treeDataProvider = new ProgressOptionsProvider(progress);
-		} catch {
-			treeDataProvider = new ProgressOptionsProvider(undefined);
-		}
-
-		const progressTree = vscode.window.createTreeView('progress', { treeDataProvider });
-		progressTree.onDidChangeVisibility((e) => {
-			if (!e.visible) {
-				isProgressVisible = false;
-				createProgressTree();
-			}
-		});
-	};
+	
 
 	// Detect changes for progress
 	vscode.workspace.onDidSaveTextDocument(() => {
