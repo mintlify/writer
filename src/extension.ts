@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose } from './helpers/ui';
+import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, displaySignInView } from './helpers/ui';
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO, PROGRESS } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { getActiveIndicatorTypeNames, ProgressOptionsProvider } from './options/progress';
@@ -172,15 +172,10 @@ export function activate(context: vscode.ExtensionContext) {
 					resolve('Error');
 					removeProgressColor();
 
-					const { requiresAuth, requiresUpgrade, button } = err?.response?.data;
+					const { requiresAuth, requiresUpgrade, message, button } = err?.response?.data;
 
 					if (requiresAuth) {
-						const SIGN_IN_BUTTON = button;
-						const signInResponse = await vscode.window.showInformationMessage(err.response.data.message, err.response.data.button);
-						if (signInResponse === SIGN_IN_BUTTON) {
-							login();
-						}
-
+						displaySignInView(message, button);
 						return;
 					}
 
@@ -261,8 +256,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	const showUpgradeInformationMessage = vscode.commands.registerCommand('docs.upgradeInfo', async (message, button) => {
-		const clickedOnButton = await vscode.window.showInformationMessage(message, button);
+		if (authService.getEmail() == null) {
+			displaySignInView('Sign in and upgrade to unlock feature', '🔐 Sign in');
+			return;
+		}
 
+		const clickedOnButton = await vscode.window.showInformationMessage(message, button);
 		if (clickedOnButton) {
 			upgrade(authService.getEmail());
 		}
