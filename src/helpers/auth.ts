@@ -76,21 +76,26 @@ export const createConfigTree = (isUpgraded: boolean) => {
   vscode.window.createTreeView('hotkeyOptions', { treeDataProvider: new HotkeyOptionsProvider() });
 };
 
-export const createTeamTree = (authService: AuthService, isUpgraded: boolean) => {
-  vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider(authService, isUpgraded) });
+export type Status = 'community' | 'team' | 'member' | 'unaccounted' | 'unauthenticated';
+
+export const createTeamTree = (authService: AuthService, status: Status) => {
+  vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider(authService, status || 'unauthenticated') });
 };
 
 export const updateTrees = async (authService: AuthService) => {
-  const { data: userStatus } = await axios.get(USER_STATUS, {
-    data: {
-      email: authService.getEmail()
-    }
-  });
-
-  const isUpgraded = Boolean(userStatus?.status === 'team');
-
-  createConfigTree(isUpgraded);
-  createTeamTree(authService, isUpgraded);
+  try {
+    const { data: userStatus } = await axios.get(USER_STATUS, {
+      data: {
+        email: authService.getEmail()
+      }
+    });
+  
+    const isUpgraded = Boolean(userStatus?.status === 'team' || userStatus?.status === 'member');
+    createConfigTree(isUpgraded);
+    createTeamTree(authService, userStatus?.status);
+  } catch {
+    vscode.window.showErrorMessage('Unable to create configurations at the moment');
+  }
 };
 
 export const initializeAuth = (authService: AuthService) => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as vscode from 'vscode';
 import { INVITE, TEAM } from '../helpers/api';
-import { AuthService, createTeamTree } from '../helpers/auth';
+import { AuthService, createTeamTree, Status } from '../helpers/auth';
 
 type Member = {
   email: string,
@@ -13,7 +13,7 @@ type Team = {
   members: Member[]
 };
 
-vscode.commands.registerCommand('docs.invite', async (authService: AuthService, isUpgraded: boolean) => {
+vscode.commands.registerCommand('docs.invite', async (authService: AuthService, status: Status) => {
   const email = await vscode.window.showInputBox({
     title: 'Invite memember adding their email',
     placeHolder: 'hi@example.com',
@@ -41,7 +41,7 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService, 
             toEmail: email
           });
           vscode.window.showInformationMessage('Invite sent to ' + email);
-          createTeamTree(authService, isUpgraded); 
+          createTeamTree(authService, status);
           resolve('Completed inviting member');
         } catch (error: any) {
           vscode.window.showErrorMessage(error?.response?.data?.error);
@@ -51,7 +51,7 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService, 
     });
 });
 
-vscode.commands.registerCommand('docs.removeMember', async (authService, isUpgraded, email) => {
+vscode.commands.registerCommand('docs.removeMember', async (authService, status, email) => {
   try {
     await axios.delete(INVITE, {
       data: {
@@ -59,19 +59,19 @@ vscode.commands.registerCommand('docs.removeMember', async (authService, isUpgra
         toEmail: email
       }
     });
-    createTeamTree(authService, isUpgraded);
+    createTeamTree(authService, status);
   } catch (error: any) {
     vscode.window.showErrorMessage(error?.response?.data?.error);
   }
 });
 
 export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
-  private isUpgraded: boolean;
   private authService: AuthService;
+  private status: Status;
 
-  constructor(authService: AuthService, isUpgraded: boolean) {
+  constructor(authService: AuthService, status: Status) {
     this.authService = authService;
-    this.isUpgraded = isUpgraded;
+    this.status = status;
   }
 
   getTreeItem(element: TeamMemberItem): vscode.TreeItem {
@@ -80,10 +80,10 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
 
   async getChildren(element?: vscode.TreeItem): Promise<any[]> {
     if (element) {
-      return [new RemoveMemberItem(this.authService, this.isUpgraded, element.id)];
+      return [new RemoveMemberItem(this.authService, this.status, element.id)];
     }
 
-    if (!this.isUpgraded) {
+    if (this.status !== 'team' && this.status !== 'member') {
       return [new UpgradeMemberItem()];
     }
 
@@ -93,16 +93,22 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
         email,
       }
     });
-    const adminTreeItem = new TeamMemberItem(team.admin, team.admin === email, true);
+    const adminTreeItem = new TeamMemberItem(this.status, team.admin, team.admin === email, true);
     const membersTreeItems = team.members.map(
-      member => new TeamMemberItem(member.email, member.email === email, false, member.isInvitePending)
+      member => new TeamMemberItem(this.status, member.email, member.email === email, false, member.isInvitePending)
     );
-    return [adminTreeItem, ...membersTreeItems, new AddMemberItem(this.authService, this.isUpgraded)];
+
+    const treeItems: any[] = [adminTreeItem, ...membersTreeItems];
+    if (this.status === 'team') {
+      treeItems.push(new AddMemberItem(this.authService, this.status));
+    }
+    return treeItems;
   }
 }
 
 class TeamMemberItem extends vscode.TreeItem {
   constructor(
+    public readonly status: Status,
     public readonly name: string,
     public readonly isSelf: boolean,
     public readonly isAdmin: boolean,
@@ -124,27 +130,27 @@ class TeamMemberItem extends vscode.TreeItem {
 }
 
 class AddMemberItem extends vscode.TreeItem {
-  constructor(authService: AuthService, isUpgraded: boolean) {
+  constructor(authService: AuthService, status: Status) {
     super('Invite Member', vscode.TreeItemCollapsibleState.None);
     this.iconPath = new vscode.ThemeIcon('add');
 
     this.command = {
       title: 'Invite Member',
       command: 'docs.invite',
-      arguments: [authService, isUpgraded]
+      arguments: [authService, status]
     };
   }
 }
 
 class RemoveMemberItem extends vscode.TreeItem {
-  constructor(authService: AuthService, isUpgraded: boolean, email?: string) {
+  constructor(authService: AuthService, status: Status, email?: string) {
     super('Remove Member', vscode.TreeItemCollapsibleState.None);
     this.iconPath = new vscode.ThemeIcon('trash');
 
     this.command = {
       title: 'Remove Member',
       command: 'docs.removeMember',
-      arguments: [authService, isUpgraded, email]
+      arguments: [authService, status, email]
     };
   }
 }
