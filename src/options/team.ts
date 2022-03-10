@@ -114,7 +114,7 @@ class TeamMemberItem extends vscode.TreeItem {
     public readonly isAdmin: boolean,
     public readonly isInvitePending: boolean = false,
   ) {
-    super(name, isSelf ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed);
+    super(name, isSelf || status === 'member' ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed);
     this.id = name;
 
     if (isAdmin) {
