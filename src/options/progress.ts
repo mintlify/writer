@@ -1,4 +1,6 @@
+import axios from 'axios';
 import * as vscode from 'vscode';
+import { PROGRESS } from '../helpers/api';
 
 type TrackingConfig = {
   id: string;
@@ -23,6 +25,51 @@ const trackingConfigIds: TrackingConfig[] = [
     name: 'Types',
   },
 ];
+
+let isProgressVisible = false;
+export const createProgressTree = async () => {
+  const editor = vscode.window.activeTextEditor;
+  if (editor == null) {
+    return;
+  }
+
+  if (!isProgressVisible) {
+    const checkProgressVisibility = vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(undefined) });
+    return checkProgressVisibility.onDidChangeVisibility((e) => {
+      if (e.visible) {
+        isProgressVisible = true;
+        createProgressTree();
+      }
+    });
+  }
+
+  const { languageId, getText } = editor.document;
+
+  const file = getText();
+  const types = getActiveIndicatorTypeNames();
+  let treeDataProvider;		
+  try {
+    const progressRes = await axios.post(PROGRESS, { file, languageId, types });
+    const { data: progress } = progressRes;
+    vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
+    treeDataProvider = new ProgressOptionsProvider(progress);
+  } catch {
+    treeDataProvider = new ProgressOptionsProvider(undefined);
+  }
+
+  const progressTree = vscode.window.createTreeView('progress', { treeDataProvider });
+  progressTree.onDidChangeVisibility((e) => {
+    if (!e.visible) {
+      isProgressVisible = false;
+      createProgressTree();
+    }
+  });
+};
+
+vscode.commands.registerCommand('docs.trackingTypeConfig', async (trackingConfigId, newValue) => {
+  await vscode.workspace.getConfiguration('docwriter').update(trackingConfigId, newValue);
+  createProgressTree();
+});
 
 const buildUnicodeProgressBar = (progress: number): string => {
   const numberOfFullBars = progress / 10;

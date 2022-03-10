@@ -15,7 +15,11 @@ const FORMAT_OPTIONS = [
 ];
 
 export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOption> {
-  constructor() {}
+  private isUpgraded: boolean;
+
+  constructor(isUpgraded: boolean) {
+    this.isUpgraded = isUpgraded;
+  }
 
   getTreeItem(element: FormatOption): vscode.TreeItem {
     return element;
@@ -33,9 +37,9 @@ export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOpti
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
       const isCustom = option === 'Custom';
-
+      const isUpgraded = this.isUpgraded;
       const collapsibleState = isCustom ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
-      return new FormatOption(option, collapsibleState, selected, isDefault, isCustom);
+      return new FormatOption(option, collapsibleState, selected, isDefault, isCustom, isUpgraded);
     });
     return options;
   }
@@ -48,6 +52,7 @@ class FormatOption extends vscode.TreeItem {
     public readonly selected: boolean = false,
     public readonly isDefault: boolean = false,
     public readonly isCustom: boolean = false,
+    public readonly isUpgraded: boolean = false,
   ) {
     super(label, collapsibleState);
     this.tooltip = this.label;
@@ -62,17 +67,22 @@ class FormatOption extends vscode.TreeItem {
       };
     }
     // Enable once we need to gate
-    // else if (this.label === 'Custom') {
-    //   this.iconPath = new vscode.ThemeIcon('lock');
-    // }
+    else if (this.label === 'Custom' && !this.isUpgraded) {
+      this.iconPath = new vscode.ThemeIcon('lock');
 
-    const onClickCommand: vscode.Command = {
+      this.command = {
+        title: 'Show Upgrade Info Message',
+        command: 'docs.upgradeInfo',
+        arguments: ['Upgrade to a teams plan for custom formatting', '🔐 Upgrade']
+      };
+      return;
+    }
+
+    this.command = {
       title: 'Style Config',
       command: 'docs.styleConfig',
       arguments: [this.label]
     };
-
-    this.command = onClickCommand;
   }
 }
 

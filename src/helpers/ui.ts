@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { login } from './auth';
 
 export const changeProgressColor = () => {
 	const workbenchConfig = vscode.workspace.getConfiguration('workbench');
@@ -51,4 +52,14 @@ export const getIdFromPurpose = (occupation: Purpose) => {
 		default:
 			return 'other';
 	}
+};
+
+export const displaySignInView = async (message: string, button: string) => {
+	const SIGN_IN_BUTTON = button;
+	const signInResponse = await vscode.window.showInformationMessage(message, button);
+	if (signInResponse === SIGN_IN_BUTTON) {
+		login();
+	}
+
+	return;
 };
