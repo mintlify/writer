@@ -75,7 +75,6 @@ export class AuthService {
 
   public setUpgradedStatus(status: boolean) {
     this.storage.update('isUpgraded', status);
-    vscode.commands.executeCommand('setContext', 'docs.isUpgraded', status);
   }
 }
 
@@ -92,10 +91,6 @@ export const createTeamTree = (authService: AuthService) => {
 export const initializeAuth = (authService: AuthService) => {
   if (authService.getEmail() != null) {
     vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
-  }
-
-  if (authService.getUpgradedStatus()) {
-    vscode.commands.executeCommand('setContext', 'docs.isUpgraded', true);
     createTeamTree(authService);
   }
   

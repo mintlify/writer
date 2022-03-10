@@ -185,9 +185,8 @@
         },
         {
           "id": "team",
-          "name": "Team",
-          "visibility": "visible",
-          "when": "docs.isUpgraded"
+          "name": "Invite Team Members",
+          "visibility": "collapsed"
         },
         {
           "id": "hotkeyOptions",

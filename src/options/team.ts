@@ -72,6 +72,10 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
       return [new RemoveMemberItem(this.authService, element.id)];
     }
 
+    if (!this.authService.getUpgradedStatus()) {
+      return [new UpgradeMemberItem()];
+    }
+
     const email = this.authService.getEmail();
     const { data: team }: { data: Team } = await axios.get(`${TEAM}?email=${email}`);
     const adminTreeItem = new TeamMemberItem(team.admin, team.admin === email, true);
@@ -126,6 +130,19 @@ class RemoveMemberItem extends vscode.TreeItem {
       title: 'Remove Member',
       command: 'docs.removeMember',
       arguments: [authService, email]
+    };
+  }
+}
+
+class UpgradeMemberItem extends vscode.TreeItem {
+  constructor() {
+    super('Upgrade to invite members', vscode.TreeItemCollapsibleState.None);
+    this.iconPath = new vscode.ThemeIcon('lock');
+
+    this.command = {
+      title: 'Show Upgrade Info Message',
+      command: 'docs.upgradeInfo',
+      arguments: ['Upgrade to a teams plan to invite members', '🔐 Upgrade']
     };
   }
 }
