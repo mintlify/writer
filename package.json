@@ -184,6 +184,11 @@
           "visibility": "collapsed"
         },
         {
+          "id": "team",
+          "name": "Invite Team Members",
+          "visibility": "collapsed"
+        },
+        {
           "id": "hotkeyOptions",
           "name": "Hotkey Binding",
           "visibility": "collapsed"

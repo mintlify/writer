@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { AuthService } from '../helpers/auth';
 
 // Must match values in package.json `configuration`
 const FORMAT_OPTIONS = [
@@ -16,10 +15,10 @@ const FORMAT_OPTIONS = [
 ];
 
 export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOption> {
-  private authService: AuthService;
+  private isUpgraded: boolean;
 
-  constructor(authService: AuthService) {
-    this.authService = authService;
+  constructor(isUpgraded: boolean) {
+    this.isUpgraded = isUpgraded;
   }
 
   getTreeItem(element: FormatOption): vscode.TreeItem {
@@ -38,7 +37,7 @@ export class FormatOptionsProvider implements vscode.TreeDataProvider<FormatOpti
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
       const isCustom = option === 'Custom';
-      const isUpgraded = this.authService.getEmail() != null && this.authService.getUpgradedStatus();
+      const isUpgraded = this.isUpgraded;
       const collapsibleState = isCustom ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
       return new FormatOption(option, collapsibleState, selected, isDefault, isCustom, isUpgraded);
     });
