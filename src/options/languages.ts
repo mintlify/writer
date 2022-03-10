@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { AuthService } from '../helpers/auth';
 
 const LANGUAGES = [
   'English',
@@ -12,10 +11,10 @@ const LANGUAGES = [
 ];
 
 export class LanguageOptionsProvider implements vscode.TreeDataProvider<LanguageOption> {
-  private authService: AuthService;
+  private isUpgraded: boolean;
   
-  constructor(authService: AuthService) {
-    this.authService = authService;
+  constructor(isUpgraded: boolean) {
+    this.isUpgraded = isUpgraded;
   }
 
   getTreeItem(element: LanguageOption): vscode.TreeItem {
@@ -30,7 +29,7 @@ export class LanguageOptionsProvider implements vscode.TreeDataProvider<Language
     const options = LANGUAGES.map((option) => {
       const isDefault = option === defaultValue;
       const selected = option === currentValue;
-      const isUpgraded = this.authService.getEmail() != null && this.authService.getUpgradedStatus();
+      const isUpgraded = this.isUpgraded;
       return new LanguageOption(option, vscode.TreeItemCollapsibleState.None, isDefault, selected, isUpgraded);
     });
     return options;

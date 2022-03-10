@@ -6,7 +6,7 @@ import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, di
 import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { createProgressTree } from './options/progress';
-import { AuthService, createConfigTree, initializeAuth, openPortal, upgrade } from './helpers/auth';
+import { AuthService, initializeAuth, openPortal, updateTrees, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
 const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp'];
@@ -198,17 +198,17 @@ export function activate(context: vscode.ExtensionContext) {
 	const updateStyleConfig = vscode.commands.registerCommand('docs.styleConfig', async (newStyle) => {
 		if (!newStyle) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('style', newStyle);
-		createConfigTree(authService);
+		updateTrees(authService);
 	});
 	const updateHotkeyConfig = vscode.commands.registerCommand('docs.hotkeyConfig', async (newHotkey) => {
 		if (!newHotkey) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update(hotkeyConfigProperty(), newHotkey);
-		createConfigTree(authService);
+		updateTrees(authService);
 	});
 	const updateLanguageConfig = vscode.commands.registerCommand('docs.languageConfig', async (newLanguage) => {
 		if (!newLanguage) {return;}
 		await vscode.workspace.getConfiguration('docwriter').update('language', newLanguage);
-		createConfigTree(authService);
+		updateTrees(authService);
 	});
 
 	const showUpgradeInformationMessage = vscode.commands.registerCommand('docs.upgradeInfo', async (message, button) => {
@@ -230,8 +230,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const languagesProvider =  LANGUAGES_SUPPORT.map((language) => {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
-	
-	createProgressTree();
+
 	context.subscriptions.push(
 		write, insert,
 		updateStyleConfig, updateHotkeyConfig, updateLanguageConfig,

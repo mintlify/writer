@@ -1,4 +1,3 @@
-import { rejects } from 'assert';
 import axios from 'axios';
 import * as vscode from 'vscode';
 import { INVITE, TEAM } from '../helpers/api';
@@ -14,7 +13,7 @@ type Team = {
   members: Member[]
 };
 
-vscode.commands.registerCommand('docs.invite', async (authService: AuthService) => {
+vscode.commands.registerCommand('docs.invite', async (authService: AuthService, isUpgraded: boolean) => {
   const email = await vscode.window.showInputBox({
     title: 'Invite memember adding their email',
     placeHolder: 'hi@example.com',
@@ -42,7 +41,7 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService) 
             toEmail: email
           });
           vscode.window.showInformationMessage('Invite sent to ' + email);
-          createTeamTree(authService); 
+          createTeamTree(authService, isUpgraded); 
           resolve('Completed inviting member');
         } catch (error: any) {
           vscode.window.showErrorMessage(error?.response?.data?.error);
@@ -52,7 +51,7 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService) 
     });
 });
 
-vscode.commands.registerCommand('docs.removeMember', async (authService, email) => {
+vscode.commands.registerCommand('docs.removeMember', async (authService, isUpgraded, email) => {
   try {
     await axios.delete(INVITE, {
       data: {
@@ -60,17 +59,19 @@ vscode.commands.registerCommand('docs.removeMember', async (authService, email) 
         toEmail: email
       }
     });
-    createTeamTree(authService);
+    createTeamTree(authService, isUpgraded);
   } catch (error: any) {
     vscode.window.showErrorMessage(error?.response?.data?.error);
   }
 });
 
 export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
+  private isUpgraded: boolean;
   private authService: AuthService;
 
-  constructor(authService: AuthService) {
+  constructor(authService: AuthService, isUpgraded: boolean) {
     this.authService = authService;
+    this.isUpgraded = isUpgraded;
   }
 
   getTreeItem(element: TeamMemberItem): vscode.TreeItem {
@@ -79,20 +80,24 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
 
   async getChildren(element?: vscode.TreeItem): Promise<any[]> {
     if (element) {
-      return [new RemoveMemberItem(this.authService, element.id)];
+      return [new RemoveMemberItem(this.authService, this.isUpgraded, element.id)];
     }
 
-    if (!this.authService.getUpgradedStatus()) {
+    if (!this.isUpgraded) {
       return [new UpgradeMemberItem()];
     }
 
     const email = this.authService.getEmail();
-    const { data: team }: { data: Team } = await axios.get(`${TEAM}?email=${email}`);
+    const { data: team }: { data: Team } = await axios.get(TEAM, {
+      data: {
+        email,
+      }
+    });
     const adminTreeItem = new TeamMemberItem(team.admin, team.admin === email, true);
     const membersTreeItems = team.members.map(
       member => new TeamMemberItem(member.email, member.email === email, false, member.isInvitePending)
     );
-    return [adminTreeItem, ...membersTreeItems, new AddMemberItem(this.authService)];
+    return [adminTreeItem, ...membersTreeItems, new AddMemberItem(this.authService, this.isUpgraded)];
   }
 }
 
@@ -119,27 +124,27 @@ class TeamMemberItem extends vscode.TreeItem {
 }
 
 class AddMemberItem extends vscode.TreeItem {
-  constructor(authService: AuthService) {
+  constructor(authService: AuthService, isUpgraded: boolean) {
     super('Invite Member', vscode.TreeItemCollapsibleState.None);
     this.iconPath = new vscode.ThemeIcon('add');
 
     this.command = {
       title: 'Invite Member',
       command: 'docs.invite',
-      arguments: [authService]
+      arguments: [authService, isUpgraded]
     };
   }
 }
 
 class RemoveMemberItem extends vscode.TreeItem {
-  constructor(authService: AuthService, email?: string) {
+  constructor(authService: AuthService, isUpgraded: boolean, email?: string) {
     super('Remove Member', vscode.TreeItemCollapsibleState.None);
     this.iconPath = new vscode.ThemeIcon('trash');
 
     this.command = {
       title: 'Remove Member',
       command: 'docs.removeMember',
-      arguments: [authService, email]
+      arguments: [authService, isUpgraded, email]
     };
   }
 }
