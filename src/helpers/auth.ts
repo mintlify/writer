@@ -88,11 +88,18 @@ export const createTeamTree = (authService: AuthService) => {
   vscode.window.createTreeView('team', { treeDataProvider: new TeamProvider(authService) });
 };
 
+const updateTrees = (authService: AuthService) => {
+  createConfigTree(authService);
+  createTeamTree(authService);
+};
+
 export const initializeAuth = (authService: AuthService) => {
   if (authService.getEmail() != null) {
     vscode.commands.executeCommand('setContext', 'docs.isSignedIn', true);
     createTeamTree(authService);
   }
+  
+  createConfigTree(authService);
   
   vscode.window.registerUriHandler({
     async handleUri(uri: vscode.Uri) {
@@ -110,7 +117,7 @@ export const initializeAuth = (authService: AuthService) => {
           const { email, isUpgraded } = authResponse.data;
           authService.setEmail(email);
           authService.setUpgradedStatus(isUpgraded);
-          createConfigTree(authService);
+          updateTrees(authService);
 
           vscode.window.showInformationMessage(`🙌 Successfully signed in with ${email}`);
         } catch (err) {
@@ -119,7 +126,7 @@ export const initializeAuth = (authService: AuthService) => {
       } else if (uri.path === '/logout') {
         authService.deleteEmail();
         authService.setUpgradedStatus(false);
-        createConfigTree(authService);
+        updateTrees(authService);
 
         vscode.window.showInformationMessage('Successfully logged out');
       } else if (uri.path === '/return') {
@@ -128,7 +135,7 @@ export const initializeAuth = (authService: AuthService) => {
 
         if (event === 'upgrade') {
           authService.setUpgradedStatus(true);
-          createConfigTree(authService);
+          updateTrees(authService);
           vscode.window.showInformationMessage('🎉 Successfully upgraded to the Team Plan');
         }
       }

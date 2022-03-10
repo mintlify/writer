@@ -230,8 +230,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const languagesProvider =  LANGUAGES_SUPPORT.map((language) => {
 		return vscode.languages.registerHoverProvider(language, new LanguagesHoverProvider());
 	});
-
-	createConfigTree(authService);
+	
 	createProgressTree();
 	context.subscriptions.push(
 		write, insert,
