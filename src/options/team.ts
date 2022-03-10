@@ -1,3 +1,4 @@
+import { rejects } from 'assert';
 import axios from 'axios';
 import * as vscode from 'vscode';
 import { INVITE, TEAM } from '../helpers/api';
@@ -30,16 +31,25 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService) 
     return null;
   }
 
-  try {
-    await axios.post(INVITE, {
-      fromEmail: authService.getEmail(),
-      toEmail: email
+    vscode.window.withProgress({
+      location: vscode.ProgressLocation.Notification,
+      title: 'Inviting member',
+    }, async () => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          await axios.post(INVITE, {
+            fromEmail: authService.getEmail(),
+            toEmail: email
+          });
+          vscode.window.showInformationMessage('Invite sent to ' + email);
+          createTeamTree(authService); 
+          resolve('Completed inviting member');
+        } catch (error: any) {
+          vscode.window.showErrorMessage(error?.response?.data?.error);
+          reject('Error inviting member');
+        }
+      });
     });
-    vscode.window.showInformationMessage('Invite sent to ' + email);
-    createTeamTree(authService);
-  } catch (error: any) {
-    vscode.window.showErrorMessage(error?.response?.data?.error);
-  }
 });
 
 vscode.commands.registerCommand('docs.removeMember', async (authService, email) => {
