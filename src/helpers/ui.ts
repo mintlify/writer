@@ -34,21 +34,24 @@ export const configUserSettings = () => {
 	removeProgressColor();
 };
 
-export enum Purpose {
-  work = '💼 Work',
-	personal = '👩‍💻 Personal',
-	openSource = '🖊 Open Source',
+export enum DiscoverSource {
+  friend = '👫 Friend',
+	vscode = '🔎 VSCode',
+	website = '💻 Website',
+	article = '📄 Article',
 	other = '🤷 Other'
 }
 
-export const getIdFromPurpose = (occupation: Purpose) => {
+export const getIdFromDiscoverSource = (occupation: DiscoverSource) => {
 	switch (occupation) {
-		case Purpose.work:
-			return 'work';
-		case Purpose.personal:
-			return 'personal';
-		case Purpose.openSource:
-			return 'open-source';
+		case DiscoverSource.friend:
+			return 'friend';
+		case DiscoverSource.vscode:
+			return 'vscode';
+		case DiscoverSource.website:
+			return 'website';
+		case DiscoverSource.article:
+			return 'article';
 		default:
 			return 'other';
 	}

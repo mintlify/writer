@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor, getIdFromPurpose, Purpose, displaySignInView } from './helpers/ui';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO } from './helpers/api';
+import { changeProgressColor, removeProgressColor, displaySignInView, getIdFromDiscoverSource, DiscoverSource } from './helpers/ui';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO_DISCOVER } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { createProgressTree } from './options/progress';
 import { AuthService, initializeAuth, openPortal, updateTrees, upgrade } from './helpers/auth';
@@ -117,15 +117,16 @@ export function activate(context: vscode.ExtensionContext) {
 							feedback: feedback === '👍 Yes' ? 1 : -1,
 						});
 					} else if (shouldShowFirstTimeFeedback) {
-						const purpose = await vscode.window.showInformationMessage(
-							'What do you plan on using AI Doc Writer for?', Purpose.work, Purpose.personal, Purpose.openSource, Purpose.other
-						) as Purpose;
+						const discover: DiscoverSource = await vscode.window.showInformationMessage(
+							'How did you discover AI Doc Writer?', DiscoverSource.friend, DiscoverSource.vscode, DiscoverSource.website,
+							DiscoverSource.article, DiscoverSource.other
+						) as DiscoverSource;
 
-						if (purpose == null) {return null;}
+						if (discover == null) {return null;}
 
-						axios.post(INTRO, {
+						axios.post(INTRO_DISCOVER, {
 							id: feedbackId,
-							purpose: getIdFromPurpose(purpose),
+							source: getIdFromDiscoverSource(discover),
 						});
 					}
 				} catch (err: AxiosError | any) {

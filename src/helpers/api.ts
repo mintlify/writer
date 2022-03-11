@@ -6,7 +6,7 @@ export const DOCS_WRITE_NO_SELECTION = MINTBASE + '/docs/write/v3/no-selection';
 export const WORKER_STATUS = (id: string) => MINTBASE + `/docs/worker/${id}`;
 
 export const FEEDBACK = MINTBASE + '/docs/feedback';
-export const INTRO = MINTBASE + '/docs/intro';
+export const INTRO_DISCOVER = MINTBASE + '/docs/intro/discover';
 export const PROGRESS = MINTBASE + '/progress';
 
 export const UPGRADE = MINTBASE + '/user/checkout';
