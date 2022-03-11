@@ -137,7 +137,7 @@ export const initializeAuth = (authService: AuthService) => {
 
         if (event === 'upgrade') {
           updateTrees(authService);
-          vscode.window.showInformationMessage('🎉 Successfully upgraded to the Team Plan');
+          vscode.window.showInformationMessage('🎉 Successfully upgraded to the premium plan');
         }
       }
     }
