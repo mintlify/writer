@@ -94,7 +94,7 @@ export const updateTrees = async (authService: AuthService) => {
     createConfigTree(isUpgraded);
     createTeamTree(authService, userStatus?.status);
   } catch {
-    vscode.window.showErrorMessage('Unable to create configurations at the moment');
+    console.log('Unable to create configurations at the moment');
   }
 };
 
