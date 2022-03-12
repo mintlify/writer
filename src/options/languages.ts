@@ -60,7 +60,7 @@ class LanguageOption extends vscode.TreeItem {
       this.command = {
         title: 'Show Upgrade Info Message',
         command: 'docs.upgradeInfo',
-        arguments: ['Upgrade to a premium plan for non-english outputs', '🔐 Upgrade']
+        arguments: ['Upgrade to a premium plan for non-english outputs', '🔐 Try for free']
       };
 
       return;

@@ -73,7 +73,7 @@ class FormatOption extends vscode.TreeItem {
       this.command = {
         title: 'Show Upgrade Info Message',
         command: 'docs.upgradeInfo',
-        arguments: ['Upgrade to a premium plan for custom formatting', '🔐 Upgrade']
+        arguments: ['Upgrade to a premium plan for custom formatting', '🔐 Try for free']
       };
       return;
     }

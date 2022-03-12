@@ -141,15 +141,11 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 
 					else if (requiresUpgrade) {
-						const REFER_BUTTON = '💬 Refer to get 100 docs';
-						const UPGRADE_BUTTON = "🔐 Upgrade to unlimited";
-						const LEARN_MORE_BUTTON = "Learn more";
-						const upgradeResponse = await vscode.window.showInformationMessage(err.response.data.message, REFER_BUTTON, UPGRADE_BUTTON, LEARN_MORE_BUTTON);
+						const REFER_BUTTON = '💬 Refer friend to extend quota';
+						const UPGRADE_BUTTON = "🔐 Try premium for free";
+						const upgradeResponse = await vscode.window.showInformationMessage(err.response.data.message, REFER_BUTTON, UPGRADE_BUTTON);
 						if (upgradeResponse === UPGRADE_BUTTON) {
 							upgrade(authService.getEmail());
-						}
-						else if (upgradeResponse === LEARN_MORE_BUTTON) {
-							vscode.env.openExternal(vscode.Uri.parse('https://www.mintlify.com/pricing'));
 						}
 						else if (upgradeResponse === REFER_BUTTON) {
 							vscode.commands.executeCommand('docs.invite', authService, 'community', false);
