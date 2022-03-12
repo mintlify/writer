@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as vscode from 'vscode';
-import { INVITE, TEAM } from '../helpers/api';
+import { INVITE, TEAM, USERID } from '../helpers/api';
 import { AuthService, createTeamTree, Status } from '../helpers/auth';
 
 type Member = {
@@ -13,7 +13,7 @@ type Team = {
   members: Member[]
 };
 
-vscode.commands.registerCommand('docs.invite', async (authService: AuthService, status: Status) => {
+vscode.commands.registerCommand('docs.invite', async (authService: AuthService, status: Status, shouldCreateTeam = true) => {
   const email = await vscode.window.showInputBox({
     title: 'Invite memember adding their email',
     placeHolder: 'hi@example.com',
@@ -37,8 +37,10 @@ vscode.commands.registerCommand('docs.invite', async (authService: AuthService, 
       return new Promise(async (resolve, reject) => {
         try {
           await axios.post(INVITE, {
+            userId: USERID,
             fromEmail: authService.getEmail(),
-            toEmail: email
+            toEmail: email,
+            shouldCreateTeam
           });
           vscode.window.showInformationMessage('Invite sent to ' + email);
           createTeamTree(authService, status);
@@ -84,7 +86,7 @@ export class TeamProvider implements vscode.TreeDataProvider<TeamMemberItem> {
     }
 
     if (this.status !== 'team' && this.status !== 'member') {
-      return [new UpgradeMemberItem()];
+      return [new UpgradeMemberItem(this.authService, this.status)];
     }
 
     const email = this.authService.getEmail();
@@ -156,14 +158,14 @@ class RemoveMemberItem extends vscode.TreeItem {
 }
 
 class UpgradeMemberItem extends vscode.TreeItem {
-  constructor() {
-    super('Upgrade to invite members', vscode.TreeItemCollapsibleState.None);
-    this.iconPath = new vscode.ThemeIcon('lock');
+  constructor(authService: AuthService, status: Status) {
+    super('Invite Member', vscode.TreeItemCollapsibleState.None);
+    this.iconPath = new vscode.ThemeIcon('add');
 
     this.command = {
-      title: 'Show Upgrade Info Message',
-      command: 'docs.upgradeInfo',
-      arguments: ['Upgrade to a teams plan to invite members', '🔐 Upgrade']
+      title: 'Invite Member',
+      command: 'docs.invite',
+      arguments: [authService, status, false]
     };
   }
 }

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { URLSearchParams } from 'url';
-import { ISDEV, USER_CODE, PORTAL, UPGRADE, USER_STATUS } from "./api";
+import { ISDEV, USER_CODE, PORTAL, UPGRADE, USER_STATUS, USERID } from "./api";
 import { FormatOptionsProvider } from '../options/format';
 import { HotkeyOptionsProvider } from '../options/hotkey';
 import { LanguageOptionsProvider } from '../options/languages';
@@ -114,7 +114,7 @@ export const initializeAuth = (authService: AuthService) => {
           const authResponse = await axios.post(USER_CODE,
             {
               code,
-              userId: vscode.env.machineId,
+              userId: USERID,
               uriScheme: vscode.env.uriScheme
             }
           );

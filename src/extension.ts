@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
 import { changeProgressColor, removeProgressColor, displaySignInView, getIdFromDiscoverSource, DiscoverSource } from './helpers/ui';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO_DISCOVER } from './helpers/api';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO_DISCOVER, USERID } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { createProgressTree } from './options/progress';
 import { AuthService, initializeAuth, openPortal, updateTrees, upgrade } from './helpers/auth';
@@ -72,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
 						{
 							languageId,
 							commented: true,
-							userId: vscode.env.machineId,
+							userId: USERID,
 							email: authService.getEmail(),
 							docStyle: getDocStyleConfig(),
 							custom: getCustomConfig(),
@@ -141,14 +141,18 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 
 					else if (requiresUpgrade) {
-						const UPGRADE_BUTTON = "🔐 Upgrade to continue";
-						const LEARN_MORE_BUTTON = "ℹ️ Learn more";
-						const upgradeResponse = await vscode.window.showInformationMessage(err.response.data.message, UPGRADE_BUTTON, LEARN_MORE_BUTTON);
+						const REFER_BUTTON = '💬 Refer to get 100 docs';
+						const UPGRADE_BUTTON = "🔐 Upgrade to unlimited";
+						const LEARN_MORE_BUTTON = "Learn more";
+						const upgradeResponse = await vscode.window.showInformationMessage(err.response.data.message, REFER_BUTTON, UPGRADE_BUTTON, LEARN_MORE_BUTTON);
 						if (upgradeResponse === UPGRADE_BUTTON) {
 							upgrade(authService.getEmail());
 						}
 						else if (upgradeResponse === LEARN_MORE_BUTTON) {
 							vscode.env.openExternal(vscode.Uri.parse('https://www.mintlify.com/pricing'));
+						}
+						else if (upgradeResponse === REFER_BUTTON) {
+							vscode.commands.executeCommand('docs.invite', authService, 'community', false);
 						}
 
 						return;
