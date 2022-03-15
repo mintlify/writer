@@ -22,6 +22,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - C and C++
 - PHP
 - Java
+- C#
 - 🚧 More under construction
 
 ### 📑 Docstring formats supported
