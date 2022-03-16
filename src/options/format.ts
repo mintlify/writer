@@ -10,6 +10,7 @@ const FORMAT_OPTIONS = [
   'DocBlock',
   'Doxygen',
   'Javadoc',
+  'XML',
   'Google',
   'Custom'
 ];

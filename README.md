@@ -33,6 +33,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - DocBlock
 - Doxygen
 - Javadoc
+- XML
 - Google
 - 🚧 More under construction
 

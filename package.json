@@ -18,6 +18,7 @@
     "jsdoc",
     "docblock",
     "doxygen",
+    "xml",
     "intellicode",
     "ai",
     "java",
@@ -210,16 +211,19 @@
             "DocBlock",
             "Doxygen",
             "Javadoc",
+            "XML",
             "Google",
             "Custom"
           ],
           "enumDescriptions": [
             "Automatically configured based on the language",
             "The conventional document format for JavaScript",
-            "A documentation format for Python",
+            "The conventional reStructured text documentation format for Python",
+            "The conventional NumPy documentation format for Python",
             "A documentation format for PHP",
             "The de facto standard tool for generating documentation for C++ and C",
             "The conventional documentation format for Java",
+            "The conventional documentation format for C# in XML",
             "Format from the Google Python Style Guide",
             "Custom template based on your own style and preferences"
           ],
