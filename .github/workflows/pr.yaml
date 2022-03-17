@@ -1,0 +1,35 @@
+name: Pull Request
+on: pull_request
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "npm"
+
+      - name: Install deps
+        run: npm install
+
+      - name: Cache linters/formatters
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/trunk
+          key: trunk-${{ runner.os }}
+
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v0.4.0-beta
+
+      - name: Run tests
+        run: npm test

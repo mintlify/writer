@@ -1,6 +1,10 @@
 # ✍️ AI Doc Writer - ⌘ + .
 
-![Size](https://img.shields.io/github/languages/code-size/mintlify/vscode-docs) ![Ratings](https://img.shields.io/visual-studio-marketplace/r/mintlify.document) [![discord](https://img.shields.io/discord/911693009253466123?logo=Discord&logoColor=white)](https://discord.gg/6W7GuYuxra) [![GitHub Stars](https://img.shields.io/github/stars/mintlify/vscode-docs?style=social)](https://github.com/mintlify/vscode-docs) [![Twitter](https://img.shields.io/twitter/follow/mintlify?style=social)](https://twitter.com/mintlify)
+![Size](https://img.shields.io/github/languages/code-size/mintlify/vscode-docs)
+![Ratings](https://img.shields.io/visual-studio-marketplace/r/mintlify.document)
+[![discord](https://img.shields.io/discord/911693009253466123?logo=Discord&logoColor=white)](https://discord.gg/6W7GuYuxra)
+[![GitHub Stars](https://img.shields.io/github/stars/mintlify/vscode-docs?style=social)](https://github.com/mintlify/vscode-docs)
+[![Twitter](https://img.shields.io/twitter/follow/mintlify?style=social)](https://twitter.com/mintlify)
 
 Writing documentation sucks. Let Mintlify take care of it. Just hightlight code and see the magic.
 
@@ -8,8 +12,8 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 
 ### 👩‍💻 How to generate documentation
 
-**Step 1** Highlight code or place cursor on the line you want to document
-**Step 2** Click on the `Write Docs` button (or hit ⌘ + .)
+**Step 1** Highlight code or place cursor on the line you want to document **Step 2** Click on the
+`Write Docs` button (or hit ⌘ + .)
 
 <img src="/assets/demo.gif" width="520px" />
 
@@ -39,14 +43,15 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 
 ### 🚨 Disclaimer
 
-We never store your code, but your code does leave your machine. You can learn more about our [security policies](https://www.mintlify.com/security) or set up [a call](https://savvycal.com/mintlify/enterprise-help) with us to discuss how you can locally host.
+We never store your code, but your code does leave your machine. You can learn more about our
+[security policies](https://www.mintlify.com/security) or set up
+[a call](https://savvycal.com/mintlify/enterprise-help) with us to discuss how you can locally host.
 
 ---
 
 ### More information
 
-[Website](https://mintlify.com/)
-[Twitter](https://twitter.com/mintlify)
+[Website](https://mintlify.com/) [Twitter](https://twitter.com/mintlify)
 [Discord](https://discord.gg/6W7GuYuxra)
 
 _Built with 💚 by the Mintlify team_
