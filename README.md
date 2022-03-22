@@ -1,4 +1,4 @@
-# ✍️ Mintlify Doc Writer - ⌘ + .
+# ✍️ AI Doc Writer - ⌘ + .
 
 ![Size](https://img.shields.io/github/languages/code-size/mintlify/vscode-docs) ![Ratings](https://img.shields.io/visual-studio-marketplace/r/mintlify.document) [![discord](https://img.shields.io/discord/911693009253466123?logo=Discord&logoColor=white)](https://discord.gg/6W7GuYuxra) [![GitHub Stars](https://img.shields.io/github/stars/mintlify/vscode-docs?style=social)](https://github.com/mintlify/vscode-docs) [![Twitter](https://img.shields.io/twitter/follow/mintlify?style=social)](https://twitter.com/mintlify)
 
