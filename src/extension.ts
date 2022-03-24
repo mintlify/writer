@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor, displaySignInView, getIdFromDiscoverSource, DiscoverSource } from './helpers/ui';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, INTRO_DISCOVER, USERID } from './helpers/api';
+import { changeProgressColor, removeProgressColor, displaySignInView } from './helpers/ui';
+import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, USERID } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { createProgressTree } from './options/progress';
 import { AuthService, initializeAuth, openPortal, updateTrees, upgrade } from './helpers/auth';
@@ -90,9 +90,9 @@ export function activate(context: vscode.ExtensionContext) {
 						docstring,
 						position,
 						shouldShowFeedback,
-						shouldShowFirstTimeFeedback,
 						feedbackId,
-						cursorMarker
+						cursorMarker,
+						// shouldShowFirstTimeFeedback, used for onboarding
 					} = await monitorWorkerStatus(id);
 					vscode.commands.executeCommand('docs.insert', {
 						position,
@@ -115,18 +115,6 @@ export function activate(context: vscode.ExtensionContext) {
 						axios.post(FEEDBACK, {
 							id: feedbackId,
 							feedback: feedback === '👍 Yes' ? 1 : -1,
-						});
-					} else if (shouldShowFirstTimeFeedback) {
-						const discover: DiscoverSource = await vscode.window.showInformationMessage(
-							'How did you discover AI Doc Writer?', DiscoverSource.friend, DiscoverSource.vscode, DiscoverSource.website,
-							DiscoverSource.article, DiscoverSource.other
-						) as DiscoverSource;
-
-						if (discover == null) {return null;}
-
-						axios.post(INTRO_DISCOVER, {
-							id: feedbackId,
-							source: getIdFromDiscoverSource(discover),
 						});
 					}
 				} catch (err: AxiosError | any) {

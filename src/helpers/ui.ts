@@ -34,29 +34,6 @@ export const configUserSettings = () => {
 	removeProgressColor();
 };
 
-export enum DiscoverSource {
-  friend = '👫 Friend',
-	vscode = '🔎 VSCode',
-	website = '💻 Website',
-	article = '📄 Article',
-	other = '🤷 Other'
-}
-
-export const getIdFromDiscoverSource = (occupation: DiscoverSource) => {
-	switch (occupation) {
-		case DiscoverSource.friend:
-			return 'friend';
-		case DiscoverSource.vscode:
-			return 'vscode';
-		case DiscoverSource.website:
-			return 'website';
-		case DiscoverSource.article:
-			return 'article';
-		default:
-			return 'other';
-	}
-};
-
 export const displaySignInView = async (message: string, button: string) => {
 	const SIGN_IN_BUTTON = button;
 	const signInResponse = await vscode.window.showInformationMessage(message, button);

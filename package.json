@@ -1,9 +1,9 @@
 {
   "name": "document",
-  "displayName": "AI Doc Writer for Python, JavaScript, TypeScript, C, C++, PHP, Java, and C#",
+  "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C, C++, PHP, Java, and C#",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -60,7 +60,7 @@
       },
       {
         "command": "docs.logout",
-        "title": "Logout of AI Doc Writer"
+        "title": "Logout of Doc Writer"
       }
     ],
     "keybindings": [
@@ -128,7 +128,7 @@
       "activitybar": [
         {
           "id": "mintdocs",
-          "title": "AI Doc Writer",
+          "title": "Mintlify Doc Writer",
           "icon": "assets/outline.png"
         }
       ]
@@ -169,7 +169,7 @@
       "mintdocs": [
         {
           "id": "docs",
-          "name": "AI Generate Docs"
+          "name": "Generate Docs"
         },
         {
           "id": "formatOptions",
@@ -198,7 +198,7 @@
       ]
     },
     "configuration": {
-      "title": "AI Doc Writer",
+      "title": "Mintlify Doc Writer",
       "properties": {
         "docwriter.style": {
           "type": "string",
