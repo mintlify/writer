@@ -55,15 +55,6 @@ class LanguageOption extends vscode.TreeItem {
         light: path.join(__filename, '..', '..', 'assets', 'light', 'check.svg'),
         dark: path.join(__filename, '..', '..', 'assets', 'dark', 'check.svg')
       };
-    } else if (!this.isDefault && !this.isUpgraded) {
-      this.iconPath = new vscode.ThemeIcon('lock');
-      this.command = {
-        title: 'Show Upgrade Info Message',
-        command: 'docs.upgradeInfo',
-        arguments: ['Upgrade to a premium plan for non-english outputs', '🔐 Try for free']
-      };
-
-      return;
     }
 
     this.command = {
