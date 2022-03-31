@@ -39,7 +39,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 
 ### 🚨 Disclaimer
 
-We never store your code, but your code does leave your machine. You can learn more about our [security policies](https://www.mintlify.com/security) or set up [a call](https://savvycal.com/mintlify/enterprise-help) with us to discuss how you can locally host.
+We never store your code, but your code does leave your machine. You can learn more about our [security policies](https://www.mintlify.com/security).
 
 ---
 
