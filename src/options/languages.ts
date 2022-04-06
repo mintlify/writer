@@ -7,7 +7,8 @@ const LANGUAGES = [
   'French',
   'Korean',
   'Russian',
-  'Spanish'  
+  'Spanish',
+  'Turkish'
 ];
 
 export class LanguageOptionsProvider implements vscode.TreeDataProvider<LanguageOption> {

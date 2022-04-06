@@ -3,7 +3,7 @@
   "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C, C++, PHP, Java, and C#",
   "description": "The AI powered documentation writer",
   "icon": "assets/icon.png",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -268,7 +268,8 @@
             "French",
             "Korean",
             "Russian",
-            "Spanish"
+            "Spanish",
+            "Turkish"
           ],
           "enumDescriptions": [
             "English",
@@ -276,7 +277,8 @@
             "française",
             "한국어",
             "Русский",
-            "Española"
+            "Española",
+            "Türkçe"
           ],
           "description": "Toggle to specify the language of the generated documentation"
         },

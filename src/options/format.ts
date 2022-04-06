@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
-// Must match values in package.json `configuration`
 const FORMAT_OPTIONS = [
   'Auto-detect',
   'JSDoc',
