@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const { languageId, getText } = editor.document;
+		const { languageId, getText, fileName } = editor.document;
 
 		const { selection, highlighted } = getHighlightedText(editor);
 		let location: number | null = null;
@@ -71,6 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 					const { data: { id } } = await axios.post(WRITE_ENDPOINT,
 						{
 							languageId,
+							fileName,
 							commented: true,
 							userId: USERID,
 							email: authService.getEmail(),

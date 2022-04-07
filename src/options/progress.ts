@@ -43,13 +43,13 @@ export const createProgressTree = async () => {
     });
   }
 
-  const { languageId, getText } = editor.document;
+  const { languageId, getText, fileName } = editor.document;
 
   const file = getText();
   const types = getActiveIndicatorTypeNames();
   let treeDataProvider;		
   try {
-    const progressRes = await axios.post(PROGRESS, { file, languageId, types });
+    const progressRes = await axios.post(PROGRESS, { file, languageId, fileName, types });
     const { data: progress } = progressRes;
     vscode.window.createTreeView('progress', { treeDataProvider: new ProgressOptionsProvider(progress) });
     treeDataProvider = new ProgressOptionsProvider(progress);
