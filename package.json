@@ -1,9 +1,9 @@
 {
   "name": "document",
   "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, & more",
-  "description": "✍️ JavaScript, Python, Java, Typescript & all other languages - AI powered documentation writer",
+  "description": "✍️ The AI powered documentation writer for JavaScript, Python, Java, Typescript & all other languages",
   "icon": "assets/icon.png",
-  "version": "2.1.10",
+  "version": "2.1.11",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
