@@ -23,6 +23,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - PHP
 - Java
 - C#
+- Ruby
 - Dart
 - 🚧 More under construction
 
