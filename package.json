@@ -3,7 +3,7 @@
   "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, & more",
   "description": "AI powered documentation writer for JavaScript, Python, Java, Typescript & all other languages",
   "icon": "assets/icon.png",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -16,6 +16,7 @@
     "csharp",
     "php",
     "dart",
+    "ruby",
     "jsdoc",
     "docblock",
     "doxygen",
@@ -69,37 +70,37 @@
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
-        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/ && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/ && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/ && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/ && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "command": "docs.write",
         "key": "ctrl+.",
         "win": "ctrl+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "win": "alt+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/ && config.docwriter.hotkey.windows == 'Alt + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/ && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "menus": {
@@ -120,7 +121,7 @@
 			],
       "editor/context": [
         {
-          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart/",
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby/",
           "command": "docs.write"
         }
       ]

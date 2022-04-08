@@ -9,7 +9,7 @@ import { createProgressTree } from './options/progress';
 import { AuthService, initializeAuth, openPortal, updateTrees, upgrade } from './helpers/auth';
 import { hotkeyConfigProperty, KEYBINDING_DISPLAY } from './constants';
 
-const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp', 'csharp', 'dart'];
+const LANGUAGES_SUPPORT = ['php', 'javascript', 'typescript', 'python', 'java', 'c', 'cpp', 'csharp', 'dart', 'ruby'];
 
 export function activate(context: vscode.ExtensionContext) {
 	// All active events can be put here
