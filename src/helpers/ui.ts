@@ -73,8 +73,14 @@ const generateFacebookIntentUrl = () => {
 	return `https://www.facebook.com/sharer.php?u=${url}`;
 };
 
+const generateMailToUrl = () => {
+	const subject = encodeURI('Check out Mintlify Doc Writer');
+	const body = encodeURI(MARKETPLACE_URL);
+	return `mailto:?to=&subject=${subject}&body=${body}`;
+};
+
 export const shareNotification = async (): Promise<void> => {
-	const shareOption = await vscode.window.showInformationMessage('Share Doc Writer to your friends', 'Twitter', 'Facebook', 'Email', 'Copy link');
+	const shareOption = await vscode.window.showInformationMessage('Share Doc Writer with your friends', 'Twitter', 'Facebook', 'Email', 'Copy link');
 
 	switch (shareOption) {
 		case 'Twitter':
@@ -85,7 +91,8 @@ export const shareNotification = async (): Promise<void> => {
 			const facebookShareUrl = generateFacebookIntentUrl();
 			vscode.env.openExternal(vscode.Uri.parse(facebookShareUrl));
 		case 'Email':
-			vscode.env.openExternal(vscode.Uri.parse('mailto:?to=&subject=Check out Mintlify Doc Writer'));
+			const mailToUrl = generateMailToUrl();
+			vscode.env.openExternal(vscode.Uri.parse(mailToUrl));
 			return;
 		case 'Copy link':
 			await vscode.env.clipboard.writeText(MARKETPLACE_URL);
