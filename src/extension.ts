@@ -119,7 +119,6 @@ export function activate(context: vscode.ExtensionContext) {
 						});
 					}
 				} catch (err: AxiosError | any) {
-					console.log(err);
 					resolve('Error');
 					removeProgressColor();
 
