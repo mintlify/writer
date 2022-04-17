@@ -94,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
 						cursorMarker,
 						// for feedback
 						shouldShowFeedback,
-						isFirstFeedback
+						shouldShowShare
 					} = await monitorWorkerStatus(id);
 					vscode.commands.executeCommand('docs.insert', {
 						position,
@@ -113,7 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
 					if (shouldShowFeedback) {
 						const feedbackScore = await askForFeedbackNotification(feedbackId);
 
-						if (feedbackScore === 1 && isFirstFeedback) {
+						if (feedbackScore === 1 && shouldShowShare) {
 							shareNotification();
 						}
 					}
