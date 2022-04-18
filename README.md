@@ -25,6 +25,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - C#
 - Ruby
 - Dart
+- Go
 - 🚧 More under construction
 
 ### 📑 Docstring formats supported
@@ -35,6 +36,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - DocBlock
 - Doxygen
 - Javadoc
+- GoDoc
 - XML
 - Google
 - 🚧 More under construction
