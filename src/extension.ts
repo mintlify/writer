@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import LanguagesHoverProvider from './hover/provider';
 import { monitorWorkerStatus, getDocStyleConfig, getCustomConfig, getHighlightedText, getWidth } from './helpers/utils';
-import { changeProgressColor, removeProgressColor, displaySignInView } from './helpers/ui';
-import { DOCS_WRITE, FEEDBACK, DOCS_WRITE_NO_SELECTION, USERID } from './helpers/api';
+import { changeProgressColor, removeProgressColor, displaySignInView, askForFeedbackNotification, shareNotification } from './helpers/ui';
+import { DOCS_WRITE, DOCS_WRITE_NO_SELECTION, USERID } from './helpers/api';
 import { configUserSettings } from './helpers/ui';
 import { createProgressTree } from './options/progress';
 import { AuthService, initializeAuth, openPortal, updateTrees, upgrade } from './helpers/auth';
@@ -90,10 +90,11 @@ export function activate(context: vscode.ExtensionContext) {
 					const {
 						docstring,
 						position,
-						shouldShowFeedback,
 						feedbackId,
 						cursorMarker,
-						// shouldShowFirstTimeFeedback, used for onboarding
+						// for feedback
+						shouldShowFeedback,
+						shouldShowShare
 					} = await monitorWorkerStatus(id);
 					vscode.commands.executeCommand('docs.insert', {
 						position,
@@ -110,13 +111,11 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 					
 					if (shouldShowFeedback) {
-						const feedback = await vscode.window.showInformationMessage('Are the results useful?', '👍 Yes', '👎 No');
-						if (feedback == null) {return null;}
+						const feedbackScore = await askForFeedbackNotification(feedbackId);
 
-						axios.post(FEEDBACK, {
-							id: feedbackId,
-							feedback: feedback === '👍 Yes' ? 1 : -1,
-						});
+						if (feedbackScore === 1 && shouldShowShare) {
+							shareNotification();
+						}
 					}
 				} catch (err: AxiosError | any) {
 					resolve('Error');
