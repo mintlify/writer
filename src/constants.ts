@@ -19,6 +19,6 @@ export const KEYBINDING_DISPLAY = (): string => {
     case 'Alt + .':
       return 'Alt+.';
     default:
-      return '⌘ + .';
+      return 'Ctrl + .';
   }
 };
