@@ -3,7 +3,7 @@
   "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, Ruby & more",
   "description": "AI powered documentation writer for JavaScript, Python, Java, Typescript & all other languages",
   "icon": "assets/icon.png",
-  "version": "2.1.17",
+  "version": "2.1.18",
   "publisher": "mintlify",
   "keywords": [
     "documentation",
@@ -26,7 +26,9 @@
     "java",
     "javadoc",
     "go",
-    "godoc"
+    "godoc",
+    "rust",
+    "rustdoc"
   ],
   "repository": {
     "url": "https://github.com/mintlify/vscode-docs"
@@ -72,37 +74,37 @@
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
-        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "command": "docs.write",
         "key": "cmd+.",
         "mac": "cmd+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "command": "docs.write",
         "key": "ctrl+.",
         "win": "ctrl+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "win": "alt+.",
-        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.windows == 'Alt + .'"
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
     "menus": {
@@ -123,7 +125,7 @@
 			],
       "editor/context": [
         {
-          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/",
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/",
           "command": "docs.write"
         }
       ]
@@ -216,6 +218,7 @@
             "Doxygen",
             "Javadoc",
             "GoDoc",
+            "RustDoc",
             "XML",
             "Google",
             "Custom"
@@ -229,6 +232,7 @@
             "The de facto standard tool for generating documentation for C++ and C",
             "The conventional documentation format for Java",
             "The conventional documentation format for Go",
+            "The unofficial documentation format for Rust",
             "The conventional documentation format for C# in XML",
             "Format from the Google Python Style Guide",
             "Custom template based on your own style and preferences"

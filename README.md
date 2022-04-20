@@ -24,6 +24,7 @@ Writing documentation sucks. Let Mintlify take care of it. Just hightlight code 
 - Java
 - C#
 - Ruby
+- Rust
 - Dart
 - Go
 - 🚧 More under construction
