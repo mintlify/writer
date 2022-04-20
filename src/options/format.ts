@@ -9,6 +9,8 @@ const FORMAT_OPTIONS = [
   'DocBlock',
   'Doxygen',
   'Javadoc',
+  'GoDoc',
+  'RustDoc',
   'XML',
   'Google',
   'Custom'
