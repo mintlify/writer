@@ -84,15 +84,15 @@
       },
       {
         "command": "docs.write",
-        "key": "cmd+.",
-        "mac": "cmd+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌘ + .'"
+        "key": "ctrl+.",
+        "mac": "ctrl+.",
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.window == 'Ctrl + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌥ + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.window == 'Alt + .'"
       },
       {
         "command": "docs.write",
@@ -152,13 +152,13 @@
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
-        "when": "isLinux && config.docwriter.hotkey.mac == '⌘ + .'"
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isLinux && config.docwriter.hotkey.window == 'Ctrl + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
-        "when": "isLinux && config.docwriter.hotkey.mac == '⌥ + .'"
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isLinux && config.docwriter.hotkey.window == 'Alt + .'"
       },
       {
         "view": "docs",
@@ -316,7 +316,7 @@
             "Control + .",
             "Alt + ."
           ],
-          "description": "The hotkey used for generating documentation (only for Windows)"
+          "description": "The hotkey used for generating documentation (only for Windows/Linux)"
         }
       }
     }
