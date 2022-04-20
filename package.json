@@ -86,13 +86,13 @@
         "command": "docs.write",
         "key": "ctrl+.",
         "mac": "ctrl+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.window == 'Ctrl + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.window == 'Ctrl + .'"
       },
       {
         "command": "docs.write",
         "key": "alt+.",
         "mac": "alt+.",
-        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go/ && config.docwriter.hotkey.window == 'Alt + .'"
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.window == 'Alt + .'"
       },
       {
         "command": "docs.write",
