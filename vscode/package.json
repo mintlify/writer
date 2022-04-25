@@ -1,0 +1,356 @@
+{
+  "name": "document",
+  "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, Ruby & more",
+  "description": "AI powered documentation writer for JavaScript, Python, Java, Typescript & all other languages",
+  "icon": "assets/icon.png",
+  "version": "2.1.18",
+  "publisher": "mintlify",
+  "license": "Expat",
+  "keywords": [
+    "documentation",
+    "typescript",
+    "javascript",
+    "python",
+    "nodejs",
+    "c",
+    "c++",
+    "csharp",
+    "php",
+    "dart",
+    "ruby",
+    "jsdoc",
+    "docblock",
+    "doxygen",
+    "xml",
+    "intellicode",
+    "ai",
+    "java",
+    "javadoc",
+    "go",
+    "godoc",
+    "rust",
+    "rustdoc"
+  ],
+  "repository": {
+    "url": "https://github.com/mintlify/vscode-docs"
+  },
+  "galleryBanner": {
+    "color": "#041811",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.63.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:docs.write",
+    "onCommand:docs.logout"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "docs.write",
+        "title": "Generate Documentation"
+      },
+      {
+        "command": "docs.portal",
+        "title": "Manage account"
+      },
+      {
+        "command": "docs.login",
+        "title": "Login to account"
+      },
+      {
+        "command": "docs.logout",
+        "title": "Logout of Doc Writer"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "docs.write",
+        "key": "cmd+.",
+        "mac": "cmd+.",
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌘ + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "alt+.",
+        "mac": "alt+.",
+        "when": "isMac && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.mac == '⌥ + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "ctrl+.",
+        "mac": "ctrl+.",
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.window == 'Ctrl + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "alt+.",
+        "mac": "alt+.",
+        "when": "isLinux && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.window == 'Alt + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "ctrl+.",
+        "win": "ctrl+.",
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.windows == 'Ctrl + .'"
+      },
+      {
+        "command": "docs.write",
+        "key": "alt+.",
+        "win": "alt+.",
+        "when": "isWindows && editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/ && config.docwriter.hotkey.windows == 'Alt + .'"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+					"command": "docs.portal",
+					"when": "view == docs && docs.isSignedIn",
+          "group": "top"
+				},
+				{
+					"command": "docs.logout",
+					"when": "view == docs && docs.isSignedIn"
+				},
+        {
+					"command": "docs.login",
+					"when": "view == docs && !docs.isSignedIn"
+				}
+			],
+      "editor/context": [
+        {
+          "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/",
+          "command": "docs.write"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mintdocs",
+          "title": "Mintlify Doc Writer",
+          "icon": "assets/outline.png"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isMac && config.docwriter.hotkey.mac == '⌘ + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isMac && config.docwriter.hotkey.mac == '⌥ + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isLinux && config.docwriter.hotkey.window == 'Ctrl + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isLinux && config.docwriter.hotkey.window == 'Alt + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isWindows && config.docwriter.hotkey.windows == 'Ctrl + .'"
+      },
+      {
+        "view": "docs",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "when": "isWindows && config.docwriter.hotkey.windows == 'Alt + .'"
+      }
+    ],
+    "views": {
+      "mintdocs": [
+        {
+          "id": "docs",
+          "name": "Generate Docs"
+        },
+        {
+          "id": "formatOptions",
+          "name": "Docstring Format"
+        },
+        {
+          "id": "progress",
+          "name": "Documentation Progress",
+          "when": "editorIsOpen"
+        },
+        {
+          "id": "languageOptions",
+          "name": "Languages",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "team",
+          "name": "Invite Team Members",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "hotkeyOptions",
+          "name": "Hotkey Binding",
+          "visibility": "collapsed"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Mintlify Doc Writer",
+      "properties": {
+        "docwriter.style": {
+          "type": "string",
+          "default": "Auto-detect",
+          "enum": [
+            "Auto-detect",
+            "JSDoc",
+            "reST",
+            "NumPy",
+            "DocBlock",
+            "Doxygen",
+            "Javadoc",
+            "GoDoc",
+            "RustDoc",
+            "XML",
+            "Google",
+            "Custom"
+          ],
+          "enumDescriptions": [
+            "Automatically configured based on the language",
+            "The conventional document format for JavaScript",
+            "The conventional reStructured text documentation format for Python",
+            "The conventional NumPy documentation format for Python",
+            "A documentation format for PHP",
+            "The de facto standard tool for generating documentation for C++ and C",
+            "The conventional documentation format for Java",
+            "The conventional documentation format for Go",
+            "The unofficial documentation format for Rust",
+            "The conventional documentation format for C# in XML",
+            "Format from the Google Python Style Guide",
+            "Custom template based on your own style and preferences"
+          ],
+          "description": "The format style of documents generated"
+        },
+        "docwriter.custom.template": {
+          "type": "string",
+          "default": "{{summary}}\n{{#params}}\n@param {{name}} ({{type}}) - {{paramExplained}}\n{{/params}}\n{{#returnExplained}}\n@returns {{.}}\n{{/returnExplained}}\n\nGenerated on {{date}}",
+          "markdownDescription": "Format using [mustache template syntax](https://mustache.github.io/mustache.5.html)\n\n‎\n\n`{{summary}}`: summary of the function\n\n`{{#params}}`\n\n`{{name}}`: name of the parameter - `{{type}}`: type of the parameter - `{{defaultValue}}`: default parameter value - `{{paramExplained}}`: summary of the parameter\n\n`{{/params}}`\n\n`{{returnExplained}}`: description of the return value\n\n`{{author}}`: name of the author\n\n`{{date}}`: the current date (in dd/mm/yyyy)",
+          "editPresentation": "multilineText"
+        },
+        "docwriter.custom.author": {
+          "type": "string",
+          "markdownDescription": "Set the name of the author. Replaces `{{author}}`"
+        },
+        "docwriter.progress.trackFunctions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Toggle to include functions in documentation progress tracking"
+        },
+        "docwriter.progress.trackMethods": {
+          "type": "boolean",
+          "default": true,
+          "description": "Toggle to include methods in documentation progress tracking"
+        },
+        "docwriter.progress.trackClasses": {
+          "type": "boolean",
+          "default": false,
+          "description": "Toggle to include classes in documentation progress tracking"
+        },
+        "docwriter.progress.trackTypes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Toggle to include type definitions in documentation progress tracking"
+        },
+        "docwriter.language": {
+          "type": "string",
+          "default": "English",
+          "enum": [
+            "English",
+            "Chinese",
+            "French",
+            "Korean",
+            "Russian",
+            "Spanish",
+            "Turkish"
+          ],
+          "enumDescriptions": [
+            "English",
+            "中文",
+            "française",
+            "한국어",
+            "Русский",
+            "Española",
+            "Türkçe"
+          ],
+          "description": "Toggle to specify the language of the generated documentation"
+        },
+        "docwriter.hotkey.mac": {
+          "type": "string",
+          "default": "⌘ + .",
+          "enum": [
+            "⌘ + .",
+            "⌥ + ."
+          ],
+          "enumDescriptions": [
+            "Command + .",
+            "Option + ."
+          ],
+          "description": "The hotkey used for generating documentation (only for Macs)"
+        },
+        "docwriter.hotkey.windows": {
+          "type": "string",
+          "default": "Ctrl + .",
+          "enum": [
+            "Ctrl + .",
+            "Alt + ."
+          ],
+          "enumDescriptions": [
+            "Control + .",
+            "Alt + ."
+          ],
+          "description": "The hotkey used for generating documentation (only for Windows/Linux)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js",
+    "publish": "npm run package && vsce publish && npx ovsx publish -p $OVSX_KEY"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "14.x",
+    "@types/vscode": "^1.63.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "@vscode/test-electron": "^1.6.2",
+    "eslint": "^8.1.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.1.3",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.4",
+    "vsce": "^2.5.3",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0"
+  },
+  "dependencies": {
+    "axios": "^0.24.0"
+  }
+}

@@ -1,0 +1,11 @@
+node_modules
+package-lock.json
+.env
+.DS_Store
+
+# Search Testing
+zignore
+# Redis DB
+dump.rdb
+# VSCode
+.vscode
