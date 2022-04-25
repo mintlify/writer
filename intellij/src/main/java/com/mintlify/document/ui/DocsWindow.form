@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mintlify.document.ui.DocsWindow">
+  <grid id="27dc6" binding="myToolWindowContent" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="0" right="10"/>
+    <constraints>
+      <xy x="20" y="20" width="304" height="298"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="a84e2" class="javax.swing.JButton" binding="generateDocsButton">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-2565928"/>
+          <text value="&lt;HTML&gt;&lt;FONT color=&quot;#18E299&quot;&gt;✍&lt;/FONT&gt; Generate docs (⌘⇧.)&lt;/HTML&gt;"/>
+        </properties>
+      </component>
+      <component id="7ced5" class="javax.swing.JComboBox" binding="docFormatSelector">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <maximumRowCount value="6"/>
+        </properties>
+      </component>
+      <grid id="a3331" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <vspacer id="e6788">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+        </children>
+      </grid>
+      <component id="5a51a" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Docstring Format"/>
+        </properties>
+      </component>
+      <component id="3b6f8" class="javax.swing.JButton" binding="joinCommunityLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-2565928"/>
+          <horizontalTextPosition value="0"/>
+          <text value="&lt;HTML&gt;Have questions? Join our &lt;FONT color=&quot;#18E299&quot;&gt;&lt;U&gt;community&lt;/U&gt;&lt;/FONT&gt;&lt;/HTML&gt;"/>
+          <toolTipText value="Join"/>
+        </properties>
+      </component>
+      <component id="96015" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Language"/>
+        </properties>
+      </component>
+      <component id="9640" class="javax.swing.JComboBox" binding="languageSelector">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+    </children>
+  </grid>
+</form>
