@@ -10,8 +10,7 @@ import { findChildByKind,
   getProgressHelper,
   getFirstNodeByKind,
   stripQuotes,
-  findIfKindIsChild,
-  extractBaseComments
+  findIfKindIsChild
 } from '../helpers';
 import { getTypedef } from '../c';
 
@@ -102,8 +101,5 @@ export default class CPP implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string {
-    return extractBaseComments(tree);
   }
 }

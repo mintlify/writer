@@ -9,7 +9,6 @@ import {
   getProgressHelper,
   findChildAfterByKind,
   stripQuotes,
-  removeFront
 } from '../helpers';
 
 const RUBY_SYNOPSIS = {
@@ -104,13 +103,5 @@ export default class Ruby implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string | null {
-      switch(tree.kind) {
-        case 'comment':
-          return removeFront(tree.value, 1);
-        default:
-          return null;
-      }
   }
 }

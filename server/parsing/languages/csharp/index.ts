@@ -8,8 +8,7 @@ import { findChildByKind,
   findKindWithinRange,
   getNodeByPath, 
   getProgressHelper,
-  stripQuotes,
-  extractBaseComments
+  stripQuotes
 } from '../helpers';
 
 const CSHARP_SYNOPSIS = {
@@ -72,8 +71,5 @@ export default class CSharp implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string {
-      return extractBaseComments(tree);
   }
 }

@@ -11,8 +11,6 @@ import { findChildByKind,
   getNodeByPath, 
   getProgressHelper,
   findChildAfterByKind,
-  removeFront,
-  removeFrontAndBack
 } from '../helpers';
 
 const PHP_SYNOPSIS = {
@@ -104,20 +102,5 @@ export default class PHP implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string | null {
-    if (!['comment', 'block_comment'].includes(tree.kind)) {
-      return null;
-    }
-    const trimmed = tree.value;
-    if (trimmed.startsWith('#')) {
-      return removeFront(trimmed, 1);
-    } else if (trimmed.startsWith('//')) {
-      return removeFront(trimmed, 2);
-    } else if (trimmed.startsWith('/*')) {
-      return removeFrontAndBack(trimmed, 2);
-    }
-    return null;
-  
   }
 }

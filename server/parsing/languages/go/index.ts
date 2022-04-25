@@ -4,7 +4,6 @@ import {
     getNodeByPath,
     returnSynopsisIfNotNull,
     findKindWithinRange,
-    removeFront,
     findChildByKind,
     checkNodeByKind,
     getValueOfChildByKind,
@@ -130,14 +129,6 @@ export default class Go implements PL {
         return desiredNode ? desiredNode.value : null;
     }
     getProgress(): Progress {
-        return null;
-    }
-    extractComment(tree: TreeNode): string {
-        if (tree.kind !== 'comment') { return null }
-        const trimmed = tree.value;
-        if (trimmed.startsWith('//')) {
-            return removeFront(trimmed, 2);
-        }
         return null;
     }
 }

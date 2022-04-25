@@ -329,25 +329,3 @@ export const getProgressHelper = (
     breakdown,
   };
 }
-
-export const removeFrontAndBack = (str: string, num: number) : string => {
-  const frontRemoved = str.trim().slice(num);
-  const backRemoved = frontRemoved.slice(num);
-  return backRemoved.trim();
-}
-
-export const removeFront = (str: string, num: number): string => {
-  return str.trim().slice(num).trim();
-}
-
-/*
-  A lot of programming languages share the same comment syntax as JS, this function removes common syntax for those languages
-*/
-export const extractBaseComments = (tree: TreeNode): string | null => {
-  if (!['comment', 'block_comment'].includes(tree.kind)) {
-    return null;
-  }
-  const comments = extract(tree.value);
-  if (comments.length === 0) { return null; }
-  return comments[0].value.trim();
-}

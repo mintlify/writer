@@ -23,9 +23,6 @@ class UnknownPL implements PL {
   getProgress() {
     return null;
   }
-  extractComment(): string {
-      return null;
-  }
 }
 
 export default (languageId: string): PL => {

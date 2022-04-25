@@ -12,7 +12,6 @@ import {
   findKindWithinRange,
   getProgressHelper,
   getNodeByPathOptions,
-  extractBaseComments
 } from '../helpers';
 
 const TYPESCRIPT_SYNOPSIS = {
@@ -157,8 +156,5 @@ export default class TypeScript implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string | null {
-    return extractBaseComments(tree);
   }
 }

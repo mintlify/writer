@@ -9,8 +9,6 @@ import {
   stripQuotes,
   findKindWithinRange, 
   getProgressHelper,
-  removeFrontAndBack,
-  removeFront
 } from '../helpers';
 
 const PYTHON_SYNOPSIS = {
@@ -91,15 +89,5 @@ export default class Python implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types, true);
-  }
-  extractComment(tree: TreeNode): string | null {
-      switch (tree.kind) {
-        case 'expression_statement':
-          return removeFrontAndBack(tree.value, 3);
-        case 'comment':
-          return removeFront(tree.value, 1);
-        default:
-          return null;
-      }
   }
 }

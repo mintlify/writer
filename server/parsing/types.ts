@@ -89,6 +89,4 @@ export interface PL {
   getCode(fileTree: TreeNode, location: number): string | null;
   // Getting the progress bar
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress | null;
-  // Extract content inside a comment
-  extractComment(tree: TreeNode): string | null;
 }

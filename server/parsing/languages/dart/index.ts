@@ -8,8 +8,6 @@ import {
   getValueOfChildByKind,
   stripQuotes,
   findIfKindExistsInTree,
-  removeFront,
-  extractBaseComments
 } from '../helpers';
 
 const DART_SYNOPSIS = {
@@ -110,15 +108,5 @@ export default class Dart implements PL {
   }
   getProgress(): Progress {
     return null;
-  }
-  extractComment(tree: TreeNode): string {
-      switch (tree.kind) {
-        case 'documentation_comment':
-          return removeFront(tree.value, 3);
-        case 'comment':
-          return extractBaseComments(tree);
-        default:
-          return null;
-      }
   }
 }

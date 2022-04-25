@@ -8,7 +8,6 @@ import {
   findKindWithinRange, 
   findAllChildsByKind,
   getProgressHelper,
-  extractBaseComments
 } from '../helpers';
 
 const KOTLIN_SYNOPSIS = {
@@ -106,8 +105,5 @@ export default class Kotlin implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string | null {
-    return extractBaseComments(tree);
   }
 }

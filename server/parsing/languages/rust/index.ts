@@ -8,7 +8,6 @@ import {
     getValueOfChildByKind,
     returnSynopsisIfNotNull,
     findKindWithinRange,
-    removeFront
 } from '../helpers';
 
 const RUST_SYNOPSIS = {
@@ -85,14 +84,6 @@ export default class Rust implements PL {
         return desiredNode ? desiredNode.value : null;
     }
     getProgress(): Progress {
-        return null;
-    }
-    extractComment(tree: TreeNode): string {
-        if (tree.kind !== 'line_comment') { return null; }
-        const trimmed = tree.value;
-        if (trimmed.startsWith('//')) {
-            return removeFront(trimmed, 2);
-        }
         return null;
     }
 }

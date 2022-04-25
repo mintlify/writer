@@ -11,10 +11,10 @@ export interface MatchedContent extends LineRange {
 }
 
 /**
-* Given a filename, return the file extension.
-* @param {string} filename - The name of the file to get the extension of.
-* @returns The file extension.
-*/
+ * It takes a filename as a string and returns the file extension as a string
+ * @param {string} filename - The name of the file you want to get the extension of.
+ * @returns The file extension of the file name.
+ */
 export const getFileExtension = (filename: string): string => {
   const fileExtensionRegex = /(?:\.([^.]+))?$/;
   const fileExtension = fileExtensionRegex.exec(filename)[1];

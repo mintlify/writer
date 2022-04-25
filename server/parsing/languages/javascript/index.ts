@@ -11,8 +11,7 @@ import {
   returnSynopsisIfNotNull,
   stripQuotes,
   findKindWithinRange, 
-  getProgressHelper,
-  extractBaseComments
+  getProgressHelper
 } from '../helpers';
 
 const JAVASCRIPT_SYNOPSIS = {
@@ -124,8 +123,5 @@ export default class JavaScript implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string | null {
-    return extractBaseComments(tree);
   }
 }

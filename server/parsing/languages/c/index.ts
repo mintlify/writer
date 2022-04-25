@@ -9,7 +9,6 @@ import { findChildByKind,
   getNodeByPath, 
   getProgressHelper,
   getFirstNodeByKind,
-  extractBaseComments
 } from '../helpers';
 
 const C_SYNOPSIS = {
@@ -100,8 +99,5 @@ export default class C implements PL {
   }
   getProgress(tree: TreeNode, types: ProgressIndicator[]): Progress {
     return getProgressHelper(this, tree, types);
-  }
-  extractComment(tree: TreeNode): string {
-    return extractBaseComments(tree);
   }
 }
