@@ -1,8 +1,9 @@
 # ✍️ Mintlify Doc Writer - ⌘⇧.
 
-![Build](https://github.com/mintlify/ai_doc_writer_plugin/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/18606-ai-doc-writer.svg)](https://plugins.jetbrains.com/plugin/18606-ai-doc-writer)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/18606-ai-doc-writer.svg)](https://plugins.jetbrains.com/plugin/18606-ai-doc-writer)
+[![Version](https://img.shields.io/jetbrains/plugin/v/18606-mintlify-doc-writer.svg)](https://plugins.jetbrains.com/plugin/18606-mintlify-doc-writer)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/18606-mintlify-doc-writer.svg)](https://plugins.jetbrains.com/plugin/18606-mintlify-doc-writer)
+[![discord](https://img.shields.io/discord/911693009253466123?logo=Discord&logoColor=white)](https://discord.gg/6W7GuYuxra)
+[![GitHub Stars](https://img.shields.io/github/stars/mintlify/vscode-docs?style=social)](https://github.com/mintlify/writer)
 
 <img src="assets/intellij-demo.gif" width="100%" />
 
@@ -33,6 +34,9 @@ We never store your code, but your code does leave your machine. You can learn m
 - Java
 - C#
 - Dart
+- Go
+- Rust
+- Dart
 - More under construction
 
 ### Docstring formats supported
@@ -45,6 +49,8 @@ We never store your code, but your code does leave your machine. You can learn m
 - Javadoc
 - XML
 - Google
+- GoDoc
+- RustDoc
 - More under construction
 <!-- Plugin description end -->
 
@@ -69,11 +75,5 @@ We never store your code, but your code does leave your machine. You can learn m
 [Website](https://mintlify.com/)
 [Twitter](https://twitter.com/mintlify)
 [Discord](https://discord.gg/6W7GuYuxra)
-
----
-
-Plugin based on the [IntelliJ Platform Plugin Template][template].
-
-[template]: https://github.com/JetBrains/intellij-platform-plugin-template
 
 _Built with 💚 by the Mintlify team_

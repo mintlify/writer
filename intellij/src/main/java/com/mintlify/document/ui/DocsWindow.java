@@ -33,6 +33,8 @@ public class DocsWindow {
     docFormatSelector.addItem("DocBlock");
     docFormatSelector.addItem("Doxygen");
     docFormatSelector.addItem("XML");
+    docFormatSelector.addItem("GoDoc");
+    docFormatSelector.addItem("RustDoc");
 
     docFormatSelector.setEditable(false);
     generateDocsButton.addActionListener(new ActionListener() {
