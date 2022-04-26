@@ -4,14 +4,14 @@
 
 Writing documentation sucks. Let Mintlify take care of it. Just hightlight code and see the magic.
 
-[![Demo](vscode/assets/demo-docs.gif)](https://www.loom.com/embed/3dbfcd7e0e1b47519d957746e05bf0f4)
+[![Demo](/vscode/assets/demo-docs.gif)](https://www.loom.com/embed/3dbfcd7e0e1b47519d957746e05bf0f4)
 
 ### 👩‍💻 How to generate documentation
 
 **Step 1** Highlight code or place cursor on the line you want to document
 **Step 2** Click on the `Write Docs` button (or hit ⌘ + .)
 
-<img src="vscode/assets/demo.gif" width="520px" />
+<img src="/vscode/assets/demo.gif" width="520px" />
 
 ### 📝 Languages supported
 
