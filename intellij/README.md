@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/jetbrains/plugin/v/18606-mintlify-doc-writer.svg)](https://plugins.jetbrains.com/plugin/18606-mintlify-doc-writer) [![Downloads](https://img.shields.io/jetbrains/plugin/d/18606-mintlify-doc-writer.svg)](https://plugins.jetbrains.com/plugin/18606-mintlify-doc-writer) [![discord](https://img.shields.io/discord/911693009253466123?logo=Discord&logoColor=white)](https://discord.gg/6W7GuYuxra) [![GitHub Stars](https://img.shields.io/github/stars/mintlify/vscode-docs?style=social)](https://github.com/mintlify/writer)
 
-<img src="assets/intellij-demo.gif" width="100%" />
+<img src="/intellij/assets/intellij-demo.gif" width="100%" />
 
 <!-- Plugin description -->
 
