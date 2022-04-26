@@ -1,0 +1,72 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.mintlify.document</id>
+    <name>Mintlify Doc Writer</name>
+    <version>1.1.5</version>
+    <vendor url="https://www.mintlify.com/" email="hi@mintlify.com">Mintlify</vendor>
+    
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.mintlify.document.services.MyApplicationService"/>
+        <projectService serviceImplementation="com.mintlify.document.services.MyProjectService"/>
+        <toolWindow id="Mintlify Doc Writer" icon="/icons/icon.svg" anchor="right"
+                factoryClass="com.mintlify.document.ui.DocsWindowFactory"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="com.mintlify.document.listeners.MyProjectManagerListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
+
+    <actions>
+        <action id="org.intellij.sdk.action.PopupDialogAction"
+                class="com.mintlify.document.actions.PopupDialogAction"
+                text="Generate Docs"
+                description="SDK action example"
+                icon="AllIcons.Actions.RealIntentionBulb"
+        >
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <override-text place="MainMenu" text="Pop Dialog Action"/>
+            <keyboard-shortcut first-keystroke="control shift PERIOD" keymap="$default"/>
+        </action>
+    </actions>
+    <description>
+        <![CDATA[
+            <h1>The AI powered documentation writer.</h1>
+            <br/>
+            <br/>
+            Writing documentation sucks. Let Mintlify take care of it. Just highlight code and see the magic.
+            <h1>How to generate documentation</h1>
+            <b>Step 1</b> Highlight code or place cursor on the line you want to document 
+            <b>Step 2</b> Click on the Write Docs button (or hit ⌘⇧.)
+            <h1>Languages supported</h1>
+            <ul>
+                <li>Python</li>
+                <li>JavaScript</li>
+                <li>TypeScript</li>
+                <li>JSX and TSX</li>
+                <li>PHP</li>
+                <li>Java</li>
+                <li>Kotlin</li>
+                <li>More under construction...</li>
+            </ul>
+            <h1>Docstring formats supported</h1>
+            <ul>
+                <li>JSDoc</li>
+                <li>reST</li>
+                <li>NumPy</li>
+                <li>DocBlock</li>
+                <li>Javadoc</li>
+                <li>Google</li>
+                <li>More under construction...</li>
+            </ul>
+            <br/>
+            <br/>
+            <h1>More Information</h1>
+            <a href="https://www.mintlify.com/">Website</a> | <a href="https://twitter.com/mintlify">Twitter</a> | <a href="https://discord.gg/6W7GuYuxra">Discord</a> | <a href="https://github.com/mintlify/intellij-docs">GitHub</a>
+            <i>Built with 💚 by the Mintlify team</i>
+        ]]>
+    </description>
+</idea-plugin>

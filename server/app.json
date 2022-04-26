@@ -1,0 +1,13 @@
+{
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "npm test"
+      }
+    }
+  },
+  "buildpacks": [
+    {"url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/emk/rust.tgz"},
+    {"url": "https://github.com/heroku/heroku-buildpack-nodejs#latest"}
+  ]
+}

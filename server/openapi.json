@@ -1,0 +1,213 @@
+{
+   "openapi": "3.0.0",
+   "info": {
+      "version": "1.0.0",
+      "title": "Mintlify API"
+   },
+   "servers": [
+      {
+         "url": "https://api.mintlify.com/v1"
+      }
+   ],
+   "components": {
+      "securitySchemes": {
+         "ApiKeyAuth": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "API-KEY"
+         }
+      },
+      "responses": {
+         "ServerError": {
+            "description": "Bad Request",
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "error": {
+                           "type": "string",
+                           "description": "The error message"
+                        }
+                     }
+                  }
+               }
+            }
+         },
+         "UnauthorizedError": {
+            "description": "API key is missing or invalid",
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "error": {
+                           "type": "string",
+                           "description": "The error message"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "security": [
+      {
+         "ApiKeyAuth": []
+      }
+   ],
+   "paths": {
+      "/document": {
+         "post": {
+            "summary": "Generate Documentation",
+            "operationId": "documentation",
+            "tags": [
+               "Document Code"
+            ],
+            "requestBody": {
+               "description": "Generate documentation for the code provided",
+               "required": true,
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "required": ["code", "language"],
+                        "properties": {
+                           "code": {
+                              "type": "string",
+                              "description": "The code to generate documentation for"
+                           },
+                           "language": {
+                              "type": "string",
+                              "description": "The programming language ID of the code",
+                              "enum": ["python", "typescript", "javascript", "php"]
+                           },
+                           "commented": {
+                              "type": "boolean",
+                              "default": false,
+                              "description": "Whether or not to comment the documentation output"
+                           },
+                           "format": {
+                              "type": "string",
+                              "description": "The format of the documentation. Only works if commented is true",
+                              "enum": ["JSDoc", "reST", "NumPy", "DocBlock", "Doxygen", "Javadoc", "Google"]
+                           },
+                           "context": {
+                              "type": "string",
+                              "description": "Only use if code needs more context (e.g. method in a class)"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Generated documentation for your code",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "documentation": {
+                                 "type": "string",
+                                 "description": "The generated documentation"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "400": {
+                  "$ref": "#/components/responses/ServerError"
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               }
+            }
+         }
+      },
+      "/list/languages": {
+         "get": {
+            "summary": "List Languages",
+            "operationId": "languages",
+            "tags": [
+               "Supported Settings"
+            ],
+            "responses": {
+               "200": {
+                  "description": "A list of supported programming language IDs",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "languages": {
+                                 "type": "array",
+                                 "items": {
+                                    "type": "string"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "400": {
+                  "$ref": "#/components/responses/ServerError"
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               }
+            }
+         }
+      },
+      "/list/formats": {
+         "get": {
+            "summary": "List Documentation Formats",
+            "operationId": "formats",
+            "tags": [
+               "Supported Settings"
+            ],
+            "responses": {
+               "200": {
+                  "description": "A list of supported documentation format IDs",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "formats": {
+                                 "type": "array",
+                                 "items": {
+                                    "type": "object",
+                                    "properties": {
+                                       "id": {
+                                          "type": "string"
+                                       },
+                                       "defaultLanguages": {
+                                          "type": "array",
+                                          "items": {
+                                             "type": "string"
+                                          }
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "400": {
+                  "$ref": "#/components/responses/ServerError"
+               },
+               "401": {
+                  "$ref": "#/components/responses/UnauthorizedError"
+               }
+            }
+         }
+      }
+   }
+}
