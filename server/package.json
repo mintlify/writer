@@ -7,7 +7,6 @@
     "node": "16.x"
   },
   "scripts": {
-    "build": "cd parser && npm install",
     "start": "ts-node -r tsconfig-paths/register index.ts",
     "test": "jest",
     "lint": "eslint . --ext .ts",
