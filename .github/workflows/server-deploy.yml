@@ -1,0 +1,32 @@
+name: Deploy Server
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - server/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      working-directory: ./server
+      run: npm install --prefix ./
+
+    - name: Running tests
+      working-directory: ./server
+      run: npm test
+
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: mintlify-connect-server
+        team: mintlify
+        heroku_email: han@mintlify.com
+        appdir: server

@@ -21,8 +21,7 @@ const dd_options = {
   'response_code':true,
   'tags': ['app:my_app']
 };
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line
 const connect_datadog = require('connect-datadog')(dd_options);
 
 app.use(cors());
