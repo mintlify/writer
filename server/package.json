@@ -7,6 +7,7 @@
     "node": "16.x"
   },
   "scripts": {
+    "build": "cd ./node_modules/@mintlify/grove/parser && npm run build",
     "start": "ts-node -r tsconfig-paths/register index.ts",
     "test": "jest",
     "lint": "eslint . --ext .ts",
@@ -18,19 +19,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mintlify/backend.git"
+    "url": "git+https://github.com/mintlify/writer.git"
   },
   "author": "Mintlify",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Mintlify/backend/issues"
+    "url": "https://github.com/mintlify/writer/issues"
   },
-  "homepage": "https://github.com/Mintlify/backend#readme",
+  "homepage": "https://github.com/mintlify/writer#readme",
   "devDependencies": {
     "@types/analytics-node": "^3.1.7",
     "@types/bull": "^3.15.8",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.0",
+    "@types/mustache": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
     "cargo-cp-artifact": "^0.1.6",
@@ -43,9 +45,6 @@
   "dependencies": {
     "@google-cloud/translate": "^6.3.1",
     "@mintlify/grove": "^1.0.10",
-    "@notionhq/client": "^1.0.4",
-    "@types/mustache": "^4.1.2",
-    "@vue/compiler-dom": "^3.2.22",
     "analytics-node": "^6.0.0",
     "axios": "^0.23.0",
     "bull": "^4.6.2",
@@ -54,7 +53,6 @@
     "dotenv": "^14.2.0",
     "express": "^4.17.1",
     "express-rate-limit": "^5.5.1",
-    "extract-comments": "^1.1.0",
     "mongoose": "^6.0.15",
     "morgan": "^1.10.0",
     "mustache": "^4.2.0",

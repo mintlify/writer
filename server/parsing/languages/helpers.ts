@@ -1,6 +1,5 @@
 import { PL, Synopsis, TreeNode } from 'parsing/types';
 import { Progress, ProgressIndicator } from 'routes/writer/progress';
-import extract from 'extract-comments';
 
 type PathOptions = {
   path: string[];

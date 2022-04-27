@@ -6,6 +6,9 @@ on:
     paths:
       - server/**
 
+env:
+  OPENAI_TOKEN: ${{secrets.OPENAI_TOKEN}}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,9 +22,18 @@ jobs:
       with:
         node-version: 16
 
+    - name: Setup Rust Toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+
     - name: Install dependencies
       working-directory: ./server
       run: npm install --prefix ./
+
+    - name: Run build
+      working-directory: ./server
+      run: npm run build
 
     - name: Running tests
       working-directory: ./server
