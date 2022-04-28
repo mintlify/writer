@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@google-cloud/translate": "^6.3.1",
-    "@mintlify/grove": "^1.0.10",
+    "@mintlify/grove": "^1.0.13",
     "analytics-node": "^6.0.0",
     "axios": "^0.23.0",
     "bull": "^4.6.2",
