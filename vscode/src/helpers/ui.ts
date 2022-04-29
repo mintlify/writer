@@ -31,9 +31,6 @@ export const removeProgressColor = () => {
 };
 
 export const configUserSettings = () => {
-	const httpConfig = vscode.workspace.getConfiguration('http');
-	httpConfig.update('systemCertificates', false, true);
-
 	// Remove color scheme in case left over
 	removeProgressColor();
 };
