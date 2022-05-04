@@ -8,7 +8,8 @@ const uri = process.env.MONGO_URI as string;
 mongoose.connect(uri);
 
 const { connection } = mongoose;
-connection.on('error', console.error.bind(console, 'connection error:'));
+connection.on('error', console.error.bind(console, `Connection error reported on ${console.profile}`));
+connection.on('log', console.log.bind('Logging on Mongoose'));
 connection.once('open', () => {
   console.log('MongoDB database connected...');
 });
