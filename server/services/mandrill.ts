@@ -1,3 +1,4 @@
+// https://www.notion.so/mintlify/Mandrill-a3257114b14b450ca53fb39c145d21b6#bf9b1ab153e04982a6f4ca0227ccb81d
 import axios from 'axios';
 
 const TEMPLATE_SLUG = 'ai-doc-writer-invite-to-team';

@@ -33,6 +33,7 @@ const apiLimiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
+// https://docs.mintlify.com/reference/documentation
 publicRouter.post('/document', apiLimiter, apiMiddleware, async (req, res) => {
   return res.status(400).send({error: 'The Mintlify API is currently being updated. Please email hi@mintlify for urgent authorization'});
   // const { hashedKey } = res.locals;
