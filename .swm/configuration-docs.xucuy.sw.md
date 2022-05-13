@@ -2,9 +2,9 @@
 id: xucuy
 name: Configuration Docs
 file_version: 1.0.2
-app_version: 0.8.3-0
+app_version: 0.8.4-0
 file_blobs:
-  server/models/writer/Doc.ts: 14b3a9380528dc14562daa7fefab3ccb1a7daa6f
+  server/models/writer/Doc.ts: d48af9b394aae93b6e6b9ffdb04b6227c90d22a1
   server/app.json: a3d73df45af954be4b54422572a05f50dddbfcb0
 ---
 
@@ -19,34 +19,34 @@ This part is for defining the doc schema
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 server/models/writer/Doc.ts
 ```typescript
-⬜ 2      
 ⬜ 3      const { Schema } = mongoose;
 ⬜ 4      
-🟩 5      const DocSchema = new Schema({
-🟩 6        timestamp: { type: Date, default: Date.now },
-🟩 7        userId: { type: String },
-🟩 8        email: { type: String },
-🟩 9        output: { type: String },
-🟩 10       prompt: { type: String, required: true },
-🟩 11       language: { type: String },
-🟩 12       timeToGenerate: { type: Number },
-🟩 13       timeToCall: { type: Number },
-🟩 14       source: { type: String },
-🟩 15       feedbackId: { type: String },
-🟩 16       feedback: { type: Number },
-🟩 17       isPreview: { type: Boolean },
-🟩 18       hasAcceptedPreview: { type: Boolean },
-🟩 19       isExplained: { type: Boolean },
-🟩 20       docFormat: { type: String },
-🟩 21       commentFormat: { type: String },
-🟩 22       kind: { type: String },
-🟩 23       isSelection: { type: Boolean },
-🟩 24       promptId: { type: String },
-🟩 25       actualLanguage: { type: String }
-🟩 26     });
-⬜ 27     
-⬜ 28     const Doc = mongoose.model('Doc', DocSchema, 'docs');
-⬜ 29     
+⬜ 5      /* Creating a schema for the Doc model. */
+🟩 6      const DocSchema = new Schema({
+🟩 7        timestamp: { type: Date, default: Date.now },
+🟩 8        userId: { type: String },
+🟩 9        email: { type: String },
+🟩 10       output: { type: String },
+🟩 11       prompt: { type: String, required: true },
+🟩 12       language: { type: String },
+🟩 13       timeToGenerate: { type: Number },
+🟩 14       timeToCall: { type: Number },
+🟩 15       source: { type: String },
+🟩 16       feedbackId: { type: String },
+🟩 17       feedback: { type: Number },
+🟩 18       isPreview: { type: Boolean },
+🟩 19       hasAcceptedPreview: { type: Boolean },
+🟩 20       isExplained: { type: Boolean },
+🟩 21       docFormat: { type: String },
+🟩 22       commentFormat: { type: String },
+🟩 23       kind: { type: String },
+🟩 24       isSelection: { type: Boolean },
+🟩 25       promptId: { type: String },
+🟩 26       actualLanguage: { type: String },
+🟩 27     });
+⬜ 28     
+⬜ 29     const Doc = mongoose.model("Doc", DocSchema, "docs");
+⬜ 30     
 ```
 
 <br/>
