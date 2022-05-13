@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+/* Creating a schema for the Doc model. */
 const DocSchema = new Schema({
   timestamp: { type: Date, default: Date.now },
   userId: { type: String },
@@ -22,9 +23,9 @@ const DocSchema = new Schema({
   kind: { type: String },
   isSelection: { type: Boolean },
   promptId: { type: String },
-  actualLanguage: { type: String }
+  actualLanguage: { type: String },
 });
 
-const Doc = mongoose.model('Doc', DocSchema, 'docs');
+const Doc = mongoose.model("Doc", DocSchema, "docs");
 
 export default Doc;

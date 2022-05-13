@@ -1,20 +1,21 @@
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose, { ObjectId } from "mongoose";
 
 const { Schema } = mongoose;
 
 export type TeamType = {
-  _id: ObjectId,
-  admin: string,
-  members: string[],
-  createdAt: Date,
-}
+  _id: ObjectId;
+  admin: string;
+  members: string[];
+  createdAt: Date;
+};
 
+/* Creating a schema for the Team model. */
 const TeamSchema = new Schema({
   admin: { type: String, required: true },
   members: { type: [String], required: true, default: [] },
-  createdAt: { type: Date, default: Date.now }
-})
+  createdAt: { type: Date, default: Date.now },
+});
 
-const Team = mongoose.model<TeamType>('Team', TeamSchema, 'teams');
+const Team = mongoose.model<TeamType>("Team", TeamSchema, "teams");
 
 export default Team;
