@@ -78,7 +78,7 @@ export const checkShowFeedbackStatus = async (userId: string): Promise<ShowFeedb
     const isWithinPossibility = Math.random() < POSSIBILITY_TO_SHOW_FEEDBACK;
 
     return {
-      shouldShowFeedback: isWithinPossibility,
+      shouldShowFeedback: isWithinPossibility && hasNotIndicatedPositiveFeedback,
       shouldShowShare: hasNotIndicatedPositiveFeedback,
     };
   }
