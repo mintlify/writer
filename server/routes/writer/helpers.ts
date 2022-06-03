@@ -64,7 +64,7 @@ export const checkShowFeedbackStatus = async (userId: string): Promise<ShowFeedb
     const pastThreeDocsRequest = Doc.find({userId}).sort({timestamp: -1}).limit(3);
     const hasIndicatedPositiveFeedbackRequest = Doc.exists({userId, feedback: 1});
     const [pastThreeDocs, hasIndicatedPositiveFeedback] = await Promise.all([pastThreeDocsRequest, hasIndicatedPositiveFeedbackRequest]);
-    const hasNotIndicatedPositiveFeedback = hasIndicatedPositiveFeedback === false;
+    const hasNotIndicatedPositiveFeedback = !hasIndicatedPositiveFeedback;
 
     const isFirstTime = pastThreeDocs.length === 0;
     const isFeedbackWithinPastThree = pastThreeDocs?.find(doc => doc.feedback) != null;
