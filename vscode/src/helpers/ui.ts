@@ -61,18 +61,18 @@ export const askForFeedbackNotification = async (feedbackId: string): Promise<nu
 
 const generateTweetIntentUrl = () => {
 	const text = encodeURI('Check out Doc Writer for VSCode by @mintlify. It just generated documentation for me in a second');
-	const url = encodeURI(MARKETPLACE_URL);
+	const url = MARKETPLACE_URL;
 	return `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
 };
 
 const generateFacebookIntentUrl = () => {
-	const url = encodeURI(MARKETPLACE_URL);
+	const url = MARKETPLACE_URL;
 	return `https://www.facebook.com/sharer.php?u=${url}`;
 };
 
 const generateMailToUrl = () => {
 	const subject = encodeURI('Check out Mintlify Doc Writer');
-	const body = encodeURI(MARKETPLACE_URL);
+	const body = MARKETPLACE_URL;
 	return `mailto:?to=&subject=${subject}&body=${body}`;
 };
 
