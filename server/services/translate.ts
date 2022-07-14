@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export type TargetLanguage = 'English' | 'Chinese' | 'French' | 'Spanish' | 'Russian' | 'Korean' | 'Turkish';
+export type TargetLanguage = 'English' | 'Chinese' | 'Dutch' | 'French' | 'Japanese' | 'Spanish' | 'Russian' | 'Korean' | 'Turkish';
 
 const { Translate } = v2;
 const projectId = 'mintlify';
@@ -16,8 +16,12 @@ const getTargetCode = (targetLanguage: TargetLanguage): string => {
       return 'en';
     case 'chinese':
       return 'zh';
+    case 'dutch':
+      return 'nl';
     case 'french':
       return 'fr';
+    case 'japanese':
+      return 'ja';
     case 'spanish':
       return 'es';
     case 'russian':

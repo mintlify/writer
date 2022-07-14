@@ -4,7 +4,9 @@ import * as path from 'path';
 const LANGUAGES = [
   'English',
   'Chinese',
+  'Dutch',
   'French',
+  'Japanese',
   'Korean',
   'Russian',
   'Spanish',

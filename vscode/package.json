@@ -276,7 +276,9 @@
           "enum": [
             "English",
             "Chinese",
+            "Dutch",
             "French",
+            "Japanese",
             "Korean",
             "Russian",
             "Spanish",
