@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 import { getDocstringPrompt } from 'brain/codex/docs';
 import { addComments, wrapStr } from 'brain/helpers';
 import { track, trackOpen } from 'services/segment';
@@ -18,7 +18,7 @@ export type Custom = {
   author?: string;
   date?: string;
   language?: TargetLanguage;
-}
+};
 
 type Body = {
   code: string;
@@ -38,36 +38,42 @@ type Body = {
 type EditCursorMarker = {
   line: number;
   message: string;
-}
+};
 
 type DocstringResponse = {
-  docstring: string,
-  position: CommentPosition,
-  feedbackId: string | null,
-  preview: string | null,
-  cursorMarker?: EditCursorMarker,
-}
+  docstring: string;
+  position: CommentPosition;
+  feedbackId: string | null;
+  preview: string | null;
+  cursorMarker?: EditCursorMarker;
+};
 
 type ShowFeedbackStatus = {
-  shouldShowFeedback: boolean,
-  shouldShowShare?: boolean,
-}
+  shouldShowFeedback: boolean;
+  shouldShowShare?: boolean;
+};
 
 export const checkShowFeedbackStatus = async (userId: string): Promise<ShowFeedbackStatus> => {
   try {
     if (!userId) {
       return {
-        shouldShowFeedback: false
+        shouldShowFeedback: false,
       };
     }
 
-    const pastThreeDocsRequest = Doc.find({userId}).sort({timestamp: -1}).limit(3);
-    const hasIndicatedPositiveFeedbackRequest = Doc.exists({userId, feedback: 1});
-    const [pastThreeDocs, hasIndicatedPositiveFeedback] = await Promise.all([pastThreeDocsRequest, hasIndicatedPositiveFeedbackRequest]);
+    const pastThreeDocsRequest = Doc.find({ userId }).sort({ timestamp: -1 }).limit(3);
+    const hasIndicatedPositiveFeedbackRequest = Doc.exists({
+      userId,
+      feedback: 1,
+    });
+    const [pastThreeDocs, hasIndicatedPositiveFeedback] = await Promise.all([
+      pastThreeDocsRequest,
+      hasIndicatedPositiveFeedbackRequest,
+    ]);
     const hasNotIndicatedPositiveFeedback = !hasIndicatedPositiveFeedback;
 
     const isFirstTime = pastThreeDocs.length === 0;
-    const isFeedbackWithinPastThree = pastThreeDocs?.find(doc => doc.feedback) != null;
+    const isFeedbackWithinPastThree = pastThreeDocs?.find((doc) => doc.feedback) != null;
     if (isFirstTime || isFeedbackWithinPastThree) {
       return {
         shouldShowFeedback: false,
@@ -81,47 +87,45 @@ export const checkShowFeedbackStatus = async (userId: string): Promise<ShowFeedb
       shouldShowFeedback: isWithinPossibility && hasNotIndicatedPositiveFeedback,
       shouldShowShare: hasNotIndicatedPositiveFeedback,
     };
-  }
-  catch {
+  } catch {
     return {
-      shouldShowFeedback: false
+      shouldShowFeedback: false,
     };
   }
-}
+};
 
-const getCommentFormat = (languageId: string | null, synopsis: Synopsis, docFormat: DocFormat): CommentFormat => {
+const getCommentFormat = (
+  languageId: string | null,
+  synopsis: Synopsis,
+  docFormat: DocFormat
+): CommentFormat => {
   if (languageId === 'java' && synopsis.kind === 'class') return CommentFormat.JSDoc;
-  if ((languageId === 'typescript'
-      || languageId === 'javascript'
-      || languageId === 'typescriptreact'
-      || languageId === 'javascriptreact'
-      || languageId === 'php'
-      || languageId === 'java'
-      || languageId === 'kotlin'
-      || languageId === 'c'
-      || languageId === 'cpp'
-    ) && (synopsis.kind === 'function' || synopsis.kind === 'typedef')) {
+  if (
+    (languageId === 'typescript' ||
+      languageId === 'javascript' ||
+      languageId === 'typescriptreact' ||
+      languageId === 'javascriptreact' ||
+      languageId === 'php' ||
+      languageId === 'java' ||
+      languageId === 'kotlin' ||
+      languageId === 'c' ||
+      languageId === 'cpp') &&
+    (synopsis.kind === 'function' || synopsis.kind === 'typedef')
+  ) {
     return CommentFormat.JSDoc;
-  }
-
-  else if (languageId === 'python' && synopsis.kind === 'function') {
+  } else if (languageId === 'python' && synopsis.kind === 'function') {
     if (docFormat === DocFormat.Numpy) {
       return CommentFormat.Numpy;
     }
     return CommentFormat.PythonDocstring;
-  }
-
-  else if (languageId === 'csharp' && synopsis.kind === 'function'
-          || languageId === 'rust') {
+  } else if ((languageId === 'csharp' && synopsis.kind === 'function') || languageId === 'rust') {
     return CommentFormat.XML;
-  }
-
-  else if (languageId === 'ruby' && synopsis.kind === 'function') {
+  } else if (languageId === 'ruby' && synopsis.kind === 'function') {
     return CommentFormat.RDoc;
   }
 
   return CommentFormat.Line;
-}
+};
 
 const getPosition = (languageId: string, synopsis: Synopsis): CommentPosition => {
   if (languageId === 'python' && synopsis.kind === 'function') {
@@ -129,10 +133,26 @@ const getPosition = (languageId: string, synopsis: Synopsis): CommentPosition =>
   }
 
   return CommentPosition.Above;
-}
+};
 
-export const getDocument = async (body: Body, logMode: LogMode = LogMode.On, allowedKinds?: string[]): Promise<DocstringResponse> => {
-  const { code, languageId, email, commented, userId, docStyle: docStyleSelected, custom, context, source, width, isSelection } = body;
+export const getDocument = async (
+  body: Body,
+  logMode: LogMode = LogMode.On,
+  allowedKinds?: string[]
+): Promise<DocstringResponse> => {
+  const {
+    code,
+    languageId,
+    email,
+    commented,
+    userId,
+    docStyle: docStyleSelected,
+    custom,
+    context,
+    source,
+    width,
+    isSelection,
+  } = body;
 
   if (!code) {
     throw 'No code provided';
@@ -140,19 +160,30 @@ export const getDocument = async (body: Body, logMode: LogMode = LogMode.On, all
 
   const timeBeforeGenerate = new Date();
   const synopsis = getSynopsis(code, languageId, context);
-  if (logMode === LogMode.Preview && allowedKinds != null && allowedKinds.includes(synopsis.kind) === false) {
+  if (
+    logMode === LogMode.Preview &&
+    allowedKinds != null &&
+    allowedKinds.includes(synopsis.kind) === false
+  ) {
     return {
       docstring: null,
       position: null,
       feedbackId: null,
       preview: null,
-    }
+    };
   }
 
   const docFormat = getDocFormat(docStyleSelected, languageId);
   const commentFormat = getCommentFormat(languageId, synopsis, docFormat);
   const timeBeforeCodexCall = new Date();
-  const docstringPrompt = await getDocstringPrompt(code, synopsis, languageId, docFormat, context, custom);
+  const docstringPrompt = await getDocstringPrompt(
+    code,
+    synopsis,
+    languageId,
+    docFormat,
+    context,
+    custom
+  );
   const timeAfterCodexCall = new Date();
   let docstringWithMarker = docstringPrompt.docstring;
   const { promptId } = docstringPrompt;
@@ -194,14 +225,14 @@ export const getDocument = async (body: Body, logMode: LogMode = LogMode.On, all
       kind: synopsis.kind,
       isSelection,
       promptId,
-      actualLanguage: custom?.language ?? 'English'
-    }
+      actualLanguage: custom?.language ?? 'English',
+    };
 
     Doc.create(doc);
     trackOpen({
       anonymousId: userId || 'aidoc',
       event: 'Generate Doc',
-      properties: doc
+      properties: doc,
     });
   }
 
@@ -210,18 +241,18 @@ export const getDocument = async (body: Body, logMode: LogMode = LogMode.On, all
     position,
     feedbackId,
     preview,
-    cursorMarker
+    cursorMarker,
   };
-}
+};
 
-const MAX_DOCS_FOR_AUTH = 80;
+const MAX_DOCS_FOR_AUTH = 60;
 const MAX_DOCS_FOR_PREMIUM = 600;
 const DAYS_PER_QUOTA_PERIOD = 30;
 
 export const checkIfUserShouldAuthenticate = async (req, res, next) => {
   const { userId, email, source }: Body = req.body;
   if (!userId) {
-    return res.status(401).send({error: 'No userId provided'});
+    return res.status(401).send({ error: 'No userId provided' });
   }
 
   // TODO: Add quota for IntelliJ users
@@ -231,34 +262,41 @@ export const checkIfUserShouldAuthenticate = async (req, res, next) => {
 
   const docsCountPromise = Doc.countDocuments({
     userId,
-    timestamp: { $gte: new Date(Date.now() - DAYS_PER_QUOTA_PERIOD * 24 * 60 * 60 * 1000) }
+    timestamp: {
+      $gte: new Date(Date.now() - DAYS_PER_QUOTA_PERIOD * 24 * 60 * 60 * 1000),
+    },
   });
-  const identifiedUserPromise = email ? User.findOne({email}) : null;
-  const existsInTeamPromise = email ? Team.exists({members: email}) : null;
-  const [docsCount, identifiedUser, existsInTeam] = await Promise.all([docsCountPromise, identifiedUserPromise, existsInTeamPromise]);
+  const identifiedUserPromise = email ? User.findOne({ email }) : null;
+  const existsInTeamPromise = email ? Team.exists({ members: email }) : null;
+  const [docsCount, identifiedUser, existsInTeam] = await Promise.all([
+    docsCountPromise,
+    identifiedUserPromise,
+    existsInTeamPromise,
+  ]);
 
   if (identifiedUser == null && docsCount > MAX_DOCS_FOR_AUTH) {
-    return res.status(401).send(
-      {
-        requiresAuth: true,
-        message: 'Please sign in to continue. By doing so, you agree to Mintlify\'s terms and conditions',
-        button: '🔐 Sign in',
-        error: 'Please update the extension to continue'
-      }
-    );
-  } else if (identifiedUser?.plan !== Plan.Premium && !existsInTeam && docsCount > MAX_DOCS_FOR_PREMIUM) {
+    return res.status(401).send({
+      requiresAuth: true,
+      message:
+        "Please sign in to continue. By doing so, you agree to Mintlify's terms and conditions",
+      button: '🔐 Sign in',
+      error: 'Please update the extension to continue',
+    });
+  } else if (
+    identifiedUser?.plan !== Plan.Premium &&
+    !existsInTeam &&
+    docsCount > MAX_DOCS_FOR_PREMIUM
+  ) {
     track(userId, 'Docs Quota Exceeded', {
-      email
-    })
-    return res.status(401).send(
-      {
-        requiresUpgrade: true,
-        message: 'You have reached the free monthly quota',
-        error: 'Please update the extension to v2.0.0 to continue'
-      }
-    );
+      email,
+    });
+    return res.status(401).send({
+      requiresUpgrade: true,
+      message: 'You have reached the free monthly quota',
+      error: 'Please update the extension to v2.0.0 to continue',
+    });
   }
 
-  User.updateOne({userId}, { lastActiveAt: new Date() });
+  User.updateOne({ userId }, { lastActiveAt: new Date() });
   next();
-}
+};
