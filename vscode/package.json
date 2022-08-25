@@ -3,7 +3,7 @@
   "displayName": "Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, Ruby & more",
   "description": "AI powered documentation writer for JavaScript, Python, Java, Typescript & all other languages",
   "icon": "assets/icon.png",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "publisher": "mintlify",
   "license": "Expat",
   "keywords": [
@@ -143,32 +143,32 @@
     "viewsWelcome": [
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com) - Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isMac && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com) - Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isMac && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com) - Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isLinux && config.docwriter.hotkey.window == 'Ctrl + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com) - Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isLinux && config.docwriter.hotkey.window == 'Alt + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com) - Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isWindows && config.docwriter.hotkey.windows == 'Ctrl + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com) - Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isWindows && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
