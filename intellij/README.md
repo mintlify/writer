@@ -18,7 +18,7 @@ Just highlight code and see the magic. Writing documentation sucks so let Mintli
 
 ### Disclaimer
 
-We never store your code, but your code does leave your machine. You can learn more about our [security policies](https://www.mintlify.com/security) or set up [a call](https://savvycal.com/mintlify/enterprise-help) with us to discuss how you can locally host.
+We never store your code, but your code does leave your machine. You can set up [a call](https://savvycal.com/mintlify/enterprise-help) with us to discuss how you can locally host.
 
 ### Languages supported
 

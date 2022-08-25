@@ -111,19 +111,19 @@
     "menus": {
       "view/title": [
         {
-					"command": "docs.portal",
-					"when": "view == docs && docs.isSignedIn",
+          "command": "docs.portal",
+          "when": "view == docs && docs.isSignedIn",
           "group": "top"
-				},
-				{
-					"command": "docs.logout",
-					"when": "view == docs && docs.isSignedIn"
-				},
+        },
         {
-					"command": "docs.login",
-					"when": "view == docs && !docs.isSignedIn"
-				}
-			],
+          "command": "docs.logout",
+          "when": "view == docs && docs.isSignedIn"
+        },
+        {
+          "command": "docs.login",
+          "when": "view == docs && !docs.isSignedIn"
+        }
+      ],
       "editor/context": [
         {
           "when": "editorTextFocus && editorLangId =~ /typescript|javascript|python|php|java|c|cpp|csharp|dart|ruby|go|rust/",
@@ -143,32 +143,32 @@
     "viewsWelcome": [
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (⌘.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isMac && config.docwriter.hotkey.mac == '⌘ + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (⌥.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isMac && config.docwriter.hotkey.mac == '⌥ + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isLinux && config.docwriter.hotkey.window == 'Ctrl + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isLinux && config.docwriter.hotkey.window == 'Alt + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Ctrl+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isWindows && config.docwriter.hotkey.windows == 'Ctrl + .'"
       },
       {
         "view": "docs",
-        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nHave questions? Join our [community](https://discord.gg/6W7GuYuxra)",
+        "contents": "[✍️ Generate docs (Alt+.)](command:docs.write)\nPowered by [Mintlify](https://mintlify.com). Join our [community](https://discord.gg/6W7GuYuxra)",
         "when": "isWindows && config.docwriter.hotkey.windows == 'Alt + .'"
       }
     ],
