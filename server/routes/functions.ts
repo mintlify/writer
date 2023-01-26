@@ -1,5 +1,4 @@
 import express from 'express';
-import axios from 'axios';
 import { adminMiddleware } from 'routes/playground';
 import ApiKey from 'models/writer/ApiKey';
 import sha1 from 'sha1';
@@ -19,7 +18,9 @@ functionsRouter.post('/typeform', async (req, res) => {
   const firstNameField = answers.find((answer) => answer.field.ref === 'd566770d2197a78b');
   const { text: firstName } = firstNameField;
 
-  const lastNameField = answers.find((answer) => answer.field.ref === '88b207c9-e0bc-4128-9159-203abc35b622');
+  const lastNameField = answers.find(
+    (answer) => answer.field.ref === '88b207c9-e0bc-4128-9159-203abc35b622'
+  );
   const { text: lastName } = lastNameField;
 
   const emailField = answers.find((answer) => answer.field.ref === '4150e35efbf41b8a');
@@ -35,40 +36,16 @@ functionsRouter.post('/typeform', async (req, res) => {
   const key = uuidv4();
   const hashedKey = sha1(key);
   try {
-    await axios.post('https://mandrillapp.com/api/1.0/messages/send-template', {
-      key: process.env.MAILCHIMP_TRANSACTIONAL_KEY,
-      template_name: 'api-access-key',
-      template_content: [],
-      message: {
-        to: [
-          {
-            email
-          }
-        ],
-        merge_language: 'handlebars',
-        global_merge_vars: [
-          {
-            name: 'firstName',
-            content: firstName
-          },
-          {
-            name: 'apiKey',
-            content: key,
-          }
-        ]
-      }
-    });
-
     await ApiKey.create({
       hashedKey,
       firstName,
       lastName,
       email,
-      purpose
+      purpose,
     });
     return res.status(200).end();
   } catch (error) {
-    return res.status(400).send({error});
+    return res.status(400).send({ error });
   }
 });
 
@@ -88,10 +65,10 @@ functionsRouter.post('/api', adminMiddleware, async (req, res) => {
       lastName,
       email,
     });
-    return res.status(200).send({key})
+    return res.status(200).send({ key });
   } catch (error) {
-    return res.status(400).send({error});
+    return res.status(400).send({ error });
   }
-})
+});
 
 export default functionsRouter;
