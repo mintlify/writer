@@ -2,7 +2,6 @@ import express from 'express';
 import Team from 'models/writer/Team';
 import User from 'models/writer/User';
 import { Plan } from 'routes/webhooks';
-import { sendInviteEmail } from 'services/mandrill';
 import { track } from 'services/segment';
 
 const teamRouter = express.Router();
@@ -91,7 +90,6 @@ teamRouter.post('/invite', async (req: { body: TeamRequestBody }, res) => {
       })
     }
 
-    await sendInviteEmail(toEmail, fromEmail);
     res.status(200).end();
   }
   catch (error) {
