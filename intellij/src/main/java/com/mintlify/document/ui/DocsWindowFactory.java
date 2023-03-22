@@ -17,7 +17,7 @@ public class DocsWindowFactory implements ToolWindowFactory {
 
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
     DocsWindow docsWindow = new DocsWindow(toolWindow);
-    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+    ContentFactory contentFactory = ContentFactory.getInstance();
     Content content = contentFactory.createContent(docsWindow.getContent(), null, false);
     content.putUserData(MY_TOOL_WINDOW, docsWindow);
     toolWindow.getContentManager().addContent(content);
