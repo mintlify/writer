@@ -29,7 +29,7 @@ class PopupDialogAction : AnAction() {
 
         val myToolWindow = DocsWindowFactory.getWindow(project)
         val selectedDocFormat = myToolWindow?.selectedDocFormat ?: "Auto-detect"
-        val selectedLanguage = myToolWindow?.selectedLanguage ?: "English"
+        val selectedLanguage = myToolWindow?.selectedLanguage ?: "Chinese"
 
         val currentCaret: Caret = editor.caretModel.currentCaret
         val selectedText = currentCaret.selectedText?.trim() ?: ""

@@ -46,8 +46,8 @@ public class DocsWindow {
       }
     });
 
-    languageSelector.addItem("English");
     languageSelector.addItem("Chinese");
+    languageSelector.addItem("English");
     languageSelector.addItem("French");
     languageSelector.addItem("Korean");
     languageSelector.addItem("Russian");
