@@ -17,7 +17,7 @@
 
     <applicationListeners>
         <listener class="com.mintlify.document.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+                  topic="com.intellij.openapi.startup.StartupActivity"/>
     </applicationListeners>
 
     <actions>
