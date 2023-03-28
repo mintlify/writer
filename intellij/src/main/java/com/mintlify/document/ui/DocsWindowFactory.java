@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class DocsWindowFactory implements ToolWindowFactory {
   public static final String ID = "Mintlify Doc Writer";
   private static final Key<DocsWindow> MY_TOOL_WINDOW = Key.create("DocsWindow");
-
+  @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
     DocsWindow docsWindow = new DocsWindow(toolWindow);
     ContentFactory contentFactory = ContentFactory.getInstance();
