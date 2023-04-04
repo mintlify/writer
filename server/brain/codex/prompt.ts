@@ -10,7 +10,8 @@ export type OpenAPICall = {
   id: string;
   model: string;
   engineEndpoint: string;
-  prompt: (code: string, languageCommented: string, custom?: CustomComponent) => string;
+  systemRoleContent: string;
+  userRoleContent: (code: string, languageCommented: string, custom?: CustomComponent) => string;
   stop: string[];
   temperature: number;
   maxTokens: number;
@@ -20,7 +21,8 @@ export const EXPLAIN_PARAM: OpenAPICall = {
   id: 'explain-param',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, _, { parameter }: CustomComponent): string => `${code}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, _, { parameter }: CustomComponent): string => `${code}
 ###
 Here's what the above parameters are:
 ${parameter}: `,
@@ -33,7 +35,8 @@ export const SUMMARIZE_FUNCTION: OpenAPICall = {
   id: 'summarize-function',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, languageCommented: string): string => `${languageCommented}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, languageCommented: string): string => `${languageCommented}
 ${code}
 ###
 Here's a one sentence summary of the above function: `,
@@ -46,7 +49,8 @@ export const SUMMARIZE_FUNCTION_SIMPLE: OpenAPICall = {
   id: 'summarize-function-simple',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, language: string): string => `${language}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, language: string): string => `${language}
 ${code}
 ###
 Question: What does the above function do?
@@ -60,7 +64,8 @@ export const GET_RETURN: OpenAPICall = {
   id: 'return',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string): string => `${code}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string): string => `${code}
 ###
 Question: What is being returned?
 Answer: `,
@@ -74,7 +79,8 @@ export const SUMMARIZE_CLASS: OpenAPICall = {
   id: 'summarize-function',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, languageCommented: string): string => `${languageCommented}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, languageCommented: string): string => `${languageCommented}
 ${code}
 ###
 Here's a one sentence summary of the above class: `,
@@ -87,7 +93,8 @@ export const SUMMARIZE_CLASS_SIMPLE: OpenAPICall = {
   id: 'summarize-function-simple',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, language: string): string => `${language}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, language: string): string => `${language}
 ${code}
 ###
 Question: What does the above class do?
@@ -102,7 +109,8 @@ export const SUMMARIZE_TYPE: OpenAPICall = {
   id: 'summarize-type',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, language: string): string => `${language}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, language: string): string => `${language}
 ${code}
 ###
 Here's a one sentence summary of the above type: `,
@@ -115,7 +123,8 @@ export const EXPLAIN_PROPERTY: OpenAPICall = {
   id: 'explain-property',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, _, { property }: CustomComponent): string => `${code}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, _, { property }: CustomComponent): string => `${code}
 ###
 Here's what the above properties are:
 ${property}: `,
@@ -129,7 +138,8 @@ export const EXPLAIN_SIMPLE: OpenAPICall = {
   id: 'simple',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, language: string): string => `${language}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (code: string, language: string): string => `${language}
 ${code}
 ###
 Question: What is the above code doing?
@@ -143,7 +153,12 @@ export const EXPLAIN_CONTEXT: OpenAPICall = {
   id: 'context',
   engineEndpoint: GPT_COMPLETIONS,
   model: GPT_MODEL,
-  prompt: (code: string, language: string, { context }: CustomComponent): string => `${language}
+  systemRoleContent: 'You are a helpful coding assistant',
+  userRoleContent: (
+    code: string,
+    language: string,
+    { context }: CustomComponent
+  ): string => `${language}
 ${context}
 ###
 Question: What is \`${code}\` doing?

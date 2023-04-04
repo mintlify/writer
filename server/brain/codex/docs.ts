@@ -48,7 +48,7 @@ const responseToDocstringPrompt = (
   const docstringPrompts: DocstringPrompt[] = [];
   for (let i = 0; i < responses.length; i++) {
     docstringPrompts.push({
-      docstring: responses[i]?.data?.choices[0].text,
+      docstring: responses[i]?.data?.choices[0].message.content,
       promptId: callTypes[i].id,
     });
   }
@@ -78,7 +78,7 @@ const getFunctionDocstringPrompt = async (
   let paramsExplained: ParamExplained[] =
     paramPromises.length > 0
       ? docResponses.slice(3).map((param, i) => {
-          const explained = param.data.choices[0].text.trim();
+          const explained = param.data.choices[0].message.content.trim();
           return {
             ...synopsis.params[i],
             explanation: explained,
@@ -92,7 +92,7 @@ const getFunctionDocstringPrompt = async (
     [SUMMARIZE_FUNCTION, SUMMARIZE_FUNCTION_SIMPLE]
   );
   const docstringPrompt = chooseDocstringPrompt(docstringPrompts);
-  let returnExplained = formatReturnExplained(returnRes?.data?.choices[0].text);
+  let returnExplained = formatReturnExplained(returnRes?.data?.choices[0].message.content);
 
   // Adding premium feature for additional language translation
   if (custom.language) {
@@ -142,11 +142,11 @@ const getTypedefDocstring = async (
   let propertiesWithExplanation: Property[] = docResponses.slice(1)?.map((param, i) => {
     return {
       ...synopsis.properties[i],
-      explanation: param.data.choices[0].text.trim(),
+      explanation: param.data.choices[0].message.content.trim(),
     };
   });
   const [summaryRes] = docResponses;
-  let summary = getSummaryFromMultipleResponses(summaryRes.data.choices[0].text);
+  let summary = getSummaryFromMultipleResponses(summaryRes.data.choices[0].message.content);
 
   // Adding languages feature
   if (custom.language) {
@@ -193,7 +193,7 @@ const getClassDocstring = async (
   const responses = await Promise.all(promises);
   const docstringPrompts: DocstringPrompt[] = callOptions.map((option, i) => {
     return {
-      docstring: responses[i]?.data?.choices[0].text,
+      docstring: responses[i]?.data?.choices[0].message.content,
       promptId: option.id,
     };
   });
@@ -229,8 +229,8 @@ const getSimpleSummary = async (
     summarySimplePromise,
   ]);
   const docstringOptions: DocstringPrompt[] = [
-    { docstring: summaryContext?.data.choices[0]?.text, promptId: EXPLAIN_CONTEXT.id },
-    { docstring: summarySimple?.data.choices[0]?.text, promptId: EXPLAIN_SIMPLE.id },
+    { docstring: summaryContext?.data.choices[0]?.message.content, promptId: EXPLAIN_CONTEXT.id },
+    { docstring: summarySimple?.data.choices[0]?.message.content, promptId: EXPLAIN_SIMPLE.id },
   ];
   const selectedPrompt = chooseDocstringPrompt(docstringOptions);
 

@@ -6,7 +6,7 @@ import { DocstringPrompt } from './docs';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const GPT_COMPLETIONS = 'https://api.openai.com/v1/completions';
+export const GPT_COMPLETIONS = 'https://api.openai.com/v1/chat/completions';
 export const GPT_MODEL = 'gpt-3.5-turbo';
 
 export const OPENAI_AUTHORIZATION = {
@@ -17,7 +17,9 @@ export const OPENAI_AUTHORIZATION = {
 
 export type OpenAIResponse = {
   choices: {
-    text: string;
+    message: {
+      content: string;
+    };
   }[];
 };
 
@@ -27,12 +29,26 @@ export const makeCodexCall = (
   languageCommented: string,
   custom?: CustomComponent
 ): Promise<AxiosResponse<OpenAIResponse>> => {
-  const { prompt, stop, temperature, maxTokens, engineEndpoint, model } = call;
+  const {
+    systemRoleContent,
+    userRoleContent,
+    stop,
+    temperature,
+    maxTokens,
+    engineEndpoint,
+    model,
+  } = call;
   return axios.post(
     engineEndpoint,
     {
       model,
-      prompt: prompt(code, languageCommented, custom),
+      messages: [
+        {
+          role: 'system',
+          content: systemRoleContent,
+        },
+        { role: 'user', content: userRoleContent(code, languageCommented, custom) },
+      ],
       temperature,
       max_tokens: maxTokens,
       stop,
