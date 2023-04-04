@@ -27,10 +27,11 @@ export const makeCodexCall = (
   languageCommented: string,
   custom?: CustomComponent
 ): Promise<AxiosResponse<OpenAIResponse>> => {
-  const { prompt, stop, temperature, maxTokens, engineEndpoint } = call;
+  const { prompt, stop, temperature, maxTokens, engineEndpoint, model } = call;
   return axios.post(
     engineEndpoint,
     {
+      model,
       prompt: prompt(code, languageCommented, custom),
       temperature,
       max_tokens: maxTokens,
