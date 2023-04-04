@@ -28,17 +28,21 @@ export const makeCodexCall = (
   custom?: CustomComponent
 ): Promise<AxiosResponse<OpenAIResponse>> => {
   const { prompt, stop, temperature, maxTokens, engineEndpoint, model } = call;
-  return axios.post(
-    engineEndpoint,
-    {
-      model,
-      prompt: prompt(code, languageCommented, custom),
-      temperature,
-      max_tokens: maxTokens,
-      stop,
-    },
-    OPENAI_AUTHORIZATION
-  );
+  try {
+    return axios.post(
+      engineEndpoint,
+      {
+        model,
+        prompt: prompt(code, languageCommented, custom),
+        temperature,
+        max_tokens: maxTokens,
+        stop,
+      },
+      OPENAI_AUTHORIZATION
+    );
+  } catch (err) {
+    console.log({ err });
+  }
 };
 
 export const sanityCheck = (response: string): string => {
