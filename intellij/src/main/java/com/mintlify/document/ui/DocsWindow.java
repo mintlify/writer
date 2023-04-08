@@ -7,15 +7,16 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 
 import com.intellij.openapi.wm.ToolWindow;
 import com.mintlify.settings.ApplicationSettingsState;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+
+import static java.lang.System.out;
 
 public class DocsWindow {
 
@@ -43,11 +44,18 @@ public class DocsWindow {
         if (Desktop.isDesktopSupported()) {
           try {
             Desktop.getDesktop().browse(joinDiscordUri);
-          } catch (IOException err) { /* TODO: error handling */ }
-        } else { /* TODO: error handling */ }
+          } catch (IOException err) {
+            /* TODO: error handling */
+            out.println("Error when open the URL" + err);
+          }
+        } else {
+          /* TODO: error handling */
+          out.println("Desktop is not supported");
+        }
       });
     } catch (URISyntaxException err) {
       /* TODO: error handling */
+      out.println("Error when create an URL" + err);
     }
   }
 
