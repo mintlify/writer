@@ -28,28 +28,22 @@ public class DocsWindow {
   public DocsWindow(ToolWindow toolWindow) {
     fillDocFormatSelector();
 
-    generateDocsButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        ActionManager actionManager = ActionManager.getInstance();
-        AnAction action = actionManager.getAction("org.intellij.sdk.action.PopupDialogAction");
-        ActionUtil.invokeAction(action, toolWindow.getComponent(), ActionPlaces.TOOLWINDOW_CONTENT, null, null);
-      }
+    generateDocsButton.addActionListener(e -> {
+      ActionManager actionManager = ActionManager.getInstance();
+      AnAction action = actionManager.getAction("org.intellij.sdk.action.PopupDialogAction");
+      ActionUtil.invokeAction(action, toolWindow.getComponent(), ActionPlaces.TOOLWINDOW_CONTENT, null, null);
     });
     fillLangSelector();
     try {
       final URI joinDiscordUri = new URI("https://discord.gg/6W7GuYuxra");
       joinCommunityLabel.setBorderPainted(false);
       joinCommunityLabel.setOpaque(false);
-      joinCommunityLabel.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          if (Desktop.isDesktopSupported()) {
-            try {
-              Desktop.getDesktop().browse(joinDiscordUri);
-            } catch (IOException err) { /* TODO: error handling */ }
-          } else { /* TODO: error handling */ }
-        }
+      joinCommunityLabel.addActionListener(e -> {
+        if (Desktop.isDesktopSupported()) {
+          try {
+            Desktop.getDesktop().browse(joinDiscordUri);
+          } catch (IOException err) { /* TODO: error handling */ }
+        } else { /* TODO: error handling */ }
       });
     } catch (URISyntaxException err) {
       /* TODO: error handling */
