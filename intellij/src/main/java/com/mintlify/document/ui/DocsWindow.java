@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 public class DocsWindow {
 
+  public static final String URL = "https://discord.gg/6W7GuYuxra";
   private JPanel myToolWindowContent;
   private JComboBox<String> docFormatSelector;
   private JButton generateDocsButton;
@@ -35,7 +36,7 @@ public class DocsWindow {
     });
     fillLangSelector();
     try {
-      final URI joinDiscordUri = new URI("https://discord.gg/6W7GuYuxra");
+      final URI joinDiscordUri = new URI(URL);
       joinCommunityLabel.setBorderPainted(false);
       joinCommunityLabel.setOpaque(false);
       joinCommunityLabel.addActionListener(e -> {
