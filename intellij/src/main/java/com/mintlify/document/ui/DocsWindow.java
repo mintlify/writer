@@ -36,18 +36,7 @@ public class DocsWindow {
         ActionUtil.invokeAction(action, toolWindow.getComponent(), ActionPlaces.TOOLWINDOW_CONTENT, null, null);
       }
     });
-    final ApplicationSettingsState instance = ApplicationSettingsState.Companion.getInstance();
-
-    languageSelector.addItem("English");
-    languageSelector.addItem("Chinese");
-    languageSelector.addItem("French");
-    languageSelector.addItem("Korean");
-    languageSelector.addItem("Russian");
-    languageSelector.addItem("Spanish");
-    languageSelector.addItem("Turkish");
-
-    languageSelector.setSelectedItem(instance.getLanguage());
-    languageSelector.setEditable(false);
+    fillLangSelector();
     try {
       final URI joinDiscordUri = new URI("https://discord.gg/6W7GuYuxra");
       joinCommunityLabel.setBorderPainted(false);
@@ -65,6 +54,15 @@ public class DocsWindow {
     } catch (URISyntaxException err) {
       /* TODO: error handling */
     }
+  }
+
+  private void fillLangSelector() {
+    final ApplicationSettingsState instance = ApplicationSettingsState.Companion.getInstance();
+    String[] supportedLanguages = {"English", "Chinese", "French", "Korean", "Russian", "Spanish", "Turkish"};
+    Arrays.stream(supportedLanguages)
+                    .forEach(language -> languageSelector.addItem(language));
+    languageSelector.setSelectedItem(instance.getLanguage());
+    languageSelector.setEditable(false);
   }
 
   private void fillDocFormatSelector() {
