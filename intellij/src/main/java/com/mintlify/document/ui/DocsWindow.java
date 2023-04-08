@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ex.ActionUtil;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 
 import com.intellij.openapi.wm.ToolWindow;
+import com.mintlify.settings.ApplicationSettingsState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,6 +46,7 @@ public class DocsWindow {
         ActionUtil.invokeAction(action, toolWindow.getComponent(), ActionPlaces.TOOLWINDOW_CONTENT, null, null);
       }
     });
+    final ApplicationSettingsState instance = ApplicationSettingsState.Companion.getInstance();
 
     languageSelector.addItem("English");
     languageSelector.addItem("Chinese");
@@ -54,6 +56,7 @@ public class DocsWindow {
     languageSelector.addItem("Spanish");
     languageSelector.addItem("Turkish");
 
+    languageSelector.setSelectedItem(instance.getLanguage());
     languageSelector.setEditable(false);
     try {
       final URI joinDiscordUri = new URI("https://discord.gg/6W7GuYuxra");

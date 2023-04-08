@@ -2,15 +2,15 @@ package com.mintlify.settings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.ComboBox
+import com.mintlify.settings.ApplicationSettingsState.Companion.instance
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
-import com.mintlify.settings.ApplicationSettingsState.Companion.instance
 
-class ApplicationSettingsPanel : Configurable{
+class ApplicationSettingsPanel : Configurable {
 
     private val panel = JPanel()
-    private val options = arrayOf("English","Chinese","French","Korean","Russian","Spanish","Turkish")
+    private val options = arrayOf("English", "Chinese", "French", "Korean", "Russian", "Spanish", "Turkish")
     private val myComboBox = ComboBox(options)
     override fun createComponent(): JComponent {
         val settings = instance
@@ -28,9 +28,7 @@ class ApplicationSettingsPanel : Configurable{
 
     override fun apply() {
         val settings = instance
-        println("selected item: ${myComboBox.selectedItem}")
-         settings.language = myComboBox.selectedItem as String
-        println("changed language: ${settings.language}")
+        settings.language = myComboBox.selectedItem as String
     }
 
     override fun getDisplayName(): String {
