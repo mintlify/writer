@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 public class DocsWindow {
 
@@ -22,22 +23,11 @@ public class DocsWindow {
   private JComboBox<String> docFormatSelector;
   private JButton generateDocsButton;
   private JButton joinCommunityLabel;
-  private JComboBox languageSelector;
+  private JComboBox<String> languageSelector;
 
   public DocsWindow(ToolWindow toolWindow) {
-    docFormatSelector.addItem("Auto-detect");
-    docFormatSelector.addItem("Javadoc");
-    docFormatSelector.addItem("Google");
-    docFormatSelector.addItem("JSDoc");
-    docFormatSelector.addItem("reST");
-    docFormatSelector.addItem("NumPy");
-    docFormatSelector.addItem("DocBlock");
-    docFormatSelector.addItem("Doxygen");
-    docFormatSelector.addItem("XML");
-    docFormatSelector.addItem("GoDoc");
-    docFormatSelector.addItem("RustDoc");
+    fillDocFormatSelector();
 
-    docFormatSelector.setEditable(false);
     generateDocsButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -76,6 +66,14 @@ public class DocsWindow {
       /* TODO: error handling */
     }
   }
+
+  private void fillDocFormatSelector() {
+    String[] supportedDocFormats = {"Auto-detect", "Javadoc", "Google", "JSDoc", "reST", "NumPy", "DocBlock", "Doxygen", "XML", "GoDoc", "RustDoc"};
+    Arrays.stream(supportedDocFormats)
+                    .forEach(docFormat -> docFormatSelector.addItem(docFormat));
+    docFormatSelector.setEditable(false);
+  }
+
   public String getSelectedDocFormat() {
     return (String) docFormatSelector.getSelectedItem();
   }
