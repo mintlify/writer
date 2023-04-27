@@ -246,7 +246,6 @@ export const getDocument = async (
 };
 
 const MAX_DOCS_FOR_AUTH = 60;
-const MAX_DOCS_FOR_PREMIUM = 600;
 const DAYS_PER_QUOTA_PERIOD = 30;
 
 export const checkIfUserShouldAuthenticate = async (req, res, next) => {
@@ -268,7 +267,7 @@ export const checkIfUserShouldAuthenticate = async (req, res, next) => {
   });
   const identifiedUserPromise = email ? User.findOne({ email }) : null;
   const existsInTeamPromise = email ? Team.exists({ members: email }) : null;
-  const [docsCount, identifiedUser, existsInTeam] = await Promise.all([
+  const [docsCount, identifiedUser] = await Promise.all([
     docsCountPromise,
     identifiedUserPromise,
     existsInTeamPromise,
@@ -281,19 +280,6 @@ export const checkIfUserShouldAuthenticate = async (req, res, next) => {
         "Please sign in to continue. By doing so, you agree to Mintlify's terms and conditions",
       button: '🔐 Sign in',
       error: 'Please update the extension to continue',
-    });
-  } else if (
-    identifiedUser?.plan !== Plan.Premium &&
-    !existsInTeam &&
-    docsCount > MAX_DOCS_FOR_PREMIUM
-  ) {
-    track(userId, 'Docs Quota Exceeded', {
-      email,
-    });
-    return res.status(401).send({
-      requiresUpgrade: true,
-      message: 'You have reached the free monthly quota',
-      error: 'Please update the extension to v2.0.0 to continue',
     });
   }
 
