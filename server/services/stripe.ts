@@ -6,12 +6,12 @@ dotenv.config();
 
 const PriceIds = {
   dev: {
-    team: 'price_1KcGymIslOV3ufr2svaasDZX'
+    team: 'price_1KcGymIslOV3ufr2svaasDZX',
   },
   prod: {
-    team: 'price_1KcGnzIslOV3ufr2TDG9TFto'
-  }
-}
+    team: 'price_1KcGnzIslOV3ufr2TDG9TFto',
+  },
+};
 
 const teamPriceId = process.env.NODE_ENV === 'production' ? PriceIds.prod.team : PriceIds.dev.team;
 
@@ -21,7 +21,9 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 export const getPremiumCheckoutSession = async (email: string, scheme: string) => {
   const user = await User.findOne({ email });
-  const customerInfo = user?.stripeCustomerId ? { customer: user.stripeCustomerId } : { customer_email: email };
+  const customerInfo = user?.stripeCustomerId
+    ? { customer: user.stripeCustomerId }
+    : { customer_email: email };
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     line_items: [
@@ -32,19 +34,16 @@ export const getPremiumCheckoutSession = async (email: string, scheme: string) =
           enabled: true,
           minimum: 1,
           maximum: 10,
-        }
+        },
       },
     ],
-    subscription_data: {
-      trial_period_days: 7,
-    },
     ...customerInfo,
     success_url: `https://mintlify.com/start/open?scheme=${scheme}&event=upgrade`,
     cancel_url: `https://mintlify.com/start/open?scheme=${scheme}`,
   });
 
   return session;
-}
+};
 
 export const getCustomerPortalSession = async (email: string, scheme: string) => {
   const user = await User.findOne({ email });
@@ -64,4 +63,4 @@ export const getCustomerPortalSession = async (email: string, scheme: string) =>
   });
 
   return session;
-}
+};
