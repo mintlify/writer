@@ -1,4 +1,4 @@
-## Notice: Mintify Writer is no longer being updated by the Mintlify Team. Get started with our customer documentation product [here](mintlify.com/start)
+## Notice: Mintify Writer is no longer being updated by the Mintlify Team. Get started with our customer documentation product [here](mintlify.com/start).
 
 # ✍️ Mintlify Writer
 
