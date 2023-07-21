@@ -28,7 +28,7 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     implementation("com.github.kittinunf.fuel:fuel:2.3.1")
     implementation("com.github.kittinunf.fuel:fuel-gson:2.3.1")
-    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("com.google.code.gson:gson:2.8.9")
     implementation("com.beust:klaxon:5.5")
     implementation(kotlin("stdlib-jdk8"))
 }
