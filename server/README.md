@@ -6,7 +6,7 @@
 
 Install [Rust](https://www.rust-lang.org/tools/install)
 
-`cd parser && npm install`
+`cd node_modules/@mintlify/grove/parser && npm install`
 
 Install [Redis](https://redis.io/)
 1. Download & cd into the redis folder

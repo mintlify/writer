@@ -1,35 +1,61 @@
 import axios, { AxiosResponse } from 'axios';
 import { CommentPosition } from 'constants/enums';
 import { CURSOR_MARKER, EMPTY_PROMPT } from 'constants/values';
-import { CodexCall, CustomComponent } from './prompt';
+import { OpenAPICall, CustomComponent } from './prompt';
 import { DocstringPrompt } from './docs';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const CUSHMAN_CODEX_COMPLETIONS = 'https://api.openai.com/v1/engines/code-cushman-001/completions';
-export const DAVINCI_CODEX_COMPLETIONS = 'https://api.openai.com/v1/engines/code-davinci-002/completions';
+export const GPT_COMPLETIONS = 'https://api.openai.com/v1/chat/completions';
+export const GPT_MODEL = 'gpt-3.5-turbo';
 
 export const OPENAI_AUTHORIZATION = {
   headers: {
-    Authorization: `Bearer ${process.env.OPENAI_TOKEN}`
-  }
+    Authorization: `Bearer ${process.env.OPENAI_TOKEN}`,
+  },
 };
 
 export type OpenAIResponse = {
   choices: {
-    text: string,
-  }[],
-}
+    message: {
+      content: string;
+    };
+  }[];
+};
 
-export const makeCodexCall = (call: CodexCall, code: string, languageCommented: string, custom?: CustomComponent): Promise<AxiosResponse<OpenAIResponse>> => {
-  const { prompt, stop, temperature, maxTokens, engineEndpoint } = call;
-  return axios.post(engineEndpoint, {
-    prompt: prompt(code, languageCommented, custom),
+export const makeCodexCall = (
+  call: OpenAPICall,
+  code: string,
+  languageCommented: string,
+  custom?: CustomComponent
+): Promise<AxiosResponse<OpenAIResponse>> => {
+  const {
+    systemRoleContent,
+    userRoleContent,
+    stop,
     temperature,
-    max_tokens: maxTokens,
-    stop
-  }, OPENAI_AUTHORIZATION);
-}
+    maxTokens,
+    engineEndpoint,
+    model,
+  } = call;
+  return axios.post(
+    engineEndpoint,
+    {
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: systemRoleContent,
+        },
+        { role: 'user', content: userRoleContent(code, languageCommented, custom) },
+      ],
+      temperature,
+      max_tokens: maxTokens,
+      stop,
+    },
+    OPENAI_AUTHORIZATION
+  );
+};
 
 export const sanityCheck = (response: string): string => {
   if (!response) return response;
@@ -39,7 +65,7 @@ export const sanityCheck = (response: string): string => {
   const withoutItIs = removedQuotes.replace(/^it is /gim, '');
   const upperCaseFirstCharacter = withoutItIs.charAt(0).toUpperCase() + withoutItIs.slice(1);
   return upperCaseFirstCharacter;
-}
+};
 
 /**
  * Get the first valid summary from multiple responses.
@@ -68,14 +94,14 @@ export const chooseDocstringPrompt = (docstringPrompts: DocstringPrompt[]): Docs
 
   // Use marker to indicate that no summary was found and identify location for cursor placement
   return EMPTY_PROMPT;
-}
+};
 
 export const getLocationAndRemoveMarker = (docstring: string, position: CommentPosition) => {
   const markerIndex = docstring.indexOf(CURSOR_MARKER);
   if (markerIndex === -1) {
     return {
       docstring,
-    }
+    };
   }
 
   const upToIndex = docstring.substring(0, markerIndex);
@@ -84,16 +110,19 @@ export const getLocationAndRemoveMarker = (docstring: string, position: CommentP
     cursorMarker: {
       line: upToIndex.split('\n').length - 1 + specialPositionIncrement,
       character: Number.MAX_SAFE_INTEGER,
-      message: 'Unable to generate summary'
+      message: 'Unable to generate summary',
     },
     docstring: docstring.replace(CURSOR_MARKER, ''),
-  }
-}
+  };
+};
 
 export const formatReturnExplained = (returnExplained: string | null): string => {
   if (!returnExplained) return '';
 
   const trimmed = returnExplained.trim();
-  const withoutIntro = trimmed.replace(/^(the function|it is|the function is)\s(returns|returning)\s/i, '');
+  const withoutIntro = trimmed.replace(
+    /^(the function|it is|the function is)\s(returns|returning)\s/i,
+    ''
+  );
   return withoutIntro;
-}
+};
