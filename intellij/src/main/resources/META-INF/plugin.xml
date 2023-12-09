@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>com.mintlify.document</id>
     <name>Mintlify Doc Writer</name>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
     <vendor url="https://www.mintlify.com/" email="hi@mintlify.com">Mintlify</vendor>
     
 
