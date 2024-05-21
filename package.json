@@ -15,9 +15,5 @@
   "bugs": {
     "url": "https://github.com/mintlify/vscode-writer/issues"
   },
-  "homepage": "https://github.com/mintlify/vscode-writer#readme",
-  "workspaces": [
-    "vscode",
-    "server"
-  ]
+  "homepage": "https://github.com/mintlify/vscode-writer#readme"
 }
