@@ -1,5 +1,7 @@
 ## Notice: Mintify Writer is no longer being updated by the Mintlify Team. Get started with our customer documentation product [here](https://mintlify.com).
 
+## As of June 2026, Mintlify Writer is entirely deprecated and its hosted version is disabled.
+
 # ✍️ Mintlify Writer
 
 ![Ratings](https://img.shields.io/visual-studio-marketplace/r/mintlify.document) [![discord](https://img.shields.io/discord/911693009253466123?logo=Discord&logoColor=white)](https://discord.gg/6W7GuYuxra) [![GitHub Stars](https://img.shields.io/github/stars/mintlify/vscode-docs?style=social)](https://github.com/mintlify/vscode-docs) [![Twitter](https://img.shields.io/twitter/follow/mintlify?style=social)](https://twitter.com/mintlify)
